@@ -247,7 +247,7 @@ int main()
          {
             Vertex lv(t.m_led_corners[i] + vec * ((float(l)+0.5)/(float(d)+1.0)));
             //std::cout << l << " " << t.m_led_corners[i] << " " << vec << " " << lv << std::endl;
-            leds.push_back({-lv.x*10, lv.y*10, lv.z*10});
+            leds.push_back({-lv.x*10, lv.y*10, lv.z*10, 0.3});
             colors.push_back(CRGB::Black);
          }
          
