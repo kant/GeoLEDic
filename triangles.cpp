@@ -3,10 +3,14 @@
 #include <math.h>
 #include <unistd.h>
 #include <vector>
+#include <algorithm>
 
 #include <iostream>
 
 struct Vertex {
+   Vertex(): x(), y(), z()
+   {}
+  
    /* ordering is deliberate, for some reason z is up in SketchUp */
    Vertex(float x, float z, float y): x(x), y(y), z(z)
    {}
@@ -43,6 +47,8 @@ std::ostream& operator<<(std::ostream& os, const Vertex& v)
 
 
 struct Edge {
+   Edge(): first_led(), last_led()
+   {}
    Edge(int first_led, int last_led): first_led(first_led), last_led(last_led)
    {}
    int first_led;
@@ -56,11 +62,13 @@ public:
    Triangle(
       const Edge (&edges)[3],
       const Vertex (&vertices)[3]):
-         m_edges(edges),
-         m_vertices(vertices),
-         m_led_corners(vertices)
+         m_edges(),
+         m_vertices(),
+         m_led_corners()
    {
       float fac = 0.95;
+      std::copy(&edges[0], &edges[3], &m_edges[0]);
+      std::copy(&vertices[0], &vertices[3], &m_vertices[0]);
       m_led_corners[0] = inset(m_vertices[0], m_vertices[1], m_vertices[2], fac);
       m_led_corners[1] = inset(m_vertices[1], m_vertices[2], m_vertices[0], fac);
       m_led_corners[2] = inset(m_vertices[2], m_vertices[0], m_vertices[1], fac);
