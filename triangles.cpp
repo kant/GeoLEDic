@@ -1,5 +1,6 @@
 #include "flogl/flogl.hpp"
 #include "flogl/Config.hpp"
+#include "Vector.hpp"
 #include "Vertex.hpp"
 #include <FastLED.h>
 #include <math.h>
@@ -40,7 +41,9 @@ public:
 
    Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac)
    {
-      return (v1 * fac + v2 * ((1-fac)/2) + v3 * ((1-fac)/2));
+     return Vertex(Vector(v1) * fac +
+		   Vector(v2) * ((1-fac)/2) +
+		   Vector(v3) * ((1-fac)/2));
    }
       
    Edge   m_edges[3];
@@ -76,24 +79,17 @@ int main()
 
    for (const Triangle& t: dome)
    {
-      for (const Vertex& v: t.m_vertices)
-      {
-         //leds.push_back({-v.x*10, v.y*10, v.z*10});
-         //colors.push_back(CRGB::Blue);
-      }
-
       int i = 0;
       for (const Edge& e: t.m_edges)
       {
          int j = (i+1)%3;
 
-         Vertex vec = t.m_led_corners[j] - t.m_led_corners[i];
+         Vector vec = t.m_led_corners[j] - t.m_led_corners[i];
 
          int d = e.last_led - e.first_led;
          for (int l = 0; l <= d; l++)
          {
             Vertex lv(t.m_led_corners[i] + vec * ((float(l)+0.5)/(float(d)+1.0)));
-            //std::cout << l << " " << t.m_led_corners[i] << " " << vec << " " << lv << std::endl;
             leds.push_back({-lv.x*10, lv.y*10, lv.z*10, 0.3});
             colors.push_back(CRGB::Black);
          }

@@ -3,40 +3,20 @@
 
 #include <iostream>
 
+struct Vector;
+
 struct Vertex {
-  Vertex(): x(0), y(0), z(0)
-  {}
-
-  Vertex(float x, float y, float z): x(x), y(y), z(z)
-  {}
-
+  Vertex();
+  Vertex(float x, float y, float z);
+  explicit Vertex(const Vector& v);
+  
   float x, y, z;
 
-  Vertex operator+(const Vertex& v) const
-  {
-    return Vertex(x + v.x, y + v.y, z + v.z);
-  }
-  
-  Vertex operator-(const Vertex& v) const
-  {
-    return Vertex(x - v.x, y - v.y, z - v.z);
-  }
-  
-  Vertex operator*(float v) const
-  {
-    return Vertex(x*v, y*v, z*v);
-  }
-  
-  Vertex operator/(float v) const
-  {
-    return Vertex(x/v, y/v, z/v);
-  }
-  
+  Vertex operator+(const Vector& v) const;
+  Vertex operator-(const Vector& v) const;
+  Vector operator-(const Vertex& v) const;
 };
 
-std::ostream& operator<<(std::ostream& os, const Vertex& v)
-{
-  return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-}
+std::ostream& operator<<(std::ostream& os, const Vertex& v);
 
 #endif
