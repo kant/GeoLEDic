@@ -1,4 +1,3 @@
-
 row0 = [
     [ 5.10,  2.68, 1.66],
     [ 5.71,  1.85, 0.00],
@@ -208,9 +207,12 @@ def print_row(row):
     for k in xrange(len(row)-2):
         s = []
         for l in xrange(3):
-            s.append("{% 1.2f, % 1.2f, % 1.2f}" % (row[k+l][0], row[k+l][1], row[k+l][2]))
-        print "{DEFAULT_TRIANGLE,    {%s}}," % ','.join(s)
+            # note: sketchup order of coordinates is x/z/y, so we'll reorder here
+            s.append("{% 1.2f, % 1.2f, % 1.2f}" % (row[k+l][0], row[k+l][2], row[k+l][1]))
+        print "{DEFAULT_TRIANGLE,    {%s}}," % ', '.join(s)
 
+
+print "Triangle dome[] = {"
 print "// row 0"
 print_row(row0)
 print "// row 1"
@@ -233,4 +235,4 @@ print_row(row43)
 print "// row 5"
 print_row(row50)
 print_row(row51)
-
+print "};"

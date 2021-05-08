@@ -7,30 +7,29 @@ struct Vertex {
   Vertex(): x(0), y(0), z(0)
   {}
 
-  // TODO: order xzy, as that's what I got out of SketchUp
-  Vertex(float x, float z, float y): x(x), y(y), z(z)
+  Vertex(float x, float y, float z): x(x), y(y), z(z)
   {}
 
   float x, y, z;
 
   Vertex operator+(const Vertex& v) const
   {
-    return Vertex(x + v.x, z + v.z, y + v.y);
+    return Vertex(x + v.x, y + v.y, z + v.z);
   }
   
   Vertex operator-(const Vertex& v) const
   {
-    return Vertex(x - v.x, z - v.z, y - v.y);
+    return Vertex(x - v.x, y - v.y, z - v.z);
   }
   
   Vertex operator*(float v) const
   {
-    return Vertex(x*v, z*v, y*v);
+    return Vertex(x*v, y*v, z*v);
   }
   
   Vertex operator/(float v) const
   {
-    return Vertex(x/v, z/v, y/v);
+    return Vertex(x/v, y/v, z/v);
   }
   
 };
