@@ -1,5 +1,6 @@
 #include "flogl/flogl.hpp"
 #include "flogl/Config.hpp"
+#include "Vertex.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
@@ -7,44 +8,6 @@
 #include <algorithm>
 
 #include <iostream>
-
-struct Vertex {
-   Vertex(): x(), y(), z()
-   {}
-  
-   /* ordering is deliberate, for some reason z is up in SketchUp */
-   Vertex(float x, float z, float y): x(x), y(y), z(z)
-   {}
-   float x;
-   float y;
-   float z;
-
-   Vertex operator+(const Vertex& v) const
-   {
-      return Vertex(x + v.x, z + v.z, y + v.y);
-   }
-
-   Vertex operator-(const Vertex& v) const
-   {
-      return Vertex(x - v.x, z - v.z, y - v.y);
-   }
-
-   Vertex operator*(float v) const
-   {
-      return Vertex(x*v, z*v, y*v);
-   }
-
-   Vertex operator/(float v) const
-   {
-      return Vertex(x/v, z/v, y/v);
-   }
-
-};
-
-std::ostream& operator<<(std::ostream& os, const Vertex& v)
-{
-   return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-}
 
 
 struct Edge {
