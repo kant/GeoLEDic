@@ -1,4 +1,5 @@
 #include "flogl/flogl.hpp"
+#include "flogl/Config.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
@@ -235,6 +236,16 @@ int main()
 {
    std::vector<flogl::LED> leds;
    std::vector<CRGB> colors;
+
+   std::vector<flogl::Config::View> views =
+     {
+     // x     y    z   FOV  horz vert
+       {0,   30, 140,  45,    0,    0},  // front
+       {0, -140, -20,  45,    0,   90},  // up
+     };
+   
+
+
    for (const Triangle& t: dome)
    {
       for (const Vertex& v: t.m_vertices)
@@ -262,7 +273,9 @@ int main()
          i++;
       }
    }
-   flogl::Flogl flogl(&leds[0], leds.size());
+   flogl::Flogl flogl(&leds[0], leds.size(),
+		      flogl::Config()
+		      .views(views));
    flogl.add(&colors[0], leds.size());
 
    int r = 0;

@@ -5,7 +5,8 @@ set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLE
 
 add_subdirectory(FastLED-OpenGL)
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++11
+                -Wno-deprecated-register)
 include_directories(FastLED-OpenGL FastLED/src)
 
 add_executable(dome-sim triangles.cpp)
