@@ -2,6 +2,7 @@
 #include "flogl/Config.hpp"
 #include "Vector.hpp"
 #include "Vertex.hpp"
+#include "Edge.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
@@ -11,14 +12,6 @@
 #include <iostream>
 
 
-struct Edge {
-   Edge(): first_led(), last_led()
-   {}
-   Edge(int first_led, int last_led): first_led(first_led), last_led(last_led)
-   {}
-   int first_led;
-   int last_led;
-};
 
 
 class Triangle {
