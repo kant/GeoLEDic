@@ -9,7 +9,8 @@ add_definitions(-std=c++11
                 -Wno-deprecated-register)
 include_directories(FastLED-OpenGL FastLED/src)
 
-add_executable(dome-sim triangles.cpp
+add_executable(dome-sim MACOSX_BUNDLE
+			triangles.cpp
 			Vector.cpp
 			Vertex.cpp)
 target_link_libraries(dome-sim flogl)
