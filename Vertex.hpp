@@ -3,6 +3,10 @@
 
 #include <iostream>
 
+namespace flogl {
+class LED;
+}
+
 struct Vector;
 
 struct Vertex {
@@ -15,6 +19,8 @@ struct Vertex {
   Vertex operator+(const Vector& v) const;
   Vertex operator-(const Vector& v) const;
   Vector operator-(const Vertex& v) const;
+   
+  operator flogl::LED() const;
 };
 
 std::ostream& operator<<(std::ostream& os, const Vertex& v);

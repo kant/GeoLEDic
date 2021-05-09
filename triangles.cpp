@@ -1,8 +1,6 @@
 #include "flogl/flogl.hpp"
 #include "flogl/Config.hpp"
-#include "Vector.hpp"
-#include "Vertex.hpp"
-#include "Edge.hpp"
+#include "Triangle.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
@@ -10,39 +8,6 @@
 #include <algorithm>
 
 #include <iostream>
-
-
-
-
-class Triangle {
-public:
-
-   Triangle(
-      const Edge (&edges)[3],
-      const Vertex (&vertices)[3]):
-         m_edges(),
-         m_vertices(),
-         m_led_corners()
-   {
-      float fac = 0.95;
-      std::copy(&edges[0], &edges[3], &m_edges[0]);
-      std::copy(&vertices[0], &vertices[3], &m_vertices[0]);
-      m_led_corners[0] = inset(m_vertices[0], m_vertices[1], m_vertices[2], fac);
-      m_led_corners[1] = inset(m_vertices[1], m_vertices[2], m_vertices[0], fac);
-      m_led_corners[2] = inset(m_vertices[2], m_vertices[0], m_vertices[1], fac);
-   }
-
-   Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac)
-   {
-     return Vertex(Vector(v1) * fac +
-		   Vector(v2) * ((1-fac)/2) +
-		   Vector(v3) * ((1-fac)/2));
-   }
-      
-   Edge   m_edges[3];
-   Vertex m_vertices[3];
-   Vertex m_led_corners[3];
-};
 
 int default_led(int step)
 {
@@ -59,7 +24,6 @@ int default_led(int step)
 int main()
 {
    std::vector<flogl::LED> leds;
-   std::vector<CRGB> colors;
 
    std::vector<flogl::Config::View> views =
      {
@@ -72,28 +36,14 @@ int main()
 
    for (const Triangle& t: dome)
    {
-      int i = 0;
-      for (const Edge& e: t.m_edges)
-      {
-         int j = (i+1)%3;
-
-         Vector vec = t.m_led_corners[j] - t.m_led_corners[i];
-
-         int d = e.last_led - e.first_led;
-         for (int l = 0; l <= d; l++)
-         {
-            Vertex lv(t.m_led_corners[i] + vec * ((float(l)+0.5)/(float(d)+1.0)));
-            leds.push_back({-lv.x*10, lv.y*10, lv.z*10, 0.3});
-            colors.push_back(CRGB::Black);
-         }
-         
-         i++;
-      }
+      t.createLeds(leds);
    }
    flogl::Flogl flogl(&leds[0], leds.size(),
 		      flogl::Config()
 		      .views(views));
-   flogl.add(&colors[0], leds.size());
+   
+   std::vector<CRGB> colors(leds.size(), CRGB::Black);
+   flogl.add(&colors[0], colors.size());
 
    int r = 0;
    int g = 0;

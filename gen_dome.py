@@ -206,9 +206,12 @@ row51 = [
 def print_row(row):
     for k in xrange(len(row)-2):
         s = []
+        SCALE = 10
         for l in xrange(3):
-            # note: sketchup order of coordinates is x/z/y, so we'll reorder here
-            s.append("{% 1.2f, % 1.2f, % 1.2f}" % (row[k+l][0], row[k+l][2], row[k+l][1]))
+            # Note: Sketchup order of coordinates is x/z/y, so we'll reorder here
+            #       Also, the x coordinates seems mirrored, and we also scale by
+            #       a factor of 10 to adjust for the OpenGL coordinate system
+            s.append("{% 1.2f, % 1.2f, % 1.2f}" % (-row[k+l][0] * SCALE, row[k+l][2] * SCALE, row[k+l][1] * SCALE))
         print "{DEFAULT_TRIANGLE,    {%s}}," % ', '.join(s)
 
 

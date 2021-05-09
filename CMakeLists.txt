@@ -10,7 +10,8 @@ add_definitions(-std=c++11
 include_directories(FastLED-OpenGL FastLED/src)
 
 add_executable(dome-sim MACOSX_BUNDLE
-			triangles.cpp
-			Vector.cpp
-			Vertex.cpp)
+                        Triangle.cpp
+                        triangles.cpp
+                        Vector.cpp
+                        Vertex.cpp)
 target_link_libraries(dome-sim flogl)
