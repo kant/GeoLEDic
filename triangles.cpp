@@ -43,7 +43,11 @@ int main()
 		      .views(views));
    
    std::vector<CRGB> colors(leds.size(), CRGB::Black);
-   flogl.add(&colors[0], colors.size());
+   CRGB* col = colors.data();
+   for (flogl::LED& led: leds)
+   {
+      led.color = col++;
+   }
 
    int r = 0;
    int g = 0;
