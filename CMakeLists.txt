@@ -7,11 +7,18 @@ add_subdirectory(FastLED-OpenGL)
 
 add_definitions(-std=c++11
                 -Wno-deprecated-register)
-include_directories(FastLED-OpenGL FastLED/src)
+include_directories(FastLED-OpenGL
+                    FastLED/src
+                    .)
 
 add_executable(dome-sim MACOSX_BUNDLE
+                        target/${CMAKE_SYSTEM_NAME}/MidiSource.cpp
                         Triangle.cpp
                         triangles.cpp
                         Vector.cpp
                         Vertex.cpp)
-target_link_libraries(dome-sim flogl)
+                        
+find_library(FRAMEWORK_COREMIDI CoreMidi)
+find_library(FRAMEWORK_COREFOUNDATION CoreFoundation)
+
+target_link_libraries(dome-sim flogl ${FRAMEWORK_COREMIDI} ${FRAMEWORK_COREFOUNDATION})
