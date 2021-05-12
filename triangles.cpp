@@ -23,6 +23,13 @@ int default_led(int step)
 
 #include "dome.hpp"
 
+const TProgmemRGBPalette16 RainbowColors_p  =
+{
+      0xFF0000, 0xD52A00, 0xAB5500, 0xAB7F00,
+      0xABAB00, 0x56D500, 0x00FF00, 0x00D52A,
+      0x00AB55, 0x0056AA, 0x0000FF, 0x2A00D5,
+      0x5500AB, 0x7F0081, 0xAB0055, 0xD5002B
+};
 
 int main()
 {
@@ -58,30 +65,23 @@ int main()
    int p = 0;
    int c0 = 0;
    
-   std::map<unsigned, unsigned> notes;
+   unsigned notes[128] = {0};
    
    do {
       const MidiMessage* msg;
       while ((msg = midi_source.read()))
       {
-         std::cout << "have: " << std::hex;
-         std::copy(msg->data, msg->data + msg->length, std::ostream_iterator<unsigned>(std::cout, ", "));
-         std::cout << std::dec << std::endl;
          switch (msg->type())
          {
             case MidiMessage::NOTE_ON:
-               std::cout << "note on" << std::endl;
                notes[msg->data[1]] = msg->data[2];
                break;
             case MidiMessage::NOTE_OFF:
-               std::cout << "note off" << std::endl;
                notes[msg->data[1]] = 0;
                break;
             case MidiMessage::PROGRAM_CHANGE:
-               std::cout << "program" << std::endl;
                break;
             case MidiMessage::CONTROL_CHANGE:
-               std::cout << "control" << std::endl;
                switch (msg->data[1])
                {
                   case 0x4a:
@@ -110,33 +110,26 @@ int main()
       for (CRGB& l: colors)
       {
          int c = c0 + c1;
-         if (rand() % (10000 / (p+1)) == 0)
+         unsigned triangle_ix = c1 / 153;
+         if (notes[triangle_ix] > 0)
+         {
+            l = RainbowColors_p[notes[triangle_ix]/8];
+         }
+         else if (rand() % (10000 / (p+1)) == 0)
          {
             l = CRGB::White;
          }
          else
          {
-            int colr = float(r) * 2 * float(c % 100)/100;
-            int colg = float(g) * 2 * float((c+30) % 100)/100;
-            int colb = float(b) * 2 * float((c+60) % 100)/100;
+            int colr = (r * (c % 128))/64;
+            int colg = (g * ((c+30) % 128))/64;
+            int colb = (b * ((c+60) % 128))/64;
             
             l = CRGB(colr < 255 ? colr : 255,
                      colg < 255 ? colg : 255,
                      colb < 255 ? colb : 255);
          }
          c1++;
-      }
-      
-      for (std::pair<unsigned, unsigned> e: notes)
-      {
-         if (e.second > 0)
-         {
-            unsigned triangle_ix = e.first;
-            for (unsigned k = triangle_ix * 153; k < (triangle_ix + 1) * 153; k++)
-            {
-               colors[k] = CRGB::Yellow;
-            }
-         }
       }
 
       usleep(30000);      
