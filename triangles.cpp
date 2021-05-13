@@ -19,9 +19,12 @@ int default_led(int step)
    return old;
 }
 
-#define DEFAULT_TRIANGLE {{default_led(50), default_led(1)},{default_led(50), default_led(1)},{default_led(50), default_led(1)}}
+CRGB colors[20000];
+
+#define DEFAULT_TRIANGLE colors, {{default_led(50), default_led(1)},{default_led(50), default_led(1)},{default_led(50), default_led(1)}}
 
 #include "dome.hpp"
+
 
 const TProgmemRGBPalette16 RainbowColors_p  =
 {
@@ -52,8 +55,7 @@ int main()
 		      flogl::Config()
 		      .views(views));
    
-   std::vector<CRGB> colors(leds.size(), CRGB::Black);
-   CRGB* col = colors.data();
+   CRGB* col = colors;
    for (flogl::LED& led: leds)
    {
       led.color = col++;
@@ -94,7 +96,7 @@ int main()
                      b = msg->data[2];
                      break;
                   case 0x5d:
-                     p = msg->data[2];
+                     p = msg->data[2] ? 4 * ((128 - msg->data[2])) : 0;
                      break;
                   default:
                      break;
@@ -105,31 +107,39 @@ int main()
          }
       }
          
-      
-      int c1 = 0;
-      for (CRGB& l: colors)
+      int t_ix = 0;
+      for (Triangle& t: dome)
       {
-         int c = c0 + c1;
-         unsigned triangle_ix = c1 / 153;
-         if (notes[triangle_ix] > 0)
+         if (notes[t_ix] > 0)
          {
-            l = RainbowColors_p[notes[triangle_ix]/8];
-         }
-         else if (rand() % (10000 / (p+1)) == 0)
-         {
-            l = CRGB::White;
+            std::fill(t.begin(), t.end(), RainbowColors_p[notes[t_ix]/8]);
          }
          else
          {
-            int colr = (r * (c % 128))/64;
-            int colg = (g * ((c+30) % 128))/64;
-            int colb = (b * ((c+60) % 128))/64;
-            
-            l = CRGB(colr < 255 ? colr : 255,
-                     colg < 255 ? colg : 255,
-                     colb < 255 ? colb : 255);
+            int c = 0;
+            int next_sparkle = p ? rand() % p : -1;
+            for(CRGB& led: t)
+            {
+               if (c == next_sparkle)
+               {
+                  next_sparkle += (rand() % p) + 1;
+                  led = CRGB::White;
+               }
+               else
+               {
+                  int c1 = c + c0 + t_ix*20;
+                  int colr = (r * (c1 % 128))/64;
+                  int colg = (g * ((c1+30) % 128))/64;
+                  int colb = (b * ((c1+60) % 128))/64;
+                  
+                  led = CRGB(colr < 255 ? colr : 255,
+                             colg < 255 ? colg : 255,
+                             colb < 255 ? colb : 255);
+               }
+               c++;
+            }
          }
-         c1++;
+         t_ix++;
       }
 
       usleep(30000);      

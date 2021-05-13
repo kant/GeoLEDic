@@ -1,6 +1,7 @@
 #include "Triangle.hpp"
 
 Triangle::Triangle(
+   CRGB* strip,
    const Edge (&edges)[3],
    const Vertex (&vertices)[3]):
       m_edges(),
@@ -14,6 +15,27 @@ Triangle::Triangle(
    m_led_corners[0] = inset(m_vertices[0], m_vertices[1], m_vertices[2], fac);
    m_led_corners[1] = inset(m_vertices[1], m_vertices[2], m_vertices[0], fac);
    m_led_corners[2] = inset(m_vertices[2], m_vertices[0], m_vertices[1], fac);
+   // find the first and the last led
+   int first = INT_MAX;
+   int last  = 0;
+   for (const Edge& e: m_edges)
+   {
+      first = std::min(std::min(e.first_led, e.first_led), first);
+      last  = std::max(std::max(e.last_led, e.last_led), last);
+   }
+   m_first = &strip[first];
+   m_last  = &strip[last];
+}
+
+CRGB* Triangle::begin()
+{
+   return m_first;
+}
+
+CRGB* Triangle::end()
+{
+   // by convention, end() points to the element past the last one
+   return m_last + 1;
 }
 
 Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac)
