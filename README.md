@@ -1,5 +1,7 @@
 # GeoLEDic
 
+![GeoLEDic Screenshot](/img/GeoLEDic.png)
+
 ~~~
 $ sudo apt-get install cmake libglfw3-dev libglew-dev libglm-dev libasound2-dev
 ~~~
