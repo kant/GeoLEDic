@@ -55,12 +55,6 @@ int main()
 		      flogl::Config()
 		      .views(views));
    
-   CRGB* col = colors;
-   for (flogl::LED& led: leds)
-   {
-      led.color = col++;
-   }
-
    int r = 0;
    int g = 0;
    int b = 0;

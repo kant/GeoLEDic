@@ -6,7 +6,10 @@ Triangle::Triangle(
    const Vertex (&vertices)[3]):
       m_edges(),
       m_vertices(),
-      m_led_corners()
+      m_led_corners(),
+      m_first(INT_MAX),
+      m_last(0),
+      m_strip(strip)
 {
    float fac = 0.95;
    std::copy(&edges[0], &edges[3], &m_edges[0]);
@@ -16,26 +19,22 @@ Triangle::Triangle(
    m_led_corners[1] = inset(m_vertices[1], m_vertices[2], m_vertices[0], fac);
    m_led_corners[2] = inset(m_vertices[2], m_vertices[0], m_vertices[1], fac);
    // find the first and the last led
-   int first = INT_MAX;
-   int last  = 0;
    for (const Edge& e: m_edges)
    {
-      first = std::min(std::min(e.first_led, e.first_led), first);
-      last  = std::max(std::max(e.last_led, e.last_led), last);
+      m_first = std::min(std::min(e.first_led, e.first_led), m_first);
+      m_last  = std::max(std::max(e.last_led, e.last_led), m_last);
    }
-   m_first = &strip[first];
-   m_last  = &strip[last];
 }
 
 CRGB* Triangle::begin()
 {
-   return m_first;
+   return &m_strip[m_first];
 }
 
 CRGB* Triangle::end()
 {
    // by convention, end() points to the element past the last one
-   return m_last + 1;
+   return &m_strip[m_last + 1];
 }
 
 Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac)
@@ -60,6 +59,7 @@ void Triangle::createLeds(std::vector<flogl::LED>& leds) const
       {
          Vertex led_vertex(start_corner + edge_vector * ((float(led_ix)+0.5)/float(num_leds)));
          leds.push_back(led_vertex);
+         leds.back().color = &m_strip[e.first_led + led_ix];
       }
       
       i++;

@@ -27,8 +27,9 @@ private:
    Edge   m_edges[3];
    Vertex m_vertices[3];
    Vertex m_led_corners[3];
-   CRGB* m_first;
-   CRGB* m_last;
+   int m_first;
+   int m_last;
+   CRGB* m_strip;
 };
 
 #endif
