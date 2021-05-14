@@ -9,6 +9,7 @@
 #include <map>
 #include <iostream>
 #include "MidiSource.hpp"
+#include "programs/SparklesAndTriangles.hpp"
 
 
 int default_led(int step)
@@ -55,14 +56,8 @@ int main()
 		      flogl::Config()
 		      .views(views));
    
-   int r = 0;
-   int g = 0;
-   int b = 0;
-   int p = 0;
-   int c0 = 0;
-   
-   unsigned notes[128] = {0};
-   
+   SparklesAndTriangles program(dome, sizeof(dome)/sizeof(*dome));
+      
    do {
       const MidiMessage* msg;
       while ((msg = midi_source.read()))
@@ -70,74 +65,25 @@ int main()
          switch (msg->type())
          {
             case MidiMessage::NOTE_ON:
-               notes[msg->data[1]] = msg->data[2];
+               program.noteOn(msg->data[1], msg->data[2]);
                break;
             case MidiMessage::NOTE_OFF:
-               notes[msg->data[1]] = 0;
+               program.noteOff(msg->data[1]);
                break;
             case MidiMessage::PROGRAM_CHANGE:
                break;
             case MidiMessage::CONTROL_CHANGE:
-               switch (msg->data[1])
-               {
-                  case 0x4a:
-                     r = msg->data[2];
-                     break;
-                  case 0x47:
-                     g = msg->data[2];
-                     break;
-                  case 0x5b:
-                     b = msg->data[2];
-                     break;
-                  case 0x5d:
-                     p = msg->data[2] ? 4 * ((128 - msg->data[2])) : 0;
-                     break;
-                  default:
-                     break;
-               }
+               program.controlChange(msg->data[1], msg->data[2]);
                break;
             default:
                break;
          }
       }
          
-      int t_ix = 0;
-      for (Triangle& t: dome)
-      {
-         if (notes[t_ix] > 0)
-         {
-            std::fill(t.begin(), t.end(), RainbowColors_p[notes[t_ix]/8]);
-         }
-         else
-         {
-            int c = 0;
-            int next_sparkle = p ? rand() % p : -1;
-            for(CRGB& led: t)
-            {
-               if (c == next_sparkle)
-               {
-                  next_sparkle += (rand() % p) + 1;
-                  led = CRGB::White;
-               }
-               else
-               {
-                  int c1 = c + c0 + t_ix*20;
-                  int colr = (r * (c1 % 128))/64;
-                  int colg = (g * ((c1+30) % 128))/64;
-                  int colb = (b * ((c1+60) % 128))/64;
-                  
-                  led = CRGB(colr < 255 ? colr : 255,
-                             colg < 255 ? colg : 255,
-                             colb < 255 ? colb : 255);
-               }
-               c++;
-            }
-         }
-         t_ix++;
-      }
-
-      usleep(30000);      
-      c0++;
+      program.run();
+      
+      usleep(30000);
+      
    } while(flogl.draw());
    
    return 0;
