@@ -16,6 +16,7 @@ include_directories(FastLED-OpenGL
 add_executable(dome-sim MACOSX_BUNDLE
                         ${TARGET_SOURCES}
                         ${PROGRAMS_SOURCES}
+                        ProgramFactory.cpp
                         Triangle.cpp
                         triangles.cpp
                         Vector.cpp

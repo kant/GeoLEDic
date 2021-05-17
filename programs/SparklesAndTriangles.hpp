@@ -2,17 +2,17 @@
 #define GEOLEDIC_SparklesAndTriangles_hpp
 
 #include "Triangle.hpp"
+#include "Program.hpp"
 
-class SparklesAndTriangles
+class SparklesAndTriangles: public Program
 {
 public:
    SparklesAndTriangles(Triangle* triangles, unsigned num_triangles);
    
-   void noteOn(uint8_t note, uint8_t velocity);
-   void noteOff(uint8_t note);
-   void controlChange(uint8_t cc_num, uint8_t value);
-   
-   void run();
+   virtual void noteOn(uint8_t note, uint8_t velocity);
+   virtual void noteOff(uint8_t note);
+   virtual void controlChange(uint8_t cc_num, uint8_t value);
+   virtual void run();
    
 private:
    Triangle* m_triangles;

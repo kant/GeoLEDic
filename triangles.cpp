@@ -9,7 +9,7 @@
 #include <map>
 #include <iostream>
 #include "MidiSource.hpp"
-#include "programs/SparklesAndTriangles.hpp"
+#include "ProgramFactory.hpp"
 
 
 int default_led(int step)
@@ -47,8 +47,9 @@ int main()
 		      flogl::Config()
 		      .views(views));
    
-   SparklesAndTriangles program(dome, sizeof(dome)/sizeof(*dome));
-      
+   ProgramFactory factory(dome, sizeof(dome)/sizeof(*dome));
+   Program* program = factory.changeProgram(0);
+   
    do {
       const MidiMessage* msg;
       while ((msg = midi_source.read()))
@@ -56,22 +57,23 @@ int main()
          switch (msg->type())
          {
             case MidiMessage::NOTE_ON:
-               program.noteOn(msg->data[1], msg->data[2]);
+               program->noteOn(msg->data[1], msg->data[2]);
                break;
             case MidiMessage::NOTE_OFF:
-               program.noteOff(msg->data[1]);
+               program->noteOff(msg->data[1]);
                break;
             case MidiMessage::PROGRAM_CHANGE:
+               program = factory.changeProgram(msg->data[1]);
                break;
             case MidiMessage::CONTROL_CHANGE:
-               program.controlChange(msg->data[1], msg->data[2]);
+               program->controlChange(msg->data[1], msg->data[2]);
                break;
             default:
                break;
          }
       }
          
-      program.run();
+      program->run();
       
       usleep(30000);
       
