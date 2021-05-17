@@ -17,10 +17,10 @@ set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
                      ProgramFactory.cpp
                      Triangle.cpp
-                     triangles.cpp
+                     GeoLEDic.cpp
                      Vector.cpp
                      Vertex.cpp)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${GEOLEDIC_SOURCES})
-add_executable(dome-sim MACOSX_BUNDLE ${GEOLEDIC_SOURCES})
+add_executable(GeoLEDic MACOSX_BUNDLE ${GEOLEDIC_SOURCES})
 
-target_link_libraries(dome-sim flogl ${TARGET_LIBRARIES})
+target_link_libraries(GeoLEDic flogl ${TARGET_LIBRARIES})

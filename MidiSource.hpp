@@ -3,6 +3,9 @@
 
 #include "MidiMessage.hpp"
 
+#define MIDI_CLIENT_NAME "GeoLEDic Client"
+#define MIDI_PORT_NAME "GeoLEDic In"
+
 class MidiSource
 {
 public:
@@ -10,6 +13,7 @@ public:
    ~MidiSource();
    
    const MidiMessage* read();
+
 private:
    class Impl;
    Impl& m_i;

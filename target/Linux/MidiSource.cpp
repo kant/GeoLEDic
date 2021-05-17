@@ -19,7 +19,7 @@ public:
       }
 
       // Set client name.
-      snd_seq_set_client_name(m_seq, "Dome MIDI Client");
+      snd_seq_set_client_name(m_seq, MIDI_CLIENT_NAME);
 
       snd_seq_port_info_t *pinfo;
       snd_seq_port_info_alloca(&pinfo);
@@ -31,7 +31,7 @@ public:
                                  SND_SEQ_PORT_TYPE_APPLICATION);
       snd_seq_port_info_set_midi_channels(pinfo, 16);
 
-      snd_seq_port_info_set_name(pinfo, "Dome");
+      snd_seq_port_info_set_name(pinfo, MIDI_PORT_NAME);
       int vport = snd_seq_create_port(m_seq, pinfo);
 
       if (vport < 0) {

@@ -13,17 +13,17 @@ public:
    Impl()
    {
       OSStatus result = noErr;
-      result = MIDIClientCreate(CFSTR("Dome MIDI Client"), nullptr, nullptr, &m_midi_client );
+      result = MIDIClientCreate(CFSTR(MIDI_CLIENT_NAME), nullptr, nullptr, &m_midi_client );
       if (result != noErr) {
          std::cerr << "MIDIClientCreate() error:" << result;
          return;
       }
-      result = MIDIDestinationCreate(m_midi_client, CFSTR("Dome"), &Impl::processMidi, this, &m_midi_out );
+      result = MIDIDestinationCreate(m_midi_client, CFSTR(MIDI_PORT_NAME), &Impl::processMidi, this, &m_midi_out );
       if (result != noErr) {
          std::cerr << "MIDIDestinationCreate() error:" << result;
          return;
       }
-      result = MIDIInputPortCreate(m_midi_client, CFSTR("Dome"), &Impl::processMidi, this,  &m_port );
+      result = MIDIInputPortCreate(m_midi_client, CFSTR(MIDI_PORT_NAME), &Impl::processMidi, this,  &m_port );
       if (result != noErr) {
          std::cerr << "MIDIInputPortCreate() error:" << result;
          return;
