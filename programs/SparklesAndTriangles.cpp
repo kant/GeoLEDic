@@ -35,7 +35,7 @@ void SparklesAndTriangles::controlChange(uint8_t cc_num, uint8_t value)
          m_blue = value;
          break;
       case 0x5d:
-         m_sparkle_probability = value ? 4 * (128 - value) : 0;
+         m_sparkle_probability = value ? 2 * (128 - value) : 0;
          break;
       default:
          break;
@@ -55,12 +55,12 @@ void SparklesAndTriangles::run()
       else
       {
          int c = 0;
-         int next_sparkle = m_sparkle_probability ? rand() % m_sparkle_probability : -1;
+         int next_sparkle = m_sparkle_probability ? random8(m_sparkle_probability) : -1;
          for(CRGB& led: t)
          {
             if (c == next_sparkle)
             {
-               next_sparkle += (rand() % m_sparkle_probability) + 1;
+               next_sparkle += random8(m_sparkle_probability) + 1;
                led = CRGB::White;
             }
             else
