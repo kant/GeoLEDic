@@ -1,4 +1,20 @@
-Triangle dome[] = {
+#include "Dome.hpp"
+
+namespace {
+int default_led(int step)
+{
+   static int led = 0;
+   int old = led;
+   led += step;
+   return old;
+}
+}
+
+#define DEFAULT_TRIANGLE colors, {{default_led(50), default_led(1)},{default_led(50), default_led(1)},{default_led(50), default_led(1)}}
+
+CRGB colors[20000];
+
+Triangle dome[123] = {
 // row 0
 {DEFAULT_TRIANGLE,    {{-51.00,  16.60,  26.80}, {-57.10,  0.00,  18.50}, {-57.10,  16.60,  8.30}}},
 {DEFAULT_TRIANGLE,    {{-57.10,  0.00,  18.50}, {-57.10,  16.60,  8.30}, {-60.00,  0.00,  0.00}}},

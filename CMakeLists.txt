@@ -15,6 +15,7 @@ include_directories(FastLED-OpenGL
 
 set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
+                     Dome.cpp
                      ProgramFactory.cpp
                      Triangle.cpp
                      GeoLEDic.cpp
