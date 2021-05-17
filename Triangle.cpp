@@ -1,4 +1,5 @@
 #include "Triangle.hpp"
+#include <climits>
 
 Triangle::Triangle(
    CRGB* strip,
