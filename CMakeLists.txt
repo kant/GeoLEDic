@@ -16,9 +16,10 @@ include_directories(FastLED-OpenGL
 set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
                      Dome.cpp
+                     GeoLEDic.cpp
+                     main-pc.cpp
                      ProgramFactory.cpp
                      Triangle.cpp
-                     GeoLEDic.cpp
                      Vector.cpp
                      Vertex.cpp)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${GEOLEDIC_SOURCES})

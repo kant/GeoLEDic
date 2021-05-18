@@ -4,7 +4,10 @@
 #include "Triangle.hpp"
 #include <FastLED.h>
 
-extern CRGB colors[20000];
-extern Triangle dome[123];
+#define DOME_NUM_LEDS 20000
+#define DOME_NUM_TRIANGLES 123
+
+extern CRGB colors[DOME_NUM_LEDS];
+extern Triangle dome[DOME_NUM_TRIANGLES];
 
 #endif

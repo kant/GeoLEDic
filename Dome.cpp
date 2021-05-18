@@ -12,9 +12,9 @@ int default_led(int step)
 
 #define DEFAULT_TRIANGLE colors, {{default_led(50), default_led(1)},{default_led(50), default_led(1)},{default_led(50), default_led(1)}}
 
-CRGB colors[20000];
+CRGB colors[DOME_NUM_LEDS];
 
-Triangle dome[123] = {
+Triangle dome[DOME_NUM_TRIANGLES] = {
 // row 0
 {DEFAULT_TRIANGLE,    {{-51.00,  16.60,  26.80}, {-57.10,  0.00,  18.50}, {-57.10,  16.60,  8.30}}},
 {DEFAULT_TRIANGLE,    {{-57.10,  0.00,  18.50}, {-57.10,  16.60,  8.30}, {-60.00,  0.00,  0.00}}},

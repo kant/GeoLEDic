@@ -1,52 +1,10 @@
-#include "flogl/flogl.hpp"
-#include "flogl/Config.hpp"
-
-#include <math.h>
-#include <unistd.h>
-#include <vector>
-#include <algorithm>
-#include <map>
-#include <iostream>
+#include "GeoLEDic.hpp"
 #include "MidiSource.hpp"
 #include "ProgramFactory.hpp"
-#include "Dome.hpp"
-
-void setupGeoLEDic();
-void loopGeoLEDic();
-
-int main()
-{
-
-   std::vector<flogl::LED> leds;
-
-   std::vector<flogl::Config::View> views =
-     {
-     // x     y    z   FOV  horz vert
-       {0,   30, 140,  45,    0,    0},  // front
-       {0, -140, -20,  45,    0,   90},  // up
-     };
-
-   for (const Triangle& t: dome)
-   {
-      t.createLeds(leds);
-   }
-   flogl::Flogl flogl(&leds[0], leds.size(),
-		      flogl::Config()
-		      .views(views));
-   
-   setupGeoLEDic();
-   
-   do {
-      loopGeoLEDic();
-      usleep(30000);
-   } while(flogl.draw());
-   
-   return 0;
-}
 
 namespace {
 MidiSource midi_source;
-ProgramFactory factory(dome, sizeof(dome)/sizeof(*dome));
+ProgramFactory factory(dome, DOME_NUM_TRIANGLES);
 Program* program;
 }
 
