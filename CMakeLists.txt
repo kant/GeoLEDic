@@ -8,6 +8,7 @@ add_subdirectory(src/target/${CMAKE_SYSTEM_NAME})
 add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
+                -DWITH_FLOGL=1
                 -Wno-deprecated-register)
 include_directories(FastLED-OpenGL
                     FastLED/src

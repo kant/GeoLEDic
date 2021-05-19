@@ -5,9 +5,10 @@
 #include "Vertex.hpp"
 #include "Edge.hpp"
 
+#ifdef WITH_FLOGL
 #include "flogl/flogl.hpp"
-
-struct CRGB;
+#endif
+#include "FastLED.h"
 
 class Triangle {
 public:
@@ -16,8 +17,10 @@ public:
             const Edge (&edges)[3],
             const Vertex (&vertices)[3]);
    
+#ifdef WITH_FLOGL
    void createLeds(std::vector<flogl::LED>& leds) const;
-   
+#endif
+
    CRGB* begin();
    CRGB* end();
    

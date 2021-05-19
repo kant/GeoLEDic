@@ -45,6 +45,7 @@ Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, flo
                  Vector(v3) * ((1-fac)/2));
 }
 
+#ifdef WITH_FLOGL
 void Triangle::createLeds(std::vector<flogl::LED>& leds) const
 {
    auto i = 0;
@@ -66,3 +67,4 @@ void Triangle::createLeds(std::vector<flogl::LED>& leds) const
       i++;
    }
 }
+#endif

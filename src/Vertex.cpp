@@ -1,6 +1,5 @@
 #include "Vertex.hpp"
 #include "Vector.hpp"
-#include "flogl/flogl.hpp"
 
 Vertex::Vertex(): x(0), y(0), z(0)
 {}
@@ -26,11 +25,13 @@ Vector Vertex::operator-(const Vertex& v) const
   return Vector(x - v.x, y - v.y, z - v.z);
 }
 
+#ifdef WITH_FLOGL
 Vertex::operator flogl::LED() const
 {
    const auto LED_SIZE = 0.3f;
    return {x, y, z, LED_SIZE};
 }
+#endif
 
 std::ostream& operator<<(std::ostream& os, const Vertex& v)
 {
