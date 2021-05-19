@@ -10,9 +10,7 @@
 #define NUM_STRIPS 1
 
 void setup() {
-    Serial.begin(115200);
-    pinMode(LED_PIN, OUTPUT);
-    
+    Serial.begin(115200);    
     delay(3000); // sanity delay
     FastLED.addLeds<NUM_STRIPS, CHIPSET, LED_PIN, COLOR_ORDER>(colors, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setBrightness(255);
