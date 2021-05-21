@@ -1,6 +1,9 @@
 #include "MidiSource.hpp"
-#ifdef USB_MIDI
+#if defined(USB_MIDI) || defined(USB_MIDI_SERIAL)
 #include "MIDIUSB.h"
+#define WITH_MIDI
+#else
+#pragma message Building without MIDI support
 #endif
 #include "Arduino.h"
 
@@ -32,7 +35,7 @@ public:
 
    const MidiMessage* read()
    {
-#ifdef USB_MIDI
+#ifdef WITH_MIDI
       midiEventPacket_t rx;
       rx = MidiUSB.read();
       if (rx.header != 0)
