@@ -1,5 +1,7 @@
 #include "MidiSource.hpp"
+#ifdef USB_MIDI
 #include "MIDIUSB.h"
+#endif
 #include "Arduino.h"
 
 #define MIDI_ACTIVITY_LED_PIN 13
@@ -30,6 +32,7 @@ public:
 
    const MidiMessage* read()
    {
+#ifdef USB_MIDI
       midiEventPacket_t rx;
       rx = MidiUSB.read();
       if (rx.header != 0)
@@ -47,6 +50,9 @@ public:
          inactive();
          return nullptr;
       }
+#else
+      return nullptr;
+#endif
    }
 
    MidiMessage m_msg;
