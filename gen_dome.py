@@ -211,7 +211,7 @@ def print_row(row):
             # Note: Sketchup order of coordinates is x/z/y, so we'll reorder here
             #       Also, the x coordinates seems mirrored, and we also scale by
             #       a factor of 10 to adjust for the OpenGL coordinate system
-            s.append("{% 1.2f, % 1.2f, % 1.2f}" % (-row[k+l][0] * SCALE, row[k+l][2] * SCALE, row[k+l][1] * SCALE))
+            s.append("{{ {:6.2f}, {:6.2f}, {:6.2f} }}".format(-row[k+l][0] * SCALE, row[k+l][2] * SCALE, row[k+l][1] * SCALE))
         print "{DEFAULT_TRIANGLE,    {%s}}," % ', '.join(s)
 
 
