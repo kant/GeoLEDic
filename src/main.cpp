@@ -5,7 +5,7 @@
 #define LED_PIN     1
 #define COLOR_ORDER RGB
 #define CHIPSET     WS2813
-#define NUM_LEDS    300
+#define NUM_LEDS    1200
 
 #define NUM_STRIPS 1
 #define FRAME_RATE 24
