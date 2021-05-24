@@ -28,7 +28,7 @@ void DefaultRainbow::run()
    for (unsigned t_ix = 0; t_ix < m_num_triangles; t_ix++)
    {
       Triangle& t(m_triangles[t_ix]);
-      fill_rainbow(t.begin(), t.end() - t.begin(), m_iteration);
+      fill_rainbow(t.begin(), t.end() - t.begin(), m_iteration, 1);
    }
    m_iteration++;
 }

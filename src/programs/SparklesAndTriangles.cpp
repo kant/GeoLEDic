@@ -65,10 +65,10 @@ void SparklesAndTriangles::run()
             }
             else
             {
-               int c1 = c + m_iteration + t_ix*20;
-               int colr = (m_red * (c1 % 128))/64;
-               int colg = (m_green * ((c1+30) % 128))/64;
-               int colb = (m_blue * ((c1+60) % 128))/64;
+               int c1 = c + m_iteration + t_ix*100;
+               int colr = (m_red *  (c1 % 200))/200;
+               int colg = (m_green * ((c1+50) % 200))/200;
+               int colb = (m_blue * ((c1+100) % 200))/200;
                
                led = CRGB(colr < 255 ? colr : 255,
                           colg < 255 ? colg : 255,
