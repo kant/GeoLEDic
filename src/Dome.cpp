@@ -10,7 +10,7 @@ int default_led(int step)
 }
 }
 
-#define DEFAULT_TRIANGLE colors, {{default_led(50), default_led(1)},{default_led(50), default_led(1)},{default_led(50), default_led(1)}}
+#define DEFAULT_TRIANGLE colors, {{default_led(99), default_led(1)},{default_led(99), default_led(1)},{default_led(99), default_led(1)}}
 
 CRGB colors[DOME_NUM_LEDS];
 
