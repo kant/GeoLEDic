@@ -1,5 +1,6 @@
 #include "Triangle.hpp"
 #include <climits>
+#include <algorithm>
 
 Triangle::Triangle(
    CRGB* strip,

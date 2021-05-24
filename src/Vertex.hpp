@@ -1,8 +1,6 @@
 #ifndef GEOLEDIC_VERTEX_HPP
 #define GEOLEDIC_VERTEX_HPP
 
-#include <iostream>
-
 #ifdef WITH_FLOGL
 #include "flogl/flogl.hpp"
 #endif
@@ -24,7 +22,5 @@ struct Vertex {
   operator flogl::LED() const;
 #endif
 };
-
-std::ostream& operator<<(std::ostream& os, const Vertex& v);
 
 #endif

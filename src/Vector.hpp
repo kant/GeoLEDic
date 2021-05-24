@@ -1,8 +1,6 @@
 #ifndef GEOLEDIC_VECTOR_HPP
 #define GEOLEDIC_VECTOR_HPP
 
-#include <iostream>
-
 struct Vertex;
 
 struct Vector {
@@ -18,7 +16,5 @@ struct Vector {
   float x, y, z;
 
 };
-
-std::ostream& operator<<(std::ostream& os, const Vector& v);
 
 #endif

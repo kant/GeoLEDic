@@ -33,8 +33,4 @@ Vertex::operator flogl::LED() const
 }
 #endif
 
-std::ostream& operator<<(std::ostream& os, const Vertex& v)
-{
-  return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-}
 

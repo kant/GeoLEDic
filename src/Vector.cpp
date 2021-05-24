@@ -31,8 +31,3 @@ Vector Vector::operator/(float v) const
   return Vector(x/v, y/v, z/v);
 }
 
-std::ostream& operator<<(std::ostream& os, const Vector& v)
-{
-  return os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
-}
-
