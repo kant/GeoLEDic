@@ -28,7 +28,15 @@ void DefaultRainbow::run()
    for (unsigned t_ix = 0; t_ix < m_num_triangles; t_ix++)
    {
       Triangle& t(m_triangles[t_ix]);
-      fill_rainbow(t.begin(), t.end() - t.begin(), m_iteration, 1);
+      CHSV hsv;
+      hsv.hue = t_ix + m_iteration;
+      hsv.val = 150; // 255 is blindingly bright
+      hsv.sat = 240;      
+      for (CRGB& led: t)
+      {
+         led = hsv;
+         hsv.hue += 1;
+      }
    }
    m_iteration++;
 }
