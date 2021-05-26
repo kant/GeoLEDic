@@ -19,53 +19,12 @@ static const uint8_t pinlist[NUM_STRIPS] = {0};
 
 OctoWS2811 leds(NUM_LEDS, dma_mem, colors, WS2811_RGB | WS2813_800kHz, NUM_STRIPS, pinlist);
 
-
-#ifdef USB_MIDI_SERIAL    
-class LoadMonitor
-{
-public:
-    LoadMonitor(unsigned pin): m_accumulated_time_ms(0), m_count(0), m_pin(pin)
-    {
-        pinMode(m_pin, OUTPUT);
-    }
-
-    void end(unsigned time_ms)
-    {
-#ifdef USB_MIDI_SERIAL
-
-        m_accumulated_time_ms += time_ms;
-        m_count++;
-        if (m_count == FRAME_RATE * 2) // print every 2 seconds
-        {
-            Serial.printf("%f%%\n",100*(float(m_accumulated_time_ms)/float(m_count))/FRAME_INTERVAL_MS);
-            m_accumulated_time_ms = 0;
-            m_count = 0;
-        }
-#else
-        (void)time_ms;
-#endif
-        digitalWrite(m_pin, LOW);
-    }
-
-    void start()
-    {
-        digitalWrite(m_pin, HIGH);
-    }
-
-    unsigned m_accumulated_time_ms;
-    unsigned m_count;
-    unsigned m_pin;
-};
-
-static LoadMonitor load_monitor(LOADMON_PIN);
-#endif
-
-
 void setup() {
 #ifdef USB_MIDI_SERIAL    
     Serial.begin(115200); 
 #endif   
-    delay(3000); // sanity delay
+    delay(1000); // sanity delay
+    pinMode(LOADMON_PIN, OUTPUT);
 
     setupGeoLEDic();
     leds.begin();
@@ -74,11 +33,11 @@ void setup() {
 void loop()
 {
     uint32_t time_before = millis();
-    load_monitor.start();
+    digitalWrite(LOADMON_PIN, HIGH);
     loopGeoLEDic();
     leds.show();
 
     uint32_t dt = millis() - time_before;
-    load_monitor.end(dt);
+    digitalWrite(LOADMON_PIN, LOW);
     delay(FRAME_INTERVAL_MS - dt);
 }
