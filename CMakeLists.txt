@@ -23,6 +23,8 @@ set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      src/Triangle.cpp
                      src/Vector.cpp
                      src/Vertex.cpp)
+# disable annoying #pragma messages
+set_source_files_properties(${GEOLEDIC_SOURCES} PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL -DHAS_HARDWARE_PIN_SUPPORT")
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${GEOLEDIC_SOURCES})
 add_executable(GeoLEDic MACOSX_BUNDLE ${GEOLEDIC_SOURCES})
 
