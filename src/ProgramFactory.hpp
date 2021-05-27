@@ -7,13 +7,17 @@
 class ProgramFactory
 {
 public:
-   ProgramFactory(Triangle* triangles, unsigned num_triangles);
+   ProgramFactory(Triangle* triangles, unsigned num_triangles, CRGB* strips, unsigned num_strips, unsigned leds_per_strip);
    ~ProgramFactory();
    Program* changeProgram(uint8_t program);
 
 private:
    Triangle* m_triangles;
    unsigned m_num_triangles;
+   CRGB* m_strips;
+   unsigned m_num_strips;
+   unsigned m_leds_per_strip;
+
    Program* m_current_program;
 };
 

@@ -1,10 +1,11 @@
 #include "GeoLEDic.hpp"
 #include "MidiSource.hpp"
 #include "ProgramFactory.hpp"
+#include "programs/Diagnostic.hpp"
 
 namespace {
 MidiSource midi_source;
-ProgramFactory factory(dome, DOME_NUM_TRIANGLES);
+ProgramFactory factory(dome, DOME_NUM_TRIANGLES, colors, 1, 1200);
 Program* program;
 }
 
@@ -36,6 +37,40 @@ void loopGeoLEDic()
             break;
       }
    }
-      
+
+#ifdef USB_MIDI_SERIAL
+   static Diagnostic* diagnostic_mode = nullptr;
+   while (Serial.available())
+   {
+      char c = Serial.read();
+      if (c == 'd')
+      {
+         program  = factory.changeProgram(127);
+         diagnostic_mode = reinterpret_cast<Diagnostic*>(program);
+         Serial.println("Diagnostic mode entered");
+      }
+      else if (c == 'x')
+      {
+         program = factory.changeProgram(0);
+         Serial.println("Diagnostic mode exited");
+         diagnostic_mode = nullptr;
+      }
+      else if (diagnostic_mode)
+      {
+         if (diagnostic_mode->processKeyboardInput(c))
+         {
+            if (c == '\r' or c == '\n')
+            {
+               Serial.println();
+            }
+            else
+            {
+               Serial.print(c);
+            }
+         }
+      }
+   }
+#endif
+
    program->run();
 }
