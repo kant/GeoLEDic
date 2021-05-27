@@ -2,10 +2,14 @@
 
 #include "programs/SparklesAndTriangles.hpp"
 #include "programs/DefaultRainbow.hpp"
+#include "programs/Diagnostic.hpp"
 
-ProgramFactory::ProgramFactory(Triangle* triangles, unsigned num_triangles):
+ProgramFactory::ProgramFactory(Triangle* triangles, unsigned num_triangles, CRGB* strips, unsigned num_strips, unsigned leds_per_strip):
       m_triangles(triangles),
       m_num_triangles(num_triangles),
+      m_strips(strips),
+      m_num_strips(num_strips),
+      m_leds_per_strip(leds_per_strip),
       m_current_program(nullptr)
 {
 }
@@ -17,6 +21,9 @@ Program* ProgramFactory::changeProgram(uint8_t program)
    {
    case 1:
       m_current_program = new SparklesAndTriangles(m_triangles, m_num_triangles);
+      break;
+   case 127:
+      m_current_program = new Diagnostic(m_triangles, m_num_triangles, m_strips, m_num_strips, m_leds_per_strip);
       break;
    default:
       m_current_program = new DefaultRainbow(m_triangles, m_num_triangles);
