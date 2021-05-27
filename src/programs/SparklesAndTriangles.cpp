@@ -25,16 +25,16 @@ void SparklesAndTriangles::controlChange(uint8_t cc_num, uint8_t value)
 {
    switch (cc_num)
    {
-      case 0x4a:
+      case 16:
          m_red = value;
          break;
-      case 0x47:
+      case 17:
          m_green = value;
          break;
-      case 0x5b:
+      case 18:
          m_blue = value;
          break;
-      case 0x5d:
+      case 19:
          m_sparkle_probability = value ? 2 * (128 - value) : 0;
          break;
       default:
