@@ -3,6 +3,13 @@
 namespace 
 {
    const int NONE(-1);
+#ifdef WITH_FLOGL
+   // need to see a bit more on the dark background in the model
+   // as we don't have the actual beams
+   CRGB OFF(40,40,40);
+#else
+   CRGB OFF(CRGB::Black);
+#endif
 }
 
 Diagnostic::Diagnostic(Triangle* triangles, unsigned num_triangles, CRGB* strips, unsigned num_strips, unsigned leds_per_strip):
@@ -75,7 +82,7 @@ void Diagnostic::run()
             }
             else
             {
-               led = CRGB::Black;
+               led = OFF;
             }
          }
       }
@@ -86,7 +93,7 @@ void Diagnostic::run()
             Triangle& t(m_triangles[i]);
 
             fill_solid(t.begin(), t.end() - t.begin(), 
-                     i == m_lit_triangle ? CRGB::White : CRGB::Black);
+                     i == m_lit_triangle ? CRGB::White : OFF);
          }
       }
 
