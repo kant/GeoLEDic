@@ -2,6 +2,9 @@
 #include "MidiSource.hpp"
 #include "ProgramFactory.hpp"
 #include "programs/Diagnostic.hpp"
+#ifdef WITH_FLOGL
+#include "Serial.hpp"
+#endif
 
 namespace {
 MidiSource midi_source;
@@ -38,18 +41,18 @@ void loopGeoLEDic()
       }
    }
 
-#ifdef USB_MIDI_SERIAL
+#if defined(USB_MIDI_SERIAL) or defined(WITH_FLOGL)
    static Diagnostic* diagnostic_mode = nullptr;
    while (Serial.available())
    {
       char c = Serial.read();
-      if (c == 'd')
+      if (c == 'd' or c == 'D')
       {
          program  = factory.changeProgram(127);
          diagnostic_mode = reinterpret_cast<Diagnostic*>(program);
          Serial.println("Diagnostic mode entered");
       }
-      else if (c == 'x')
+      else if (c == 'x' or c == 'X')
       {
          program = factory.changeProgram(0);
          Serial.println("Diagnostic mode exited");
