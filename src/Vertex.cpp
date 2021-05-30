@@ -29,7 +29,8 @@ Vector Vertex::operator-(const Vertex& v) const
 Vertex::operator flogl::LED() const
 {
    const auto LED_SIZE = 0.3f;
-   return {x, y, z, LED_SIZE};
+   const auto SCALE = 10.0f; // convert from meters to the OpenGL coordinate system
+   return {x * SCALE, y * SCALE, z * SCALE, LED_SIZE};
 }
 #endif
 
