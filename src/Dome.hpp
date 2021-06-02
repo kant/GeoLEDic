@@ -7,7 +7,7 @@
 #define DOME_NUM_TRIANGLES 123
 #define DOME_NUM_LEDS (DOME_NUM_TRIANGLES * 300)
 
-extern CRGB colors[DOME_NUM_LEDS];
+extern CRGB strips[DOME_NUM_LEDS];
 extern Triangle dome[DOME_NUM_TRIANGLES];
 
 #endif

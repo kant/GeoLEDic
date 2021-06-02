@@ -10,12 +10,11 @@ int default_led(int step)
 }
 }
 
-#define DEFAULT_TRIANGLE colors, {{default_led(99), default_led(1)},{default_led(99), default_led(1)},{default_led(99), default_led(1)}}
+#define DEFAULT_TRIANGLE strips, {{default_led(99), default_led(1)},{default_led(99), default_led(1)},{default_led(99), default_led(1)}}
 
-CRGB colors[DOME_NUM_LEDS];
+CRGB strips[DOME_NUM_LEDS];
 
 Triangle dome[DOME_NUM_TRIANGLES] = {
-// row 0
 // row 0
 {DEFAULT_TRIANGLE,    {{  -5.104,   1.658,   2.683 }, {  -5.706,   0.000,   1.854 }, {  -5.706,   1.658,   0.829 }}},
 {DEFAULT_TRIANGLE,    {{  -5.706,   0.000,   1.854 }, {  -5.706,   1.658,   0.829 }, {  -6.000,   0.000,   0.000 }}},

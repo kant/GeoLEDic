@@ -8,7 +8,7 @@
 
 namespace {
 MidiSource midi_source;
-ProgramFactory factory(dome, DOME_NUM_TRIANGLES, colors, 1, 1200);
+ProgramFactory factory(dome, DOME_NUM_TRIANGLES, strips, 1, 1200);
 Program* program;
 }
 

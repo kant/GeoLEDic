@@ -17,7 +17,7 @@ static const int LOADMON_PIN = 14;
 DMAMEM int dma_mem[NUM_LEDS * 3 * (NUM_STRIPS + 3)/4];
 static const uint8_t pinlist[NUM_STRIPS] = {0};
 
-OctoWS2811 leds(NUM_LEDS, dma_mem, colors, WS2811_RGB | WS2813_800kHz, NUM_STRIPS, pinlist);
+OctoWS2811 leds(NUM_LEDS, dma_mem, strips, WS2811_RGB | WS2813_800kHz, NUM_STRIPS, pinlist);
 
 void setup() {
 #ifdef USB_MIDI_SERIAL    
