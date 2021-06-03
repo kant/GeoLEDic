@@ -8,7 +8,7 @@
 
 namespace {
 MidiSource midi_source;
-ProgramFactory factory(dome, DOME_NUM_TRIANGLES, strips, NUM_STRIPS, LEDS_PER_STRIP);
+ProgramFactory factory(dome, DOME_NUM_TRIANGLES, leds, NUM_STRIPS, LEDS_PER_STRIP);
 Program* program;
 }
 

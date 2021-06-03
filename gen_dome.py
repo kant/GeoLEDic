@@ -335,7 +335,7 @@ def print_row(row):
            end   = start + leds_on_edge - 1
            led_counts[strip_ix] += leds_on_edge
            edges_def.append("{%4d, %4d}" % (start, end))
-        triangle_def = "&strips[%2d*LEDS_PER_STRIP], {%s}" % (strip_ix, ', '.join(edges_def))
+        triangle_def = "strip(%2d), {%s}" % (strip_ix, ', '.join(edges_def))
         print "/* %3d */ { %s,  {%s}}, %s" % (triangle_ix, triangle_def, vertices, comment)
         triangle_ix += 1
         
@@ -344,7 +344,11 @@ with open(fbase + ".cpp", 'w') as f:
    sys.stdout = f
    print "#include \"Dome.hpp\""
    print ""
-   print "CRGB strips[NUM_STRIPS * LEDS_PER_STRIP];"
+   print "CRGB leds[NUM_STRIPS * LEDS_PER_STRIP];"
+   print ""
+   print "namespace {"
+   print "CRGB* strip(int ix){ return &leds[ix*LEDS_PER_STRIP]; }"
+   print "}"
    print ""
    print "Triangle dome[DOME_NUM_TRIANGLES] = {"
    print "// row 0"
@@ -389,7 +393,7 @@ with open(fbase + ".hpp", 'w') as f:
    "#define NUM_STRIPS %d\n" \
    "#define LEDS_PER_STRIP %d\n" \
    "\n" \
-   "extern CRGB strips[NUM_STRIPS * LEDS_PER_STRIP];\n" \
+   "extern CRGB leds[NUM_STRIPS * LEDS_PER_STRIP];\n" \
    "extern Triangle dome[DOME_NUM_TRIANGLES];" \
    "\n" \
    "#endif\n" % (len(led_counts), max(led_counts))
