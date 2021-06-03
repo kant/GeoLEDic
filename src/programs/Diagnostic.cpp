@@ -2,7 +2,7 @@
 
 namespace 
 {
-   const int NONE(-1);
+   const unsigned NONE(~0U);
 #ifdef WITH_FLOGL
    // need to see a bit more on the dark background in the model
    // as we don't have the actual beams
@@ -45,11 +45,11 @@ void Diagnostic::run()
 {
    if (m_state == INTRO)
    {
-      const int stride = 20;
-      for (int i = 0; i < m_strips.size(); i++)
+      const unsigned stride = 20;
+      for (unsigned i = 0; i < m_strips.size(); i++)
       {
          Strip leds(m_strips[i]);
-         for (int j = 0; j < leds.size(); j++)
+         for (unsigned j = 0; j < leds.size(); j++)
          {
             if (j >= m_iteration and j < (m_iteration+stride))
             {
@@ -71,7 +71,7 @@ void Diagnostic::run()
    {
       if (m_lit_led != NONE)
       {
-         for (int j = 0; j < m_strips.numLedsPerStrip(); j++)
+         for (unsigned j = 0; j < m_strips.numLedsPerStrip(); j++)
          {
             CRGB& led(m_strips[0][j]);
             if (j == m_lit_led)
@@ -86,7 +86,7 @@ void Diagnostic::run()
       }
       else if (m_lit_triangle != NONE)
       {
-         for (int i = 0; i < m_dome.size(); i++)
+         for (unsigned i = 0; i < m_dome.size(); i++)
          {
             Triangle& t(m_dome[i]);
 
@@ -96,7 +96,7 @@ void Diagnostic::run()
       }
       else
       {
-         for (int i = 0; i < m_strips.size(); i++)
+         for (unsigned i = 0; i < m_strips.size(); i++)
          {
             fill_solid(m_strips[i].begin(), m_strips.numLedsPerStrip(),
                      i == m_lit_strip ? CRGB::White : OFF);

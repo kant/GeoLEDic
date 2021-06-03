@@ -29,11 +29,11 @@ private:
       STRIP
    } m_state;
 
-   int m_iteration;
+   unsigned m_iteration;
    unsigned m_accumulator;
-   int m_lit_led;
-   int m_lit_triangle;
-   int m_lit_strip;
+   unsigned m_lit_led;
+   unsigned m_lit_triangle;
+   unsigned m_lit_strip;
 };
 
 #endif 
