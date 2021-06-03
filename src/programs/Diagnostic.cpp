@@ -22,7 +22,8 @@ Diagnostic::Diagnostic(Triangle* triangles, unsigned num_triangles, CRGB* strips
    m_iteration(0),
    m_accumulator(0),
    m_lit_led(NONE),
-   m_lit_triangle(NONE)
+   m_lit_triangle(NONE),
+   m_lit_strip(NONE)
 {
 }
 
@@ -86,7 +87,7 @@ void Diagnostic::run()
             }
          }
       }
-      else
+      else if (m_lit_triangle != NONE)
       {
          for (int i = 0; i < m_num_triangles; i++)
          {
@@ -94,6 +95,14 @@ void Diagnostic::run()
 
             fill_solid(t.begin(), t.end() - t.begin(), 
                      i == m_lit_triangle ? CRGB::White : OFF);
+         }
+      }
+      else
+      {
+         for (int i = 0; i < m_num_strips; i++)
+         {
+            fill_solid(&m_strips[i*m_leds_per_strip], m_leds_per_strip,
+                     i == m_lit_strip ? CRGB::White : OFF);
          }
       }
 
@@ -119,8 +128,14 @@ bool Diagnostic::processKeyboardInput(char c)
                m_state = TRIANGLE;
                input_accepted = true;
                break;
+            case 's':
+            case 'S':
+               m_state = STRIP;
+               input_accepted = true;
+               break;
             default:
                break;
+
          }
          break;
       
@@ -134,6 +149,7 @@ bool Diagnostic::processKeyboardInput(char c)
          {
             m_lit_led = m_accumulator;
             m_lit_triangle = NONE;
+            m_lit_strip = NONE;
             input_accepted = true;
             m_state = WAIT;
          }
@@ -149,6 +165,23 @@ bool Diagnostic::processKeyboardInput(char c)
          {
             m_lit_triangle = m_accumulator;
             m_lit_led = NONE;
+            m_lit_strip = NONE;
+            input_accepted = true;
+            m_state = WAIT;
+         }
+         break;
+
+      case STRIP:
+         if (isdigit(c))
+         {
+            m_accumulator = 10 * m_accumulator + (c - '0');
+            input_accepted = true;
+         }
+         else if (c == '\n' or c == '\r')
+         {
+            m_lit_strip = m_accumulator;
+            m_lit_led = NONE;
+            m_lit_triangle = NONE;
             input_accepted = true;
             m_state = WAIT;
          }

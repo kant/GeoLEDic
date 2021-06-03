@@ -1,4 +1,7 @@
 import math
+import sys
+
+fbase = sys.argv[1]+"/Dome"
 
 row0 = [
     [ 5.104,  2.683, 1.658],
@@ -215,40 +218,144 @@ row51 = [
     [-0.886,  1.219, 5.808]
 ]
 
+strips = [
+   [ 0,  1, 26],
+   [ 2,  3,  4, 30],
+   [ 5,  6, 31, 32],
+   [ 7,  8,  9],
+   [10, 11, 12, 38],
+   [13, 14, 39, 40],
+   [15, 16, 17],
+   [18, 19, 20, 46],
+   [21, 22, 47, 48],
+   [23, 24, 50],
+   [25, 27, 28, 29],
+   [33, 60, 59, 83],
+   [34, 35, 36, 37],
+   [41, 67, 88, 89],
+   [42, 43, 44, 45],
+   [49, 51, 73, 74],
+   [52, 53, 78, 79],
+   [54, 55, 56, 57],
+   [58, 84, 85, 107],
+   [61, 62, 63, 64],
+   [65, 66, 91, 92],
+   [68, 69, 70, 71],
+   [72, 75, 93, 94],
+   [76, 77, 98, 99],
+   [80, 81, 104, 119],
+   [82, 105, 106, 108],
+   [86, 87, 109, 120],
+   [90, 110, 112, 121],
+   [95, 111, 113, 114],
+   [96, 97, 115, 122],
+   [100, 101, 102],
+   [103, 116, 117, 118]
+]
+
+led_counts = [0] * 32
+
+def distance(a, b):
+   e = [b[0] - a[0], b[1] - a[1], b[2] - a[2]]
+   correction = 0.0685 # approximate correction for hub diameter and curvature, to be confirmed
+   return math.sqrt(e[0]**2 + e[1]**2 + e[2]**2) - correction
+
+total_length = 0
+triangle_ix = 0
+
+def find_strip(triangle_ix):
+   global strips
+   for k in xrange(len(strips)):
+      if triangle_ix in strips[k]:
+         return k
+   raise Exception("Couldn't find strip for triangle %d" % triangle_ix)
+         
 
 def print_row(row):
+    global total_length
+    global triangle_ix
+    global led_counts
     for k in xrange(len(row)-2):
         s = []
         for l in xrange(3):
             # Note: Sketchup order of coordinates is x/z/y, so we'll reorder here
             #       Also, the x coordinate seems mirrored
-            s.append("{{ {:7.3f}, {:7.3f}, {:7.3f} }}".format(-row[k+l][0], row[k+l][2], row[k+l][1]))
-        print "{DEFAULT_TRIANGLE,    {%s}}," % ', '.join(s)
+            s.append("{{ {:6.3f}, {:6.3f}, {:6.3f} }}".format(-row[k+l][0], row[k+l][2], row[k+l][1]))
+        edge_lengths = [distance(row[k], row[k+1]), distance(row[k+1], row[k+2]), distance(row[k+2], row[k])]
+        triangle_length = sum(edge_lengths)
+        total_length += triangle_length
+        num_leds = int(math.ceil(triangle_length*60))
+        comment = "// {:d}: {:.3f}, {:.3f}, {:.3f}: {:.4f}m (~{:d} LEDs)".format(triangle_ix, edge_lengths[0], edge_lengths[1], edge_lengths[2], triangle_length, num_leds)
+        vertices = ', '.join(s)
+        strip_ix = find_strip(triangle_ix)
+        edges_def = []
+        leds_remaining = num_leds
+        for e in xrange(3):
+           start = led_counts[strip_ix]
+           if e < 2:
+              leds_on_edge = math.ceil(edge_lengths[e] * 60)
+              leds_remaining -= leds_on_edge
+           else:
+              leds_on_edge = leds_remaining
+           end   = start + leds_on_edge - 1
+           led_counts[strip_ix] += leds_on_edge
+           edges_def.append("{%4d, %4d}" % (start, end))
+        triangle_def = "&strips[%2d*LEDS_PER_STRIP], {%s}" % (strip_ix, ', '.join(edges_def))
+        print "/* %3d */ { %s,  {%s}}, %s" % (triangle_ix, triangle_def, vertices, comment)
+        triangle_ix += 1
+        
+with open(fbase + ".cpp", 'w') as f:
+   original_stdout = sys.stdout
+   sys.stdout = f
+   print "#include \"Dome.hpp\""
+   print ""
+   print "CRGB strips[NUM_STRIPS * LEDS_PER_STRIP];"
+   print ""
+   print "Triangle dome[DOME_NUM_TRIANGLES] = {"
+   print "// row 0"
+   print_row(row0)
+   print "// row 1"
+   print_row(row1)
+   print "// row 2"
+   print_row(row20)
+   print_row(row21)
+   print_row(row22)
+   print_row(row23)
+   print "// row 3"
+   print_row(row30)
+   print_row(row31)
+   print_row(row32)
+   print_row(row33)
+   print_row(row34)
+   print "// row 4"
+   print_row(row40)
+   print_row(row41)
+   print_row(row42)
+   print_row(row43)
+   print_row(row44)
+   print "// row 5"
+   print_row(row50)
+   print_row(row51)
+   print "};"
+   print "// TOTAL LEDS: %d" % sum(led_counts)
+   sys.stdout = original_stdout
 
-
-print "Triangle dome[] = {"
-print "// row 0"
-print_row(row0)
-print "// row 1"
-print_row(row1)
-print "// row 2"
-print_row(row20)
-print_row(row21)
-print_row(row22)
-print_row(row23)
-print "// row 3"
-print_row(row30)
-print_row(row31)
-print_row(row32)
-print_row(row33)
-print_row(row34)
-print "// row 4"
-print_row(row40)
-print_row(row41)
-print_row(row42)
-print_row(row43)
-print_row(row44)
-print "// row 5"
-print_row(row50)
-print_row(row51)
-print "};"
+with open(fbase + ".hpp", 'w') as f:
+   original_stdout = sys.stdout
+   sys.stdout = f
+   print \
+   "#ifndef GEOLEDIC_DOME_HPP\n" \
+   "#define GEOLEDIC_DOME_HPP\n" \
+   "\n" \
+   "#include \"Triangle.hpp\"\n" \
+   "#include <FastLED.h>\n" \
+   "\n" \
+   "#define DOME_NUM_TRIANGLES 123\n" \
+   "#define NUM_STRIPS %d\n" \
+   "#define LEDS_PER_STRIP %d\n" \
+   "\n" \
+   "extern CRGB strips[NUM_STRIPS * LEDS_PER_STRIP];\n" \
+   "extern Triangle dome[DOME_NUM_TRIANGLES];" \
+   "\n" \
+   "#endif\n" % (len(led_counts), max(led_counts))
+   sys.stdout = original_stdout

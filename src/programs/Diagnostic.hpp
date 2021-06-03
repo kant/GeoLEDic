@@ -27,13 +27,15 @@ private:
       INTRO,
       WAIT,
       LED,
-      TRIANGLE
+      TRIANGLE,
+      STRIP
    } m_state;
 
    int m_iteration;
    unsigned m_accumulator;
    int m_lit_led;
    int m_lit_triangle;
+   int m_lit_strip;
 };
 
 #endif 

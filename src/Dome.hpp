@@ -5,9 +5,10 @@
 #include <FastLED.h>
 
 #define DOME_NUM_TRIANGLES 123
-#define DOME_NUM_LEDS (DOME_NUM_TRIANGLES * 300)
+#define NUM_STRIPS 32
+#define LEDS_PER_STRIP 1260
 
-extern CRGB strips[DOME_NUM_LEDS];
+extern CRGB strips[NUM_STRIPS * LEDS_PER_STRIP];
 extern Triangle dome[DOME_NUM_TRIANGLES];
-
 #endif
+

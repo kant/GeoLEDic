@@ -6,18 +6,16 @@
 #define LED_PIN     1
 #define COLOR_ORDER RGB
 #define CHIPSET     WS2813
-#define NUM_LEDS    1200
-#define NUM_STRIPS  1
 
 #define FRAME_RATE 24
 static const unsigned FRAME_INTERVAL_MS = 1000 / FRAME_RATE;
 
-static const int LOADMON_PIN = 14;
+static const int LOADMON_PIN = 34;
 
-DMAMEM int dma_mem[NUM_LEDS * 3 * (NUM_STRIPS + 3)/4];
-static const uint8_t pinlist[NUM_STRIPS] = {0};
+DMAMEM int dma_mem[LEDS_PER_STRIP * 3 * (NUM_STRIPS + 3)/4];
+static const uint8_t pinlist[NUM_STRIPS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
 
-OctoWS2811 leds(NUM_LEDS, dma_mem, strips, WS2811_RGB | WS2813_800kHz, NUM_STRIPS, pinlist);
+OctoWS2811 leds(LEDS_PER_STRIP, dma_mem, strips, WS2811_RGB | WS2813_800kHz, NUM_STRIPS, pinlist);
 
 void setup() {
 #ifdef USB_MIDI_SERIAL    
