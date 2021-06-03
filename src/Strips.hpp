@@ -1,6 +1,7 @@
 #ifndef Strips_h
 #define Strips_h
 
+#define FASTLED_INTERNAL // get rid of annoying version pragma
 #include "FastLED.h"
 
 class Strip

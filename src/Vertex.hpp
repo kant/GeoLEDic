@@ -2,6 +2,7 @@
 #define GEOLEDIC_VERTEX_HPP
 
 #ifdef WITH_FLOGL
+#define FASTLED_INTERNAL // get rid of annoying version pragma
 #include "flogl/flogl.hpp"
 #endif
 

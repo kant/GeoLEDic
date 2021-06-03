@@ -387,7 +387,6 @@ with open(fbase + ".hpp", 'w') as f:
    "#define GEOLEDIC_DOME_HPP\n" \
    "\n" \
    "#include \"Triangle.hpp\"\n" \
-   "#include <FastLED.h>\n" \
    "\n" \
    "#define DOME_NUM_TRIANGLES 123\n" \
    "#define NUM_STRIPS %d\n" \

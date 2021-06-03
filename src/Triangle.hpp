@@ -5,6 +5,7 @@
 #include "Vertex.hpp"
 #include "Edge.hpp"
 
+#define FASTLED_INTERNAL // get rid of annoying version pragma
 #ifdef WITH_FLOGL
 #include "flogl/flogl.hpp"
 #endif

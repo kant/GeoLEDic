@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include <OctoWS2811.h>
+#define FASTLED_INTERNAL // get rid of annoying version pragma
 #include "FastLED.h"
 #include "GeoLEDic.hpp"
 

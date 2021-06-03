@@ -2,7 +2,6 @@
 #define GEOLEDIC_DOME_HPP
 
 #include "Triangle.hpp"
-#include <FastLED.h>
 
 #define DOME_NUM_TRIANGLES 123
 #define NUM_STRIPS 32
