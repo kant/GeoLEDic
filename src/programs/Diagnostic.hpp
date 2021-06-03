@@ -2,12 +2,13 @@
 #define GEOLEDIC_DIAGNOSTIC_HPP
 
 #include "DomeWrapper.hpp"
+#include "Strips.hpp"
 #include "Program.hpp"
 
 class Diagnostic: public Program
 {
 public:
-   Diagnostic(const DomeWrapper& dome, CRGB* strips, unsigned num_strips, unsigned m_leds_per_strip);
+   Diagnostic(const DomeWrapper& dome, const Strips& strips);
    
    virtual void noteOn(uint8_t note, uint8_t velocity);
    virtual void noteOff(uint8_t note);
@@ -18,9 +19,7 @@ public:
    
 private:
    const DomeWrapper& m_dome;
-   CRGB* m_strips;
-   int m_num_strips;
-   int m_leds_per_strip;
+   const Strips& m_strips;
 
    enum {
       INTRO,

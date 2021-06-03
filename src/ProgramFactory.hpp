@@ -2,21 +2,20 @@
 #define GEOLEDIC_PROGRAM_FACTORY
 
 #include "DomeWrapper.hpp"
+#include "Strips.hpp"
 #include "Program.hpp"
 
 class ProgramFactory
 {
 public:
-   ProgramFactory(const DomeWrapper& dome, CRGB* strips, unsigned num_strips, unsigned leds_per_strip);
+   ProgramFactory(const DomeWrapper& dome, const Strips& strips);
    ~ProgramFactory();
    Program* changeProgram(uint8_t program);
 
 private:
    
    DomeWrapper m_dome;
-   CRGB* m_strips;
-   unsigned m_num_strips;
-   unsigned m_leds_per_strip;
+   Strips m_strips;
 
    Program* m_current_program;
 };

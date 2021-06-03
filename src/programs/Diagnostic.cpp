@@ -12,11 +12,9 @@ namespace
 #endif
 }
 
-Diagnostic::Diagnostic(const DomeWrapper& dome, CRGB* strips, unsigned num_strips, unsigned leds_per_strip):
+Diagnostic::Diagnostic(const DomeWrapper& dome, const Strips& strips):
    m_dome(dome),
    m_strips(strips),
-   m_num_strips(num_strips),
-   m_leds_per_strip(leds_per_strip),
    m_state(INTRO),
    m_iteration(0),
    m_accumulator(0),
@@ -48,23 +46,23 @@ void Diagnostic::run()
    if (m_state == INTRO)
    {
       const int stride = 20;
-      for (int i = 0; i < m_num_strips; i++)
+      for (int i = 0; i < m_strips.size(); i++)
       {
-         for (int j = 0; j < m_leds_per_strip; j++)
+         Strip leds(m_strips[i]);
+         for (int j = 0; j < leds.size(); j++)
          {
-            CRGB& led(m_strips[i*m_leds_per_strip + j]);
             if (j >= m_iteration and j < (m_iteration+stride))
             {
-               led = CRGB::White;
+               leds[j] = CRGB::White;
             }
             else
             {
-               led = CRGB::Black;
+               leds[j] = CRGB::Black;
             }
          }
       }
       m_iteration += stride;
-      if (m_iteration > m_leds_per_strip)
+      if (m_iteration > m_strips.numLedsPerStrip())
       {
          m_state = WAIT;
       }
@@ -73,9 +71,9 @@ void Diagnostic::run()
    {
       if (m_lit_led != NONE)
       {
-         for (int j = 0; j < m_leds_per_strip; j++)
+         for (int j = 0; j < m_strips.numLedsPerStrip(); j++)
          {
-            CRGB& led(m_strips[j]);
+            CRGB& led(m_strips[0][j]);
             if (j == m_lit_led)
             {
                led = CRGB::White;
@@ -98,9 +96,9 @@ void Diagnostic::run()
       }
       else
       {
-         for (int i = 0; i < m_num_strips; i++)
+         for (int i = 0; i < m_strips.size(); i++)
          {
-            fill_solid(&m_strips[i*m_leds_per_strip], m_leds_per_strip,
+            fill_solid(m_strips[i].begin(), m_strips.numLedsPerStrip(),
                      i == m_lit_strip ? CRGB::White : OFF);
          }
       }
