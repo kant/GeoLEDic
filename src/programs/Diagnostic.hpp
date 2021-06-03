@@ -1,13 +1,13 @@
 #ifndef GEOLEDIC_DIAGNOSTIC_HPP
 #define GEOLEDIC_DIAGNOSTIC_HPP
 
-#include "Triangle.hpp"
+#include "DomeWrapper.hpp"
 #include "Program.hpp"
 
 class Diagnostic: public Program
 {
 public:
-   Diagnostic(Triangle* triangles, unsigned num_triangles, CRGB* strips, unsigned num_strips, unsigned m_leds_per_strip);
+   Diagnostic(const DomeWrapper& dome, CRGB* strips, unsigned num_strips, unsigned m_leds_per_strip);
    
    virtual void noteOn(uint8_t note, uint8_t velocity);
    virtual void noteOff(uint8_t note);
@@ -17,8 +17,7 @@ public:
    bool processKeyboardInput(char c);
    
 private:
-   Triangle* m_triangles;
-   int m_num_triangles;
+   const DomeWrapper& m_dome;
    CRGB* m_strips;
    int m_num_strips;
    int m_leds_per_strip;

@@ -1,13 +1,13 @@
 #ifndef GEOLEDIC_SparklesAndTriangles_hpp
 #define GEOLEDIC_SparklesAndTriangles_hpp
 
-#include "Triangle.hpp"
+#include "DomeWrapper.hpp"
 #include "Program.hpp"
 
 class SparklesAndTriangles: public Program
 {
 public:
-   SparklesAndTriangles(Triangle* triangles, unsigned num_triangles);
+   SparklesAndTriangles(const DomeWrapper& dome);
    
    virtual void noteOn(uint8_t note, uint8_t velocity);
    virtual void noteOff(uint8_t note);
@@ -15,8 +15,7 @@ public:
    virtual void run();
    
 private:
-   Triangle* m_triangles;
-   unsigned m_num_triangles;
+   const DomeWrapper& m_dome;
    int m_red;
    int m_green;
    int m_blue;

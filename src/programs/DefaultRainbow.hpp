@@ -1,13 +1,13 @@
 #ifndef GEOLEDIC_DEFAULT_RAINBOW_HPP
 #define GEOLEDIC_DEFAULT_RAINBOW_HPP
 
-#include "Triangle.hpp"
+#include "DomeWrapper.hpp"
 #include "Program.hpp"
 
 class DefaultRainbow: public Program
 {
 public:
-   DefaultRainbow(Triangle* triangles, unsigned num_triangles);
+   DefaultRainbow(const DomeWrapper& dome);
    
    virtual void noteOn(uint8_t note, uint8_t velocity);
    virtual void noteOff(uint8_t note);
@@ -15,8 +15,7 @@ public:
    virtual void run();
    
 private:
-   Triangle* m_triangles;
-   unsigned m_num_triangles;
+   const DomeWrapper& m_dome;
    int m_iteration;
 };
 

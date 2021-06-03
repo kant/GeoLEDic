@@ -12,9 +12,8 @@ namespace
 #endif
 }
 
-Diagnostic::Diagnostic(Triangle* triangles, unsigned num_triangles, CRGB* strips, unsigned num_strips, unsigned leds_per_strip):
-   m_triangles(triangles),
-   m_num_triangles(num_triangles),
+Diagnostic::Diagnostic(const DomeWrapper& dome, CRGB* strips, unsigned num_strips, unsigned leds_per_strip):
+   m_dome(dome),
    m_strips(strips),
    m_num_strips(num_strips),
    m_leds_per_strip(leds_per_strip),
@@ -89,9 +88,9 @@ void Diagnostic::run()
       }
       else if (m_lit_triangle != NONE)
       {
-         for (int i = 0; i < m_num_triangles; i++)
+         for (int i = 0; i < m_dome.size(); i++)
          {
-            Triangle& t(m_triangles[i]);
+            Triangle& t(m_dome[i]);
 
             fill_solid(t.begin(), t.end() - t.begin(), 
                      i == m_lit_triangle ? CRGB::White : OFF);

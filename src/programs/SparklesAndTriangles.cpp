@@ -1,8 +1,7 @@
 #include "SparklesAndTriangles.hpp"
 
-SparklesAndTriangles::SparklesAndTriangles(Triangle* triangles, unsigned num_triangles):
-   m_triangles(triangles),
-   m_num_triangles(num_triangles),
+SparklesAndTriangles::SparklesAndTriangles(const DomeWrapper& dome):
+   m_dome(dome),
    m_red(0),
    m_green(0),
    m_blue(0),
@@ -45,9 +44,9 @@ void SparklesAndTriangles::controlChange(uint8_t cc_num, uint8_t value)
 
 void SparklesAndTriangles::run()
 {
-   for (unsigned t_ix = 0; t_ix < m_num_triangles; t_ix++)
+   for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
-      Triangle& t(m_triangles[t_ix]);
+      Triangle& t(m_dome[t_ix]);
       if (m_notes[t_ix] > 0)
       {
          fill_solid(t.begin(), t.end() - t.begin(), ColorFromPalette(RainbowColors_p, m_notes[t_ix]*2));
