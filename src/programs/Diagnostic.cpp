@@ -19,6 +19,7 @@ Diagnostic::Diagnostic(const DomeWrapper& dome, const Strips& strips):
    m_iteration(0),
    m_accumulator(0),
    m_lit_led(NONE),
+   m_strip_for_lit_led(0),
    m_lit_triangle(NONE),
    m_lit_strip(NONE)
 {
@@ -57,7 +58,7 @@ void Diagnostic::run()
             }
             else
             {
-               leds[j] = CRGB::Black;
+               leds[j] = OFF;
             }
          }
       }
@@ -71,16 +72,13 @@ void Diagnostic::run()
    {
       if (m_lit_led != NONE)
       {
-         for (unsigned j = 0; j < m_strips.numLedsPerStrip(); j++)
+         for (unsigned k = 0; k < m_strips.size(); k++)
          {
-            CRGB& led(m_strips[0][j]);
-            if (j == m_lit_led)
+            Strip leds(m_strips[k]);
+            fill_solid(leds.begin(), leds.size(), OFF);
+            if (k == m_strip_for_lit_led)
             {
-               led = CRGB::White;
-            }
-            else
-            {
-               led = OFF;
+               leds[m_lit_led] = CRGB::White;
             }
          }
       }
@@ -140,6 +138,12 @@ bool Diagnostic::processKeyboardInput(char c)
          if (isdigit(c))
          {
             m_accumulator = 10 * m_accumulator + (c - '0');
+            input_accepted = true;
+         }
+         else if (c == ':' or c == ';')
+         {
+            m_strip_for_lit_led = m_accumulator;
+            m_accumulator = 0;
             input_accepted = true;
          }
          else if (c == '\r' or c == '\n')

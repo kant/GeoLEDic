@@ -32,6 +32,7 @@ private:
    unsigned m_iteration;
    unsigned m_accumulator;
    unsigned m_lit_led;
+   unsigned m_strip_for_lit_led;
    unsigned m_lit_triangle;
    unsigned m_lit_strip;
 };
