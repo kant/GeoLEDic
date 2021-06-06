@@ -27,13 +27,16 @@ Diagnostic::Diagnostic(const DomeWrapper& dome, const Strips& strips):
 
 void Diagnostic::noteOn(uint8_t note, uint8_t velocity)
 {
-   (void)note;
    (void)velocity;
+   m_lit_triangle = note;
+   m_lit_strip = NONE;
+   m_lit_led = NONE;
 }
 
 void Diagnostic::noteOff(uint8_t note)
 {
    (void)note;
+   if (note == m_lit_triangle) m_lit_triangle = NONE;
 }
 
 void Diagnostic::controlChange(uint8_t cc_num, uint8_t value)
