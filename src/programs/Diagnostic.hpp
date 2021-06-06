@@ -18,6 +18,13 @@ public:
    bool processKeyboardInput(char c);
    
 private:
+   bool extractDigit(char c);
+   
+   bool processWaitState(char c);
+   bool processLedState(char c);
+   bool processTriangleState(char c);
+   bool processStripState(char c);
+
    const DomeWrapper& m_dome;
    const Strips& m_strips;
 

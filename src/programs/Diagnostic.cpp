@@ -109,91 +109,114 @@ void Diagnostic::run()
 
 bool Diagnostic::processKeyboardInput(char c)
 {
-   bool input_accepted = false;
    switch (m_state)
    {         
       case WAIT:
-         m_accumulator = 0;
-         switch (c)
-         {
-            case 'l':
-            case 'L':
-               m_state = LED;
-               input_accepted = true;
-               break;
-            case 't':
-            case 'T':
-               m_state = TRIANGLE;
-               input_accepted = true;
-               break;
-            case 's':
-            case 'S':
-               m_state = STRIP;
-               input_accepted = true;
-               break;
-            default:
-               break;
-
-         }
-         break;
+         return processWaitState(c);
       
       case LED:
-         if (isdigit(c))
-         {
-            m_accumulator = 10 * m_accumulator + (c - '0');
-            input_accepted = true;
-         }
-         else if (c == ':' or c == ';')
-         {
-            m_strip_for_lit_led = m_accumulator;
-            m_accumulator = 0;
-            input_accepted = true;
-         }
-         else if (c == '\r' or c == '\n')
-         {
-            m_lit_led = m_accumulator;
-            m_lit_triangle = NONE;
-            m_lit_strip = NONE;
-            input_accepted = true;
-            m_state = WAIT;
-         }
-         break;
+         return processLedState(c);
 
       case TRIANGLE:
-         if (isdigit(c))
-         {
-            m_accumulator = 10 * m_accumulator + (c - '0');
-            input_accepted = true;
-         }
-         else if (c == '\n' or c == '\r')
-         {
-            m_lit_triangle = m_accumulator;
-            m_lit_led = NONE;
-            m_lit_strip = NONE;
-            input_accepted = true;
-            m_state = WAIT;
-         }
-         break;
+         return processTriangleState(c);
 
       case STRIP:
-         if (isdigit(c))
-         {
-            m_accumulator = 10 * m_accumulator + (c - '0');
-            input_accepted = true;
-         }
-         else if (c == '\n' or c == '\r')
-         {
-            m_lit_strip = m_accumulator;
-            m_lit_led = NONE;
-            m_lit_triangle = NONE;
-            input_accepted = true;
-            m_state = WAIT;
-         }
-         break;
+         return processStripState(c);
 
       case INTRO:
       default:
-         break;
+         return false;
    }
-   return input_accepted;
 }
+
+bool Diagnostic::extractDigit(char c)
+{
+   if (not isdigit(c)) return false;
+   
+   m_accumulator = 10 * m_accumulator + (c - '0');
+   return true;
+}
+
+bool Diagnostic::processWaitState(char c)
+{
+   m_accumulator = 0;
+   switch (toupper(c))
+   {
+      case 'L':
+         m_state = LED;
+         return true;
+      case 'T':
+         m_state = TRIANGLE;
+         return true;
+      case 'S':
+         m_state = STRIP;
+         return true;
+      default:
+         return false;
+   }
+}
+
+bool Diagnostic::processLedState(char c)
+{
+   if (extractDigit(c))
+   {
+      return true;
+   }
+   
+   if (c == ':' or c == ';')
+   {
+      m_strip_for_lit_led = m_accumulator;
+      m_accumulator = 0;
+      return true;
+   }
+   
+   if (c == '\r' or c == '\n')
+   {
+      m_lit_led = m_accumulator;
+      m_lit_triangle = NONE;
+      m_lit_strip = NONE;
+      m_state = WAIT;
+      return true;
+   }
+
+   return false;
+}
+
+bool Diagnostic::processTriangleState(char c)
+{
+   if (extractDigit(c))
+   {
+      return true;
+   }
+   
+   if (c == '\n' or c == '\r')
+   {
+      m_lit_triangle = m_accumulator;
+      m_lit_led = NONE;
+      m_lit_strip = NONE;
+      m_state = WAIT;
+      return true;
+   }
+   
+   return false;
+}
+
+bool Diagnostic::processStripState(char c)
+{
+   if (extractDigit(c))
+   {
+      return true;
+   }
+   
+   if (c == '\n' or c == '\r')
+   {
+      m_lit_strip = m_accumulator;
+      m_lit_led = NONE;
+      m_lit_triangle = NONE;
+      m_state = WAIT;
+      return true;
+   }
+   
+   return false;
+}
+
