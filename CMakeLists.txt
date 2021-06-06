@@ -5,6 +5,7 @@ set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLE
 
 add_subdirectory(FastLED-OpenGL)
 add_subdirectory(src/target/${CMAKE_SYSTEM_NAME})
+add_subdirectory(src/target/Flogl)
 add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
@@ -12,7 +13,8 @@ add_definitions(-std=c++11
                 -Wno-deprecated-register)
 include_directories(FastLED-OpenGL
                     FastLED/src
-                    src)
+                    src
+                    src/target/Flogl)
 
 set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
