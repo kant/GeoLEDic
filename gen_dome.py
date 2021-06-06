@@ -218,40 +218,16 @@ row51 = [
     [-0.886,  1.219, 5.808]
 ]
 
-strips_old = [
-   [  0,   1,  26],
-   [  2,   3,   4,  30],
-   [  5,   6,  31,  32],
-   [  7,   8,   9],
-   [ 10,  11,  12,  38],
-   [ 13,  14,  39,  40],
-   [ 15,  16,  17],
-   [ 18,  19,  20,  46],
-   [ 21,  22,  47,  48],
-   [ 23,  24,  50],
-   [ 25,  27,  28,  29],
-   [ 33,  60,  59,  83],
-   [ 34,  35,  36,  37],
-   [ 41,  67,  88,  89],
-   [ 42,  43,  44,  45],
-   [ 49,  51,  73,  74],
-   [ 52,  53,  78,  79],
-   [ 54,  55,  56,  57],
-   [ 58,  84,  85, 107],
-   [ 61,  62,  63,  64],
-   [ 65,  66,  91,  92],
-   [ 68,  69,  70,  71],
-   [ 72,  75,  93,  94],
-   [ 76,  77,  98,  99],
-   [ 80,  81, 104, 119],
-   [ 82, 105, 106, 108],
-   [ 86,  87, 109, 120],
-   [ 90, 110, 112, 121],
-   [ 95, 111, 113, 114],
-   [ 96,  97, 115, 122],
-   [100, 101, 102],
-   [103, 116, 117, 118]
-]
+# map exterior panel edge lengths of the (inaccurate) SketchUp model to the
+# actual strut lengths
+strut_map = {
+   1.519: 1.155, # A  20
+   1.771: 1.380, # B  22
+   1.767: 1.677, # C  48
+   1.877: 1.700, # D  54
+   1.950: 1.772, # E  27
+   1.792: 1.799, # F? 24
+}
 
 strips = [
    [  0,   1,   2,  29],
@@ -290,10 +266,21 @@ strips = [
 
 led_counts = [0] * 32
 
+
 def distance(a, b):
+   global strut_map
    e = [b[0] - a[0], b[1] - a[1], b[2] - a[2]]
-   correction = 0.0685 # approximate correction for hub diameter and curvature, to be confirmed
-   return math.sqrt(e[0]**2 + e[1]**2 + e[2]**2) - correction
+   panel_edge_length =  math.sqrt(e[0]**2 + e[1]**2 + e[2]**2)
+   min_diff = 10000;
+   strut_length = 0;
+   for outer, strut in strut_map.items():
+      d = abs(outer - panel_edge_length)
+      if d < min_diff:
+         min_diff = d
+         strut_length = strut
+   if (strut_length == 0):
+      raise Exception("Couldn't find strut length for outer panel edge %.3f" % panel_edge_length)
+   return strut_length
 
 total_length = 0
 triangle_ix = 0
@@ -319,8 +306,8 @@ def print_row(row):
         edge_lengths = [distance(row[k], row[k+1]), distance(row[k+1], row[k+2]), distance(row[k+2], row[k])]
         triangle_length = sum(edge_lengths)
         total_length += triangle_length
-        num_leds = int(math.ceil(triangle_length*60))
-        comment = "// {:d}: {:.3f}, {:.3f}, {:.3f}: {:.4f}m (~{:d} LEDs)".format(triangle_ix, edge_lengths[0], edge_lengths[1], edge_lengths[2], triangle_length, num_leds)
+        num_leds = int(math.ceil(triangle_length*60)) + 3 # adding 3 LEDs for the corners seems to be roughly right
+        comment = "// {:.3f}, {:.3f}, {:.3f}: {:.4f}m (~{:d} LEDs)".format(edge_lengths[0], edge_lengths[1], edge_lengths[2], triangle_length, num_leds)
         vertices = ', '.join(s)
         strip_ix = find_strip(triangle_ix)
         edges_def = []
@@ -339,6 +326,7 @@ def print_row(row):
         print "/* %3d */ { %s,  {%s}}, %s" % (triangle_ix, triangle_def, vertices, comment)
         triangle_ix += 1
         
+
 with open(fbase + ".cpp", 'w') as f:
    original_stdout = sys.stdout
    sys.stdout = f
