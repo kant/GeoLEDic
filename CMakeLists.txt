@@ -33,4 +33,5 @@ add_executable(GeoLEDic MACOSX_BUNDLE ${GEOLEDIC_SOURCES})
 target_link_libraries(GeoLEDic flogl ${TARGET_LIBRARIES})
 
 
-add_custom_target(regenerate-dome COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_custom_target(regenerate-dome COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py ${CMAKE_CURRENT_SOURCE_DIR}/src
+                                  SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py)
