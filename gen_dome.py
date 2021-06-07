@@ -293,17 +293,54 @@ def find_strip(triangle_ix):
    raise Exception("Couldn't find strip for triangle %d" % triangle_ix)
          
 
+def rotate180(triangle):
+   for c in triangle:
+      c[0] = -c[0]
+      c[2] = -c[2]
+
+def angle(coords):
+   if (coords[0] == 0 and coords[2] == 0):
+      # at the apex, artificially high number to make sure it isn't the starting corner
+      return 100
+   return round(2*math.atan2(coords[0], -coords[2]),3)/2
+
 def print_row(row):
     global total_length
     global triangle_ix
     global led_counts
     for k in xrange(len(row)-2):
         s = []
-        for l in xrange(3):
+        
+        triangle = []
+        for m in xrange(3):
             # Note: Sketchup order of coordinates is x/z/y, so we'll reorder here
             #       Also, the x coordinate seems mirrored
-            s.append("{{ {:6.3f}, {:6.3f}, {:6.3f} }}".format(-row[k+l][0], row[k+l][2], row[k+l][1]))
-        edge_lengths = [distance(row[k], row[k+1]), distance(row[k+1], row[k+2]), distance(row[k+2], row[k])]
+            triangle.append([-row[k+m][0], row[k+m][2], row[k+m][1]])
+
+        # rotate by 180 deg if necessary to steer clear of the singularity at +-pi
+        triangle_rotated = abs(angle(triangle[0])) > math.pi*3/4
+        if triangle_rotated:
+            rotate180(triangle)
+
+        # make triangles turn clock-wise:
+        # first corner is left-most (lowest horizontal angle, lowest y if angle equal), second corner is top-most (highest y)
+        triangle.sort(key=lambda c: (angle(c), c[1]))
+
+        # second corner is the one higher up of the two remaining
+        if triangle[1][1] < triangle[2][1]:
+            tmp = triangle[2]
+            triangle[2] = triangle[1]
+            triangle[1] = tmp
+
+        if triangle_rotated:
+            rotate180(triangle)
+
+        for m in xrange(3):
+            s.append("{{ {:6.3f}, {:6.3f}, {:6.3f} }}".format(triangle[m][0], triangle[m][1], triangle[m][2]))
+
+        edge_lengths = [distance(triangle[0], triangle[1]),
+                        distance(triangle[1], triangle[2]),
+                        distance(triangle[2], triangle[0])]
         triangle_length = sum(edge_lengths)
         total_length += triangle_length
         num_leds = int(math.ceil(triangle_length*60)) + 3 # adding 3 LEDs for the corners seems to be roughly right
