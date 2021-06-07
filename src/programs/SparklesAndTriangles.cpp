@@ -64,7 +64,7 @@ void SparklesAndTriangles::run()
             }
             else
             {
-               int c1 = c + m_iteration + t_ix*100;
+               int c1 = c + m_iteration;
                int colr = (m_red *  (c1 % 200))/200;
                int colg = (m_green * ((c1+50) % 200))/200;
                int colb = (m_blue * ((c1+100) % 200))/200;
