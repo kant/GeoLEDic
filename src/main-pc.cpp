@@ -20,10 +20,11 @@ int main()
    {
       t.createLeds(leds);
    }
-   flogl::Flogl flogl(&leds[0], leds.size(),
+   flogl::Flogl flogl(
+            leds,
             flogl::Config()
-            .views(views)
-            .keyboardHandler(&Serial));
+               .views(views)
+               .keyboardHandler(&Serial));
    
    setupGeoLEDic();
    
