@@ -8,7 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
     - name: Cache pip
       uses: actions/cache@v2
       with:
@@ -21,7 +24,7 @@ jobs:
       with:
         path: ~/.platformio
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-    - name: Set up Python
+    - name: Set up Python 
       uses: actions/setup-python@v2
     - name: Install PlatformIO
       run: |
