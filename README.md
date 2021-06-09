@@ -7,7 +7,7 @@ Assuming [PlatformIO](https://platformio.org/) is installed and you have some ex
 ~~~
 $ git clone --recurse-submodules https://github.com/samsta/GeoLEDic.git
 $ cd GeoLEDic
-$ pio run
+$ pio run -e teensy41
 ~~~
 
 Alternatively, if you use PlatformIO from within an IDE like Visual Studio Code, open the project by opening the GeoLEDic directory cloned above and then build as usual.
