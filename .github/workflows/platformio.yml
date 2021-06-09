@@ -29,3 +29,5 @@ jobs:
         pip install --upgrade platformio
     - name: Run PlatformIO
       run: pio run
+    - name: Run native tests
+      run: pio test -e native
