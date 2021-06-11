@@ -7,7 +7,6 @@ Triangle::Triangle(
    const Edge (&edges)[3],
    const Vertex (&vertices)[3]):
       m_edges(),
-      m_vertices(),
       m_led_corners(),
       m_first(INT_MAX),
       m_last(0),
@@ -15,11 +14,10 @@ Triangle::Triangle(
 {
    float fac = 0.95;
    std::copy(&edges[0], &edges[3], &m_edges[0]);
-   std::copy(&vertices[0], &vertices[3], &m_vertices[0]);
    // the LEDs are not on the triangle's edge, but slightly inset.
-   m_led_corners[0] = inset(m_vertices[0], m_vertices[1], m_vertices[2], fac);
-   m_led_corners[1] = inset(m_vertices[1], m_vertices[2], m_vertices[0], fac);
-   m_led_corners[2] = inset(m_vertices[2], m_vertices[0], m_vertices[1], fac);
+   m_led_corners[0] = inset(vertices[0], vertices[1], vertices[2], fac);
+   m_led_corners[1] = inset(vertices[1], vertices[2], vertices[0], fac);
+   m_led_corners[2] = inset(vertices[2], vertices[0], vertices[1], fac);
    // find the first and the last led
    for (const Edge& e: m_edges)
    {

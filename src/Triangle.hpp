@@ -29,7 +29,6 @@ private:
    Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac);
       
    Edge   m_edges[3];
-   Vertex m_vertices[3];
    Vertex m_led_corners[3];
    int m_first;
    int m_last;
