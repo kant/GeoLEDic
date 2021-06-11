@@ -1,5 +1,5 @@
-add_executable(test_geometry geometry/test_Edge.cpp)
-target_link_libraries(test_geometry geoledic-core
+add_executable(test_triangle triangle/test_orientation.cpp)
+target_link_libraries(test_triangle geoledic-core
                                     GTest::gtest
                                     GTest::gtest_main)
-gtest_discover_tests(test_geometry)
+gtest_discover_tests(test_triangle)
