@@ -1,4 +1,5 @@
 #include "Diagnostic.hpp"
+#include <algorithm>
 
 namespace 
 {
@@ -78,7 +79,7 @@ void Diagnostic::run()
          for (unsigned k = 0; k < m_strips.size(); k++)
          {
             Strip leds(m_strips[k]);
-            fill_solid(leds.begin(), leds.size(), OFF);
+            std::fill(leds.begin(), leds.end(), OFF);
             if (k == m_strip_for_lit_led)
             {
                leds[m_lit_led] = CRGB::White;
@@ -91,7 +92,7 @@ void Diagnostic::run()
          {
             Triangle& t(m_dome[i]);
 
-            fill_solid(t.begin(), t.end() - t.begin(), 
+            std::fill(t.begin(), t.end(),
                      i == m_lit_triangle ? CRGB::White : OFF);
          }
       }
@@ -99,7 +100,7 @@ void Diagnostic::run()
       {
          for (unsigned i = 0; i < m_strips.size(); i++)
          {
-            fill_solid(m_strips[i].begin(), m_strips.numLedsPerStrip(),
+            std::fill(m_strips[i].begin(), m_strips[i].end(),
                      i == m_lit_strip ? CRGB::White : OFF);
          }
       }

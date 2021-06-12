@@ -26,12 +26,12 @@ Triangle::Triangle(
    }
 }
 
-CRGB* Triangle::begin()
+Triangle::CRGB_iterator Triangle::begin()
 {
    return &m_strip[m_first];
 }
 
-CRGB* Triangle::end()
+Triangle::CRGB_iterator Triangle::end()
 {
    // by convention, end() points to the element past the last one
    return &m_strip[m_last + 1];

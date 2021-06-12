@@ -49,7 +49,7 @@ void SparklesAndTriangles::run()
       Triangle& t(m_dome[t_ix]);
       if (m_notes[t_ix] > 0)
       {
-         fill_solid(t.begin(), t.end() - t.begin(), ColorFromPalette(RainbowColors_p, m_notes[t_ix]*2));
+         std::fill(t.begin(), t.end(), ColorFromPalette(RainbowColors_p, m_notes[t_ix]*2));
       }
       else
       {
