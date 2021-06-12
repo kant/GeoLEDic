@@ -10,11 +10,13 @@ add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
                 -DWITH_FLOGL=1
+                -Werror
+                -Wall
                 -Wno-deprecated-register)
 include_directories(FastLED-OpenGL
-                    FastLED/src
                     src
                     src/target/Flogl)
+include_directories(SYSTEM FastLED/src)
 
 # The core sources are the ones built for unit tests as well
 set(GEOLEDIC_CORE_SOURCES src/Triangle.cpp
