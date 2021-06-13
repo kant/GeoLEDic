@@ -25,8 +25,9 @@ struct CRGB_iterator: public std::iterator<std::forward_iterator_tag, CRGB>
    
    struct invalid_iterator_tag{};
    enum Validity {VALID, INVALID};
+   enum Direction {FORWARD, BACKWARD};
    
-   CRGB_iterator(pointer start_ptr, pointer strip_begin, pointer strip_end);
+   CRGB_iterator(pointer start_ptr, pointer strip_begin, pointer strip_end, Direction direction = FORWARD);
    
    // Use to create end() iterator
    CRGB_iterator(pointer ptr, invalid_iterator_tag invalid);
@@ -37,6 +38,7 @@ private:
    pointer m_strip_begin;
    pointer m_strip_end;
    Validity m_valid;
+   Direction m_direction;
 };
 
 #endif /* CRGB_iterator_hpp */

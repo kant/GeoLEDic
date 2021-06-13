@@ -11,6 +11,7 @@ Triangle::Triangle(
       m_first_corner_led(edges[0].first_led),
       m_first_led(INT_MAX),
       m_last_led(0),
+      m_reverse(edges[0].first_led > edges[0].last_led),
       m_strip(strip)
 {
    float fac = 0.95;
@@ -23,14 +24,18 @@ Triangle::Triangle(
    // find the first and the last led of strip
    for (const Edge& e: m_edges)
    {
-      m_first_led = std::min(std::min(e.first_led, e.first_led), m_first_led);
-      m_last_led  = std::max(std::max(e.last_led, e.last_led), m_last_led);
+      m_first_led = std::min(std::min(e.first_led, e.last_led), m_first_led);
+      m_last_led  = std::max(std::max(e.first_led, e.last_led), m_last_led);
    }
 }
 
 CRGB_iterator Triangle::begin()
 {
-   return {&m_strip[m_first_corner_led], &m_strip[m_first_led], &m_strip[m_last_led + 1]};
+   return {&m_strip[m_first_corner_led],
+           &m_strip[m_first_led],
+           &m_strip[m_last_led + 1],
+           m_reverse ? CRGB_iterator::BACKWARD : CRGB_iterator::FORWARD
+   };
 }
 
 CRGB_iterator Triangle::end()

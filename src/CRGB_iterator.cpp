@@ -3,11 +3,20 @@
 // Prefix increment
 CRGB_iterator& CRGB_iterator::operator++()
 {
-   m_ptr++;
+   if (m_direction == FORWARD)
+   {
+      m_ptr++;
+   }
+   else
+   {
+      m_ptr--;
+   }
+   
    if (m_ptr == m_strip_end)
    {
       m_ptr = m_strip_begin;
    }
+   
    if (m_ptr == m_end)
    {
       m_valid = INVALID;
@@ -34,12 +43,13 @@ bool operator!=(const CRGB_iterator& a, const CRGB_iterator& b)
    return not (a == b);
 }
 
-CRGB_iterator::CRGB_iterator(pointer start_ptr, pointer strip_begin, pointer strip_end):
+CRGB_iterator::CRGB_iterator(pointer start_ptr, pointer strip_begin, pointer strip_end, Direction direction):
    m_ptr(start_ptr),
    m_end(start_ptr),
-   m_strip_begin(strip_begin),
-   m_strip_end(strip_end),
-   m_valid(VALID)
+   m_strip_begin(direction == FORWARD ? strip_begin : strip_end - 1),
+   m_strip_end(direction == FORWARD ? strip_end : strip_begin - 1),
+   m_valid(VALID),
+   m_direction(direction)
 {}
 
 CRGB_iterator::CRGB_iterator(pointer ptr, invalid_iterator_tag invalid):
@@ -47,5 +57,6 @@ CRGB_iterator::CRGB_iterator(pointer ptr, invalid_iterator_tag invalid):
    m_end(),
    m_strip_begin(),
    m_strip_end(),
-   m_valid(INVALID)
+   m_valid(INVALID),
+   m_direction(FORWARD)
 {}
