@@ -22,9 +22,9 @@ TEST(TriangleOrientation, stripStartingInFirstCornerRunningClockwise)
    */
    Triangle t(strip, {{0, 2}, {3, 5}, {6, 8}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
 
-   EXPECT_THAT(strip, testing::ElementsAreArray({1, 2, 3, 4, 5, 6, 7, 8, 9}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({0, 1, 2, 3, 4, 5, 6, 7, 8}));
 }
 
 TEST(TriangleOrientation, stripStartingInSecondCornerRunningClockwise)
@@ -40,9 +40,9 @@ TEST(TriangleOrientation, stripStartingInSecondCornerRunningClockwise)
    */
    Triangle t(strip, {{6, 8}, {0, 2}, {3, 5}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
    
-   EXPECT_THAT(strip, testing::ElementsAreArray({4, 5, 6, 7, 8, 9, 1, 2, 3}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({3, 4, 5, 6, 7, 8, 0, 1, 2}));
 }
 
 TEST(TriangleOrientation, stripStartingInThirdCornerRunningClockwise)
@@ -58,9 +58,9 @@ TEST(TriangleOrientation, stripStartingInThirdCornerRunningClockwise)
    */
    Triangle t(strip, {{3, 5}, {6, 8}, {0, 2}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
    
-   EXPECT_THAT(strip, testing::ElementsAreArray({7, 8, 9, 1, 2, 3, 4, 5, 6}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({6, 7, 8, 0, 1, 2, 3, 4, 5}));
 }
 
 TEST(TriangleOrientation, stripStartingInFirstCornerRunningCounterClockwise)
@@ -76,9 +76,9 @@ TEST(TriangleOrientation, stripStartingInFirstCornerRunningCounterClockwise)
    */
    Triangle t(strip, {{8, 6}, {5, 3}, {2, 0}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
 
-   EXPECT_THAT(strip, testing::ElementsAreArray({9, 8, 7, 6, 5, 4, 3, 2, 1}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({8, 7, 6, 5, 4, 3, 2, 1, 0}));
 }
 
 TEST(TriangleOrientation, stripStartingInSecondCornerRunningCounterClockwise)
@@ -94,9 +94,9 @@ TEST(TriangleOrientation, stripStartingInSecondCornerRunningCounterClockwise)
    */
    Triangle t(strip, {{2, 0}, {8, 6}, {5, 3}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
 
-   EXPECT_THAT(strip, testing::ElementsAreArray({3, 2, 1, 9, 8, 7, 6, 5, 4}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({2, 1, 0, 8, 7, 6, 5, 4, 3}));
 }
 
 TEST(TriangleOrientation, stripStartingInThirdCornerRunningCounterClockwise)
@@ -112,8 +112,8 @@ TEST(TriangleOrientation, stripStartingInThirdCornerRunningCounterClockwise)
    */
    Triangle t(strip, {{5, 3}, {2, 0}, {8, 6}}, ARBITRARY_COORDINATES);
    
-   std::iota(t.begin(), t.end(), 1);
+   std::iota(t.begin(), t.end(), 0);
 
-   EXPECT_THAT(strip, testing::ElementsAreArray({6, 5, 4, 3, 2, 1, 9, 8, 7}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({5, 4, 3, 2, 1, 0, 8, 7, 6}));
 }
 
