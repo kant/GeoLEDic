@@ -4,14 +4,13 @@
 #include "Vector.hpp"
 #include "Vertex.hpp"
 #include "Edge.hpp"
+#include "CRGB_iterator.hpp"
 
 #define FASTLED_INTERNAL // get rid of annoying version pragma
 #ifdef WITH_FLOGL
 #include "flogl/flogl.hpp"
 #endif
 #include "FastLED.h"
-
-#include <iterator>
 
 class Triangle {
 public:
@@ -23,26 +22,6 @@ public:
 #ifdef WITH_FLOGL
    void createLeds(std::vector<flogl::LED>& leds) const;
 #endif
-
-   struct CRGB_iterator: public std::iterator<std::forward_iterator_tag, CRGB>
-   {
-      CRGB_iterator(pointer ptr): m_ptr(ptr) {}
-
-      reference operator*() const { return *m_ptr; }
-      pointer operator->() { return m_ptr; }
-
-      // Prefix increment
-      CRGB_iterator& operator++() { m_ptr++; return *this; }
-
-      // Postfix increment
-      CRGB_iterator operator++(int) { CRGB_iterator tmp = *this; ++(*this); return tmp; }
-
-      friend bool operator== (const CRGB_iterator& a, const CRGB_iterator& b) { return a.m_ptr == b.m_ptr; };
-      friend bool operator!= (const CRGB_iterator& a, const CRGB_iterator& b) { return a.m_ptr != b.m_ptr; };
-
-  private:
-      pointer m_ptr;
-   };
    
    CRGB_iterator begin();
    CRGB_iterator end();
@@ -52,8 +31,9 @@ private:
       
    Edge   m_edges[3];
    Vertex m_led_corners[3];
-   int m_first;
-   int m_last;
+   int m_first_corner_led;
+   int m_first_led;
+   int m_last_led;
    CRGB* m_strip;
 };
 
