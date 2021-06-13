@@ -1,5 +1,9 @@
 # GeoLEDic
 
+![macOS build + test](https://github.com/samsta/GeoLEDic/actions/workflows/macos.yml/badge.svg)
+![PlatformIO build + (native) test](https://github.com/samsta/GeoLEDic/actions/workflows/platformio.yml/badge.svg)
+
+
 ## Teensy 4.1
 
 Assuming [PlatformIO](https://platformio.org/) is installed and you have some experience using it, and `pio` is on your path:
