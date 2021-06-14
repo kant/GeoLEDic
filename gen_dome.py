@@ -308,6 +308,7 @@ def print_row(row):
     global total_length
     global triangle_ix
     global led_counts
+
     for k in xrange(len(row)-2):
         s = []
         
@@ -358,11 +359,13 @@ def print_row(row):
               leds_on_edge = leds_remaining
            end   = start + leds_on_edge - 1
            led_counts[strip_ix] += leds_on_edge
-           edges_def.append("{%4d, %4d}" % (start, end))
+           edges_def.append("           {%4d, %4d}" % (start, end))
         triangle_def = "strip(%2d), {%s}" % (strip_ix, ', '.join(edges_def))
-        print "/* %3d */ { %s,  {%s}}, %s" % (triangle_ix, triangle_def, vertices, comment)
+        print "/* %3d */ { %s,   {%s}}, %s" % (triangle_ix, triangle_def, vertices, comment)
         triangle_ix += 1
         
+def printHeader():
+    print("/* triangle   strip             LEDs on 1st edge         LEDs on 2nd edge          LEDs on 3rd edge      coordinates 1st corner      coordinates 2nd corner      coordinates 3rd corner  */")
 
 with open(fbase + ".cpp", 'w') as f:
    original_stdout = sys.stdout
@@ -377,31 +380,36 @@ with open(fbase + ".cpp", 'w') as f:
    print ""
    print "Triangle dome[DOME_NUM_TRIANGLES] = {"
    print "// row 0"
+   printHeader()
    print_row(row0)
    print "// row 1"
+   printHeader()
    print_row(row1)
    print "// row 2"
+   printHeader()
    print_row(row20)
    print_row(row21)
    print_row(row22)
    print_row(row23)
    print "// row 3"
+   printHeader()
    print_row(row30)
    print_row(row31)
    print_row(row32)
    print_row(row33)
    print_row(row34)
    print "// row 4"
+   printHeader()
    print_row(row40)
    print_row(row41)
    print_row(row42)
    print_row(row43)
    print_row(row44)
    print "// row 5"
+   printHeader()
    print_row(row50)
    print_row(row51)
    print "};"
-   print "// TOTAL LEDS: %d" % sum(led_counts)
    sys.stdout = original_stdout
 
 with open(fbase + ".hpp", 'w') as f:
