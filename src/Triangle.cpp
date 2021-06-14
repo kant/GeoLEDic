@@ -8,10 +8,10 @@ Triangle::Triangle(
    const Vertex (&vertices)[3]):
       m_edges(),
       m_led_corners(),
-      m_first_corner_led(edges[0].first_led),
+      m_first_corner_led(edges[0].first_led_seg0),
       m_first_led(INT_MAX),
       m_last_led(0),
-      m_reverse(edges[0].first_led > edges[0].last_led),
+      m_reverse(edges[0].first_led_seg0 > edges[0].last_led_seg0),
       m_strip(strip)
 {
    float fac = 0.95;
@@ -24,8 +24,13 @@ Triangle::Triangle(
    // find the first and the last led of strip
    for (const Edge& e: m_edges)
    {
-      m_first_led = std::min(std::min(e.first_led, e.last_led), m_first_led);
-      m_last_led  = std::max(std::max(e.first_led, e.last_led), m_last_led);
+      m_first_led = std::min(std::min(e.first_led_seg0, e.last_led_seg0), m_first_led);
+      m_last_led  = std::max(std::max(e.first_led_seg0, e.last_led_seg0), m_last_led);
+      if (e.first_led_seg1 != e.SEGMENT_UNUSED)
+      {
+         m_first_led = std::min(std::min(e.first_led_seg1, e.last_led_seg1), m_first_led);
+         m_last_led  = std::max(std::max(e.first_led_seg1, e.last_led_seg1), m_last_led);
+      }
    }
 }
 
@@ -61,12 +66,12 @@ void Triangle::createLeds(std::vector<flogl::LED>& leds) const
       const Vertex& end_corner = m_led_corners[(i+1)%3];
       const Vector edge_vector = end_corner - start_corner;
 
-      int num_leds = e.last_led - e.first_led + 1;
+      int num_leds = e.last_led_seg0 - e.first_led_seg0 + 1;
       for (int led_ix = 0; led_ix < num_leds; led_ix++)
       {
          Vertex led_vertex(start_corner + edge_vector * ((float(led_ix)+0.5)/float(num_leds)));
          leds.push_back(led_vertex);
-         leds.back().color = &m_strip[e.first_led + led_ix];
+         leds.back().color = &m_strip[e.first_led_seg0 + led_ix];
       }
       
       i++;
