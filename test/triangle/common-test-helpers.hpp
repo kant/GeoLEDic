@@ -6,7 +6,7 @@
 
 void PrintTo(const CRGB& c, ::std::ostream* os);
 extern const Vertex ARBITRARY_COORDINATES[3];
-extern const CRGB::HTMLColorCode UNSET;
+extern const int UNSET;
 
 
 #endif /* common_test_helpers_hpp */

@@ -216,7 +216,7 @@ TEST(TriangleOrientation, stripStartingAt2OnFirstLedOfThirdEdgeRunningCounterClo
    
    std::iota(t.begin(), t.end(), 0);
 
-   EXPECT_THAT(strip, testing::ElementsAreArray({int(UNSET), int(UNSET), 6, 5, 4, 3, 2, 1, 0, 8, 7}));
+   EXPECT_THAT(strip, testing::ElementsAreArray({UNSET, UNSET, 6, 5, 4, 3, 2, 1, 0, 8, 7}));
 }
 
 TEST(TriangleOrientation, stripStartingOnSecondEdgeRunningCounterClockwiseLargerExample)
