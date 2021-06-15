@@ -92,8 +92,16 @@ void Diagnostic::run()
          {
             Triangle& t(m_dome[i]);
 
-            std::fill(t.begin(), t.end(),
-                     i == m_lit_triangle ? CRGB::White : OFF);
+            if (m_lit_triangle == i)
+            {
+               std::fill(t.edge(0).begin(), t.edge(0).end(), CRGB::Red);
+               std::fill(t.edge(1).begin(), t.edge(1).end(), CRGB::Green);
+               std::fill(t.edge(2).begin(), t.edge(2).end(), CRGB::Blue);
+            }
+            else
+            {
+               std::fill(t.begin(), t.end(), OFF);
+            }
          }
       }
       else
