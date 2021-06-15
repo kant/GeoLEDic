@@ -55,6 +55,11 @@ Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, flo
                  Vector(v3) * ((1-fac)/2));
 }
 
+unsigned Triangle::size() const
+{
+   return m_last_led - m_first_led + 1;
+}
+
 #ifdef WITH_FLOGL
 void Triangle::createLeds(std::vector<flogl::LED>& leds) const
 {

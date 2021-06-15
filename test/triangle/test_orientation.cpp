@@ -245,3 +245,19 @@ TEST(TriangleOrientation, stripStartingOnSecondEdgeRunningCounterClockwiseLarger
 
    EXPECT_THAT(strip, testing::ElementsAreArray({7, 6, 5, 4, 3, 2, 1, 0, 15, 14, 13, 12, 11, 10, 9, 8}));
 }
+
+TEST(TriangleOrientation, size)
+{
+   CRGB strip[9];
+   Triangle t(strip, {{0, 2}, {3, 5}, {6, 8}}, ARBITRARY_COORDINATES);
+
+   EXPECT_EQ(9, t.size());
+}
+
+TEST(TriangleOrientation, sizeWithSplitEdge)
+{
+   CRGB strip[9];
+   Triangle t(strip, {{6, 4}, {3, 1}, {0, 0, 8, 7}}, ARBITRARY_COORDINATES);
+
+   EXPECT_EQ(9, t.size());
+}

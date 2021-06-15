@@ -25,6 +25,7 @@ public:
    
    CRGB_iterator begin();
    CRGB_iterator end();
+   unsigned size() const;
    
 private:
    Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac);
