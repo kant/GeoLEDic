@@ -11,8 +11,12 @@ add_subdirectory(src/programs)
 add_definitions(-std=c++11
                 -DWITH_FLOGL=1
                 -Werror
-                -Wall
-                -Wno-deprecated-register)
+                -Wall)
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+   add_definitions(-Wno-deprecated-register)
+endif()
+
 include_directories(FastLED-OpenGL
                     src
                     src/target/Flogl)
