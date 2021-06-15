@@ -60,3 +60,18 @@ CRGB_iterator::CRGB_iterator(pointer ptr, invalid_iterator_tag invalid):
    m_valid(INVALID),
    m_direction(FORWARD)
 {}
+
+CRGB_iterator::CRGB_iterator(pointer first_segment_begin,
+                             pointer first_segment_end,
+                             pointer second_segment_begin,
+                             pointer second_segment_end,
+                             Direction direction):
+   m_ptr(first_segment_begin),
+   m_end(direction == FORWARD ? second_segment_end : second_segment_end - 2),
+   m_strip_begin(second_segment_begin),
+   m_strip_end(direction == FORWARD ? first_segment_end : first_segment_end - 2),
+   m_valid(VALID),
+   m_direction(direction)
+{
+   
+}

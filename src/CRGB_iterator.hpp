@@ -27,7 +27,18 @@ struct CRGB_iterator: public std::iterator<std::forward_iterator_tag, CRGB>
    enum Validity {VALID, INVALID};
    enum Direction {FORWARD, BACKWARD};
    
-   CRGB_iterator(pointer start_ptr, pointer strip_begin, pointer strip_end, Direction direction = FORWARD);
+   CRGB_iterator(pointer start_ptr,
+                 pointer strip_begin,
+                 pointer strip_end,
+                 Direction direction = FORWARD);
+
+   // non-contiguous, consisting of two segments
+   CRGB_iterator(pointer first_segment_begin,
+                 pointer first_segment_end,
+                 pointer second_segment_begin,
+                 pointer second_segment_end,
+                 Direction direction = FORWARD);
+
    
    // Use to create end() iterator
    CRGB_iterator(pointer ptr, invalid_iterator_tag invalid);

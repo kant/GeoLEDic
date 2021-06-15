@@ -90,3 +90,40 @@ TEST_F(TriangleEdgesContiguousCounterClockWise, accessThirdEdge)
    EXPECT_EQ(3, t.edge(2).size());
 }
 
+TEST(TriangleEdgesNonContiguous, accessNonContiguousClockwiseEdge)
+{
+   CRGB strip[9];
+   std::fill(strip, &strip[9], UNSET);
+   
+   /*
+                7 8
+              6     0
+    begin-> 5         1
+    end-1 --> 4  3  2
+   */
+   Triangle t(strip, {{5, 7}, {8, 8, 0, 1}, {2, 4}}, ARBITRARY_COORDINATES);
+   
+   std::iota(t.edge(1).begin(), t.edge(1).end(), 0);
+
+   EXPECT_THAT(strip, testing::ElementsAreArray({1, 2, int(UNSET), int(UNSET), int(UNSET), int(UNSET), int(UNSET), int(UNSET), 0}));
+   EXPECT_EQ(3, t.edge(1).size());
+}
+
+TEST(TriangleEdgesNonContiguous, accessNonContiguousCounterClockwiseEdge)
+{
+   CRGB strip[9];
+   std::fill(strip, &strip[9], UNSET);
+   
+   /*
+                2 1
+              3     0
+    begin-> 4         8
+    end-1 --> 5  6  7
+   */
+   Triangle t(strip, {{4, 2}, {1, 0, 8, 8}, {7, 5}}, ARBITRARY_COORDINATES);
+   
+   std::iota(t.edge(1).begin(), t.edge(1).end(), 0);
+
+   EXPECT_THAT(strip, testing::ElementsAreArray({1, 0, int(UNSET), int(UNSET), int(UNSET), int(UNSET), int(UNSET), int(UNSET), 2}));
+   EXPECT_EQ(3, t.edge(1).size());
+}
