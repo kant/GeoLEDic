@@ -1,4 +1,5 @@
 #include "Serial.hpp"
+#include <stdio.h>
 
 void SerialFromKeyboard::handleKey(char c)
 {
