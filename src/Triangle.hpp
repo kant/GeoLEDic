@@ -27,6 +27,8 @@ public:
    CRGB_iterator end();
    unsigned size() const;
    
+   const Edge& edge(unsigned ix);
+   
 private:
    Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac);
       

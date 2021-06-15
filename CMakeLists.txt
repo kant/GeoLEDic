@@ -24,6 +24,7 @@ include_directories(SYSTEM FastLED/src)
 
 # The core sources are the ones built for unit tests as well
 set(GEOLEDIC_CORE_SOURCES src/CRGB_iterator.cpp
+                          src/Edge.cpp
                           src/Triangle.cpp
                           src/Vector.cpp
                           src/Vertex.cpp)

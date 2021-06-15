@@ -22,8 +22,11 @@ Triangle::Triangle(
    m_led_corners[2] = inset(vertices[2], vertices[0], vertices[1], fac);
    
    // find the first and the last led of strip
-   for (const Edge& e: m_edges)
+   for (Edge& e: m_edges)
    {
+      // we're passing this in here because it would have made the constructor more verbose,
+      //  leading to even more stuff to supply in Dome.cpp
+      e.strip = strip;
       m_first_led = std::min(std::min(e.first_led_seg0, e.last_led_seg0), m_first_led);
       m_last_led  = std::max(std::max(e.first_led_seg0, e.last_led_seg0), m_last_led);
       if (e.first_led_seg1 != e.SEGMENT_UNUSED)
@@ -60,6 +63,12 @@ unsigned Triangle::size() const
    return m_last_led - m_first_led + 1;
 }
 
+const Edge& Triangle::edge(unsigned edge_ix)
+{
+   if (edge_ix > 2) edge_ix = 2;
+   return m_edges[edge_ix];
+}
+
 #ifdef WITH_FLOGL
 void Triangle::createLeds(std::vector<flogl::LED>& leds) const
 {
@@ -71,12 +80,14 @@ void Triangle::createLeds(std::vector<flogl::LED>& leds) const
       const Vertex& end_corner = m_led_corners[(i+1)%3];
       const Vector edge_vector = end_corner - start_corner;
 
-      int num_leds = e.last_led_seg0 - e.first_led_seg0 + 1;
-      for (int led_ix = 0; led_ix < num_leds; led_ix++)
+      int num_leds = e.size();
+      int led_ix = 0;
+      for (CRGB& led: e)
       {
          Vertex led_vertex(start_corner + edge_vector * ((float(led_ix)+0.5)/float(num_leds)));
          leds.push_back(led_vertex);
-         leds.back().color = &m_strip[e.first_led_seg0 + led_ix];
+         leds.back().color = &led;
+         led_ix++;
       }
       
       i++;
