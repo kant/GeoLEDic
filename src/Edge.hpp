@@ -3,12 +3,10 @@
 
 #include "CRGB_iterator.hpp"
 
-struct Edge {
-   enum Constants
-   {
-      SEGMENT_UNUSED = -1
-   };
+class Edge
+{
    
+public:
    Edge();
    
    // Contiguous edge
@@ -22,11 +20,25 @@ struct Edge {
    // Number of LEDs on edge
    unsigned size() const;
    
-   int first_led_seg0;
-   int last_led_seg0;
-   int first_led_seg1;
-   int last_led_seg1;
-   CRGB* strip;
+   unsigned firstLedOnStrip() const;
+   unsigned lastLedOnStrip() const;
+   unsigned firstLedOnEdge() const;
+   
+   // split, or non-contiguous, consisting of two segments
+   bool isSplit() const;
+   
+   // LEDs run backwards on strip
+   bool isReverse() const;
+   
+   void assign(CRGB* strip);
+   
+private:
+   
+   struct {
+      int first_led;
+      int last_led;
+   } m_segments[2];
+   CRGB* m_strip;
 };
 
 #endif

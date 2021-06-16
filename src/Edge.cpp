@@ -1,102 +1,114 @@
 #include "Edge.hpp"
+#include <algorithm>
+
+namespace {
+const int SEGMENT_UNUSED = -1;
+}
 
 Edge::Edge():
-   first_led_seg0(SEGMENT_UNUSED),
-   last_led_seg0(SEGMENT_UNUSED),
-   first_led_seg1(SEGMENT_UNUSED),
-   last_led_seg1(SEGMENT_UNUSED),
-   strip(nullptr)
+   m_segments{{SEGMENT_UNUSED, SEGMENT_UNUSED}, {SEGMENT_UNUSED, SEGMENT_UNUSED}},
+   m_strip(nullptr)
 {}
 
 // Contiguous edge
 Edge::Edge(unsigned short first_led, unsigned short last_led):
-   first_led_seg0(first_led),
-   last_led_seg0(last_led),
-   first_led_seg1(SEGMENT_UNUSED),
-   last_led_seg1(SEGMENT_UNUSED),
-   strip(nullptr)
+   m_segments{{first_led, last_led}, {SEGMENT_UNUSED, SEGMENT_UNUSED}},
+   m_strip(nullptr)
 {}
 // Edge consisting of two segments on the same strip, with the same direction
 Edge::Edge(unsigned short first_led_seg0, unsigned short last_led_seg0, unsigned short first_led_seg1, unsigned short last_led_seg1):
-   first_led_seg0(first_led_seg0),
-   last_led_seg0(last_led_seg0),
-   first_led_seg1(first_led_seg1),
-   last_led_seg1(last_led_seg1),
-   strip(nullptr)
+   m_segments{{first_led_seg0, last_led_seg0}, {first_led_seg1, last_led_seg1}},
+   m_strip(nullptr)
 {
 }
 
 CRGB_iterator Edge::begin() const
 {
-   if (first_led_seg1 == SEGMENT_UNUSED)
+   if (not isSplit())
    {
-      if (first_led_seg0 <= last_led_seg0)
-      {
-         return {&strip[first_led_seg0],
-                 &strip[first_led_seg0],
-                 &strip[last_led_seg0 + 1],
-                 CRGB_iterator::FORWARD};
-      }
-      else
-      {
-         return {&strip[first_led_seg0],
-                 &strip[last_led_seg0],
-                 &strip[first_led_seg0 + 1],
-                 CRGB_iterator::BACKWARD};
-      }
+      return {&m_strip[m_segments[0].first_led],
+                 &m_strip[firstLedOnStrip()],
+                 &m_strip[lastLedOnStrip()],
+                 isReverse() ? CRGB_iterator::BACKWARD : CRGB_iterator::FORWARD
+      };
    }
    else
    {
-      return {&strip[first_led_seg0],
-              &strip[last_led_seg0 + 1],
-              &strip[first_led_seg1],
-              &strip[last_led_seg1 + 1],
-              first_led_seg0 <= last_led_seg0 ? CRGB_iterator::FORWARD : CRGB_iterator::BACKWARD
+      return {&m_strip[m_segments[0].first_led],
+              &m_strip[m_segments[0].last_led],
+              &m_strip[m_segments[1].first_led],
+              &m_strip[m_segments[1].last_led],
+              isReverse() ? CRGB_iterator::BACKWARD : CRGB_iterator::FORWARD
       };
    }
 }
 
 CRGB_iterator Edge::end() const
 {
-   if (first_led_seg1 == SEGMENT_UNUSED)
+   if (not isSplit())
    {
-      return {&strip[first_led_seg0], CRGB_iterator::invalid_iterator_tag()};
+      return {&m_strip[m_segments[0].first_led], CRGB_iterator::invalid_iterator_tag()};
    }
    else
    {
-      if (first_led_seg0 <= last_led_seg0)
+      if (not isReverse())
       {
-         return {&strip[last_led_seg1 + 1], CRGB_iterator::invalid_iterator_tag()};
+         return {&m_strip[m_segments[1].last_led + 1], CRGB_iterator::invalid_iterator_tag()};
       }
       else
       {
-         return {&strip[first_led_seg1 + 1], CRGB_iterator::invalid_iterator_tag()};
+         return {&m_strip[m_segments[1].first_led + 1], CRGB_iterator::invalid_iterator_tag()};
       }
    }
 }
 
 unsigned Edge::size() const
 {
-   if (first_led_seg1 == SEGMENT_UNUSED)
+   unsigned sz = abs(m_segments[0].last_led - m_segments[0].first_led) + 1;
+   if (isSplit())
    {
-      if (first_led_seg0 <= last_led_seg0)
-      {
-         return last_led_seg0 - first_led_seg0 + 1;
-      }
-      else
-      {
-         return first_led_seg0 - last_led_seg0 + 1;
-      }
+      sz += abs(m_segments[1].last_led - m_segments[1].first_led) + 1;
    }
-   else
-   {
-      if (first_led_seg0 <= last_led_seg0)
-      {
-         return last_led_seg0 - first_led_seg0 + last_led_seg1 - first_led_seg1 + 2;
-      }
-      else
-      {
-         return first_led_seg0 - last_led_seg0 + first_led_seg1 - last_led_seg1 + 2;
-      }
-   }
+   return sz;
 }
+
+unsigned Edge::firstLedOnStrip() const
+{
+   int first_led = std::min(m_segments[0].first_led, m_segments[0].last_led);
+   if (isSplit())
+   {
+      first_led = std::min(first_led, std::min(m_segments[1].first_led, m_segments[1].last_led));
+   }
+   return first_led;
+}
+
+unsigned Edge::lastLedOnStrip() const
+{
+   int last_led = std::max(m_segments[0].first_led, m_segments[0].last_led);
+   if (isSplit())
+   {
+      last_led = std::max(last_led, std::max(m_segments[1].first_led, m_segments[1].last_led));
+   }
+   return last_led;
+}
+
+unsigned Edge::firstLedOnEdge() const
+{
+   return m_segments[0].first_led;
+}
+
+bool Edge::isSplit() const
+{
+   return m_segments[1].first_led != SEGMENT_UNUSED;
+}
+
+bool Edge::isReverse() const
+{
+   return m_segments[0].first_led > m_segments[0].last_led;
+}
+
+void Edge::assign(CRGB* strip)
+{
+   m_strip = strip;
+}
+

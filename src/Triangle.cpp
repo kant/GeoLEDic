@@ -8,10 +8,10 @@ Triangle::Triangle(
    const Vertex (&vertices)[3]):
       m_edges(),
       m_led_corners(),
-      m_first_corner_led(edges[0].first_led_seg0),
+      m_first_corner_led(edges[0].firstLedOnEdge()),
       m_first_led(INT_MAX),
       m_last_led(0),
-      m_reverse(edges[0].first_led_seg0 > edges[0].last_led_seg0),
+      m_reverse(edges[0].isReverse()),
       m_strip(strip)
 {
    float fac = 0.95;
@@ -26,14 +26,9 @@ Triangle::Triangle(
    {
       // we're passing this in here because it would have made the constructor more verbose,
       //  leading to even more stuff to supply in Dome.cpp
-      e.strip = strip;
-      m_first_led = std::min(std::min(e.first_led_seg0, e.last_led_seg0), m_first_led);
-      m_last_led  = std::max(std::max(e.first_led_seg0, e.last_led_seg0), m_last_led);
-      if (e.first_led_seg1 != e.SEGMENT_UNUSED)
-      {
-         m_first_led = std::min(std::min(e.first_led_seg1, e.last_led_seg1), m_first_led);
-         m_last_led  = std::max(std::max(e.first_led_seg1, e.last_led_seg1), m_last_led);
-      }
+      e.assign(strip);
+      m_first_led = std::min(e.firstLedOnStrip(), m_first_led);
+      m_last_led  = std::max(e.lastLedOnStrip(), m_last_led);
    }
 }
 
@@ -41,7 +36,7 @@ CRGB_iterator Triangle::begin()
 {
    return {&m_strip[m_first_corner_led],
            &m_strip[m_first_led],
-           &m_strip[m_last_led + 1],
+           &m_strip[m_last_led],
            m_reverse ? CRGB_iterator::BACKWARD : CRGB_iterator::FORWARD
    };
 }

@@ -34,9 +34,9 @@ private:
       
    Edge   m_edges[3];
    Vertex m_led_corners[3];
-   int m_first_corner_led;
-   int m_first_led;
-   int m_last_led;
+   unsigned m_first_corner_led;
+   unsigned m_first_led;
+   unsigned m_last_led;
    bool m_reverse;
    CRGB* m_strip;
 };
