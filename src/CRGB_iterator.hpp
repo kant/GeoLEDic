@@ -45,11 +45,11 @@ struct CRGB_iterator: public std::iterator<std::forward_iterator_tag, CRGB>
 
 private:
    pointer m_ptr;
-   pointer m_end;
-   pointer m_strip_begin;
-   pointer m_strip_end;
+   const pointer m_end;
+   const pointer m_strip_begin;
+   const pointer m_strip_end;
    Validity m_valid;
-   Direction m_direction;
+   const Direction m_direction;
 };
 
 #endif /* CRGB_iterator_hpp */
