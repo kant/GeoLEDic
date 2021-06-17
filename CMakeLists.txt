@@ -4,8 +4,8 @@ project(GeoLEDic)
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
 
 add_subdirectory(FastLED-OpenGL)
-add_subdirectory(src/target/${CMAKE_SYSTEM_NAME})
-add_subdirectory(src/target/Flogl)
+add_subdirectory(src/target/native/${CMAKE_SYSTEM_NAME})
+add_subdirectory(src/target/native)
 add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
@@ -19,7 +19,7 @@ endif()
 
 include_directories(FastLED-OpenGL
                     src
-                    src/target/Flogl)
+                    src/target/native)
 include_directories(SYSTEM FastLED/src)
 
 # The core sources are the ones built for unit tests as well
