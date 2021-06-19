@@ -3,10 +3,11 @@
 #include <vector>
 #include <unistd.h>
 #include "Serial.hpp"
+#include <iostream>
 
 int main()
 {
-
+   
    std::vector<flogl::LED> leds;
 
    std::vector<flogl::Config::View> views =
@@ -16,22 +17,28 @@ int main()
        {0, -140, -20,  45,    0,   90},  // up
      };
 
-   for (const Triangle& t: dome)
-   {
-      t.createLeds(leds);
+   try {
+      for (const Triangle& t: dome)
+      {
+         t.createLeds(leds);
+      }
+      flogl::Flogl flogl(
+               leds,
+               flogl::Config()
+                  .views(views)
+                  .keyboardHandler(&Serial));
+      
+      setupGeoLEDic();
+      
+      do {
+         loopGeoLEDic();
+         usleep(30000);
+      } while(flogl.draw());
    }
-   flogl::Flogl flogl(
-            leds,
-            flogl::Config()
-               .views(views)
-               .keyboardHandler(&Serial));
-   
-   setupGeoLEDic();
-   
-   do {
-      loopGeoLEDic();
-      usleep(30000);
-   } while(flogl.draw());
-   
+   catch (std::exception& e)
+   {
+      std::cerr << std::endl << "=== Exception: " << e.what() << " ===" << std::endl << std::endl;
+      return 1;
+   }
    return 0;
 }
