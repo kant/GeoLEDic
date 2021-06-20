@@ -5,7 +5,7 @@
 
 #define ASSERT_CMP(a, op, b, msg) \
    if (not (a op b)){ \
-      std::cerr << "Assertion failed: "#a"(" << a << ")" #op #b "("<< b << "); " << msg << " in " __FILE__ << ", line " << __LINE__; \
+      std::cerr << "Assertion failed: "#a"(" << a << ")" #op #b "("<< b << "); " << msg << " in " __FILE__ << ", line " << __LINE__ << std::endl; \
       throw "Assertion failed"; \
    }
 
