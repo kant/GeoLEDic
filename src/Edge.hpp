@@ -23,7 +23,8 @@ public:
    unsigned firstLedOnStrip() const;
    unsigned lastLedOnStrip() const;
    unsigned firstLedOnEdge() const;
-   
+   unsigned lastLedOnEdge() const;
+
    // split, or non-contiguous, consisting of two segments
    bool isSplit() const;
    

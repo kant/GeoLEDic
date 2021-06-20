@@ -1,6 +1,7 @@
 #include "Triangle.hpp"
 #include <climits>
 #include <algorithm>
+#include "assert.hpp"
 
 Triangle::Triangle(
    CRGB* strip,
@@ -56,6 +57,11 @@ Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, flo
 unsigned Triangle::size() const
 {
    return m_last_led - m_first_led + 1;
+}
+
+bool Triangle::isReverse() const
+{
+   return m_reverse;
 }
 
 const Edge& Triangle::edge(unsigned edge_ix)

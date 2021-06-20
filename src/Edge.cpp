@@ -1,4 +1,5 @@
 #include "Edge.hpp"
+#include "assert.hpp"
 #include <algorithm>
 
 namespace {
@@ -14,12 +15,26 @@ Edge::Edge():
 Edge::Edge(unsigned short first_led, unsigned short last_led):
    m_segments{{first_led, last_led}, {SEGMENT_UNUSED, SEGMENT_UNUSED}},
    m_strip(nullptr)
-{}
+{
+   ASSERT_CMP(first_led, !=, last_led, "Can't have a single LED on an Edge");
+}
 // Edge consisting of two segments on the same strip, with the same direction
 Edge::Edge(unsigned short first_led_seg0, unsigned short last_led_seg0, unsigned short first_led_seg1, unsigned short last_led_seg1):
    m_segments{{first_led_seg0, last_led_seg0}, {first_led_seg1, last_led_seg1}},
    m_strip(nullptr)
 {
+   if (first_led_seg0 == last_led_seg0)
+   {
+      ASSERT_CMP(first_led_seg1, !=, last_led_seg1, "Can't have a single LED on both segments of an Edge");
+   }
+   else if (first_led_seg0 < last_led_seg0)
+   {
+      ASSERT_CMP(first_led_seg1, <=, last_led_seg1, "Both segments must go in the same direction")
+   }
+   else
+   {
+      ASSERT_CMP(first_led_seg1, >=, last_led_seg1, "Both segments must go in the same direction")
+   }
 }
 
 CRGB_iterator Edge::begin() const
@@ -97,6 +112,11 @@ unsigned Edge::firstLedOnEdge() const
    return m_segments[0].first_led;
 }
 
+unsigned Edge::lastLedOnEdge() const
+{
+   return isSplit() ? m_segments[1].last_led : m_segments[0].last_led;
+}
+
 bool Edge::isSplit() const
 {
    return m_segments[1].first_led != SEGMENT_UNUSED;
@@ -104,7 +124,9 @@ bool Edge::isSplit() const
 
 bool Edge::isReverse() const
 {
-   return m_segments[0].first_led > m_segments[0].last_led;
+   return m_segments[0].first_led > m_segments[0].last_led ||
+          (m_segments[0].first_led == m_segments[0].last_led &&
+           m_segments[1].first_led > m_segments[1].last_led);
 }
 
 void Edge::assign(CRGB* strip)

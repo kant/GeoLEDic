@@ -29,6 +29,9 @@ public:
    
    const Edge& edge(unsigned ix);
    
+   // LEDs on strip run in the opposite direction of the corner vertices
+   bool isReverse() const;
+   
 private:
    Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac);
       
