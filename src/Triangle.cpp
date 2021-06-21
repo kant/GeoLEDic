@@ -21,7 +21,8 @@ Triangle::Triangle(
    m_led_corners[0] = inset(vertices[0], vertices[1], vertices[2], fac);
    m_led_corners[1] = inset(vertices[1], vertices[2], vertices[0], fac);
    m_led_corners[2] = inset(vertices[2], vertices[0], vertices[1], fac);
-   
+ 
+   bool has_split_edge = false;
    // find the first and the last led of strip
    for (Edge& e: m_edges)
    {
@@ -30,6 +31,26 @@ Triangle::Triangle(
       e.assign(strip);
       m_first_led = std::min(e.firstLedOnStrip(), m_first_led);
       m_last_led  = std::max(e.lastLedOnStrip(), m_last_led);
+      has_split_edge |= e.isSplit();
+   }
+   
+   //Consistency check.
+   int edge_ix = 0;
+   Edge* prev = &m_edges[2];
+   for (Edge& e: m_edges)
+   {
+      ASSERT_CMP(m_reverse, ==, e.isReverse(), "All edges must go in the same direction, but edge " << edge_ix << " doesn't");
+      
+      if (not m_reverse and e.firstLedOnEdge() != m_first_led)
+      {
+         ASSERT_CMP(e.firstLedOnEdge(), ==, prev->lastLedOnEdge()+1, "Corners must be continuous, but corner " << edge_ix << " isn't");
+      }
+      if (m_reverse and e.firstLedOnEdge() != m_last_led)
+      {
+         ASSERT_CMP(e.firstLedOnEdge(), ==, prev->lastLedOnEdge()-1, "Corners must be continuous, but corner " << edge_ix << " isn't");
+      }
+      prev = &e;
+      edge_ix++;
    }
 }
 
