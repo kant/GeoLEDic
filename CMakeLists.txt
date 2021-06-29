@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
 project(GeoLEDic VERSION 0.0.1)
+cmake_policy(SET CMP0087 NEW) # use generator expression in install(CODE)
 
 set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
@@ -70,14 +71,14 @@ endif()
 
 
 if(APPLE)
-   set(APPS ${CMAKE_BINARY_DIR}/GeoLEDic.app)  # paths to executables
+   set(APP "$<TARGET_FILE:GeoLEDic>")  # paths to executables
    set(DIRS "")   # directories to search for prerequisites
    install(CODE "
       include(BundleUtilities)
-      fixup_bundle(\"${APPS}\"   \"\"   \"${DIRS}\")
+      fixup_bundle(\"${APP}\"   \"\"   \"${DIRS}\")
       " COMPONENT Runtime)
    install(TARGETS GeoLEDic
-           BUNDLE DESTINATION . COMPONENT Runtime
+           BUNDLE DESTINATION "./" COMPONENT Runtime
            RUNTIME DESTINATION bin COMPONENT Runtime)
    set(CPACK_GENERATOR "ZIP")
    set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${VERSION_EXTRA}")
