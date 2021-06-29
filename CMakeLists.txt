@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
-project(GeoLEDic)
+project(GeoLEDic VERSION 0.0.1)
 
+set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
 
 add_subdirectory(FastLED-OpenGL)
@@ -39,7 +40,14 @@ set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      src/main-pc.cpp)
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${GEOLEDIC_SOURCES})
-add_executable(GeoLEDic MACOSX_BUNDLE ${GEOLEDIC_SOURCES})
+
+if (APPLE)
+   set(MACOSX_BUNDLE_ICON_FILE Icon.icns)
+   set(ICON ${CMAKE_CURRENT_SOURCE_DIR}/img/Icon.icns)
+   set_source_files_properties(${ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+endif()
+
+add_executable(GeoLEDic MACOSX_BUNDLE ${ICON} ${GEOLEDIC_SOURCES})
 
 target_link_libraries(GeoLEDic flogl ${TARGET_LIBRARIES}
                                      geoledic-core)
@@ -58,4 +66,20 @@ if(GTest_FOUND)
 else()
    message(STATUS "NOT building tests")
    return()
+endif()
+
+
+if(APPLE)
+   set(APPS ${CMAKE_BINARY_DIR}/GeoLEDic.app)  # paths to executables
+   set(DIRS "")   # directories to search for prerequisites
+   install(CODE "
+      include(BundleUtilities)
+      fixup_bundle(\"${APPS}\"   \"\"   \"${DIRS}\")
+      " COMPONENT Runtime)
+   install(TARGETS GeoLEDic
+           BUNDLE DESTINATION . COMPONENT Runtime
+           RUNTIME DESTINATION bin COMPONENT Runtime)
+   set(CPACK_GENERATOR "ZIP")
+   set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}${VERSION_EXTRA}")
+   include(CPack)
 endif()
