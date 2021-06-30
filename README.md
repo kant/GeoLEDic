@@ -1,7 +1,8 @@
 # GeoLEDic
 
-![macOS build + test](https://github.com/samsta/GeoLEDic/actions/workflows/macos.yml/badge.svg)
-![PlatformIO build + (native) test](https://github.com/samsta/GeoLEDic/actions/workflows/platformio.yml/badge.svg)
+[![macOS build + test](https://github.com/samsta/GeoLEDic/actions/workflows/macos.yml/badge.svg)](https://github.com/samsta/GeoLEDic/actions/workflows/macos.yml)
+[![PlatformIO build + (native) test](https://github.com/samsta/GeoLEDic/actions/workflows/platformio.yml/badge.svg)](https://github.com/samsta/GeoLEDic/actions/workflows/platformio.yml)
+[![Ubuntu build + test](https://github.com/samsta/GeoLEDic/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/samsta/GeoLEDic/actions/workflows/ubuntu.yml)
 
 
 ## Teensy 4.1
