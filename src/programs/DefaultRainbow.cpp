@@ -3,7 +3,9 @@
 DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
    m_dome(dome),
    m_sparkle_probability(511),
-   m_iteration(0)
+   m_iteration(0),
+   m_stride(1),
+   m_speed(1)
 {}
 
 void DefaultRainbow::noteOn(uint8_t note, uint8_t velocity)
@@ -21,6 +23,12 @@ void DefaultRainbow::controlChange(uint8_t cc_num, uint8_t value)
 {
    switch (cc_num)
    {
+      case 16:
+         m_speed = value;
+         break;
+      case 17:
+         m_stride = value;
+         break;
       case 19:
          m_sparkle_probability = value ? 4 * (128 - value) : 0;
          break;
@@ -54,9 +62,9 @@ void DefaultRainbow::run()
          {
             led = hsv;
          }
-         hsv.hue += 1;
+         hsv.hue += m_stride;
          next_sparkle--;
       }
    }
-   m_iteration++;
+   m_iteration += m_speed;
 }

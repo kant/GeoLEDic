@@ -17,6 +17,8 @@ public:
 private:
    const DomeWrapper& m_dome;
    int m_sparkle_probability;
+   int m_stride;
+   int m_speed;
    int m_iteration;
 };
 
