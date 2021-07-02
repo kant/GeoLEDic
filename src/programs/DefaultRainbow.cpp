@@ -3,9 +3,9 @@
 DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
    m_dome(dome),
    m_sparkle_probability(511),
-   m_iteration(0),
    m_stride(1),
-   m_speed(1)
+   m_speed(1),
+   m_iteration(0)
 {}
 
 void DefaultRainbow::noteOn(uint8_t note, uint8_t velocity)
