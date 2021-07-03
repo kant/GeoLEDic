@@ -3,6 +3,7 @@
 #include "programs/SparklesAndTriangles.hpp"
 #include "programs/DefaultRainbow.hpp"
 #include "programs/Diagnostic.hpp"
+#include "programs/Fire.hpp"
 
 ProgramFactory::ProgramFactory(const DomeWrapper& dome, const Strips& strips):
       m_dome(dome),
@@ -18,6 +19,9 @@ Program* ProgramFactory::changeProgram(uint8_t program)
    {
    case 1:
       m_current_program = new SparklesAndTriangles(m_dome);
+      break;
+   case 2:
+      m_current_program = new Fire(m_dome);
       break;
    case 127:
       m_current_program = new Diagnostic(m_dome, m_strips);

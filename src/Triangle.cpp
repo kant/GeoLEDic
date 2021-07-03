@@ -85,11 +85,18 @@ bool Triangle::isReverse() const
    return m_reverse;
 }
 
-const Edge& Triangle::edge(unsigned edge_ix)
+const Edge& Triangle::edge(unsigned edge_ix) const
 {
    if (edge_ix > 2) edge_ix = 2;
    return m_edges[edge_ix];
 }
+
+const Vertex& Triangle::corner(unsigned corner_ix) const
+{
+   if (corner_ix > 2) corner_ix = 2;
+   return m_led_corners[corner_ix];
+}
+
 
 #ifdef WITH_FLOGL
 void Triangle::createLeds(std::vector<flogl::LED>& leds) const

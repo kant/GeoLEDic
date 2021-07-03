@@ -27,7 +27,8 @@ public:
    CRGB_iterator end();
    unsigned size() const;
    
-   const Edge& edge(unsigned ix);
+   const Edge& edge(unsigned ix) const;
+   const Vertex& corner(unsigned ix) const;
    
    // LEDs on strip run in the opposite direction of the corner vertices
    bool isReverse() const;
