@@ -1,5 +1,6 @@
 #include "Fire.hpp"
 #include <iostream>
+#include <math.h>
 
 Fire::Fire(const DomeWrapper& dome):
    m_dome(dome),
