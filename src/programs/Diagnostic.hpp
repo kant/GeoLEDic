@@ -24,6 +24,8 @@ private:
    bool processLedState(char c);
    bool processTriangleState(char c);
    bool processStripState(char c);
+   bool processPhiState(char c);
+   bool processThetaState(char c);
 
    const DomeWrapper& m_dome;
    const Strips& m_strips;
@@ -33,7 +35,9 @@ private:
       WAIT,
       LED,
       TRIANGLE,
-      STRIP
+      STRIP,
+      PHI,
+      THETA
    } m_state;
 
    unsigned m_iteration;
@@ -42,6 +46,8 @@ private:
    unsigned m_strip_for_lit_led;
    unsigned m_lit_triangle;
    unsigned m_lit_strip;
+   unsigned m_lit_phi;
+   unsigned m_lit_theta;
 };
 
 #endif 

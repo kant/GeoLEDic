@@ -22,7 +22,9 @@ Diagnostic::Diagnostic(const DomeWrapper& dome, const Strips& strips):
    m_lit_led(NONE),
    m_strip_for_lit_led(0),
    m_lit_triangle(NONE),
-   m_lit_strip(NONE)
+   m_lit_strip(NONE),
+   m_lit_phi(NONE),
+   m_lit_theta(NONE)
 {
 }
 
@@ -104,7 +106,59 @@ void Diagnostic::run()
             }
          }
       }
-      else
+      else if (m_lit_phi != NONE)
+      {
+         for (Triangle& t: m_dome)
+         {
+            for (unsigned k = 0; k < 3; k++)
+            {
+               const Edge& e(t.edge(k));
+               const Vertex c0(t.corner(k));
+               const Vertex c1(t.corner((k+1)%3));
+
+               int led_ix = 0;
+               for (CRGB& l: e)
+               {
+                  if (interpolatePhi(c0, c1, led_ix, e.size()) == m_lit_phi)
+                  {
+                     l = CRGB::White;
+                  }
+                  else
+                  {
+                     l = OFF;
+                  }
+                  led_ix++;
+               }
+            }
+         }
+      }
+      else if (m_lit_theta != NONE)
+      {
+         for (Triangle& t: m_dome)
+         {
+            for (unsigned k = 0; k < 3; k++)
+            {
+               const Edge& e(t.edge(k));
+               const Vertex c0(t.corner(k));
+               const Vertex c1(t.corner((k+1)%3));
+
+               int led_ix = 0;
+               for (CRGB& l: e)
+               {
+                  if (interpolateTheta(c0, c1, led_ix, e.size()) == m_lit_theta)
+                  {
+                     l = CRGB::White;
+                  }
+                  else
+                  {
+                     l = OFF;
+                  }
+                  led_ix++;
+               }
+            }
+         }
+      }
+      else 
       {
          for (unsigned i = 0; i < m_strips.size(); i++)
          {
@@ -131,6 +185,12 @@ bool Diagnostic::processKeyboardInput(char c)
 
       case STRIP:
          return processStripState(c);
+
+      case PHI:
+         return processPhiState(c);
+
+      case THETA:
+         return processThetaState(c);
 
       case INTRO:
       default:
@@ -160,6 +220,28 @@ bool Diagnostic::processWaitState(char c)
       case 'S':
          m_state = STRIP;
          return true;
+      case 'H':
+         m_state = PHI;
+         return true;
+      case 'V':
+         m_state = THETA;
+         return true;
+      case '=':
+      case '+':
+         if (m_lit_led != NONE)
+         {
+            m_lit_led++;
+            return true;
+         }
+         return false;
+      case '-':
+      case '_':
+         if (m_lit_led != NONE)
+         {
+            m_lit_led--;
+            return true;
+         }
+         return false;
       default:
          return false;
    }
@@ -184,6 +266,8 @@ bool Diagnostic::processLedState(char c)
       m_lit_led = m_accumulator;
       m_lit_triangle = NONE;
       m_lit_strip = NONE;
+      m_lit_phi = NONE;
+      m_lit_theta = NONE;
       m_state = WAIT;
       return true;
    }
@@ -203,6 +287,8 @@ bool Diagnostic::processTriangleState(char c)
       m_lit_triangle = m_accumulator;
       m_lit_led = NONE;
       m_lit_strip = NONE;
+      m_lit_phi = NONE;
+      m_lit_theta = NONE;
       m_state = WAIT;
       return true;
    }
@@ -222,10 +308,55 @@ bool Diagnostic::processStripState(char c)
       m_lit_strip = m_accumulator;
       m_lit_led = NONE;
       m_lit_triangle = NONE;
+      m_lit_phi = NONE;
+      m_lit_theta = NONE;
       m_state = WAIT;
       return true;
    }
    
    return false;
 }
+
+bool Diagnostic::processPhiState(char c)
+{
+   if (extractDigit(c))
+   {
+      return true;
+   }
+   
+   if (c == '\n' or c == '\r')
+   {
+      m_lit_phi = m_accumulator;
+      m_lit_theta = NONE;
+      m_lit_strip = NONE;
+      m_lit_led = NONE;
+      m_lit_triangle = NONE;
+      m_state = WAIT;
+      return true;
+   }
+   
+   return false;
+}
+
+bool Diagnostic::processThetaState(char c)
+{
+   if (extractDigit(c))
+   {
+      return true;
+   }
+   
+   if (c == '\n' or c == '\r')
+   {
+      m_lit_theta = m_accumulator;
+      m_lit_phi = NONE;
+      m_lit_strip = NONE;
+      m_lit_led = NONE;
+      m_lit_triangle = NONE;
+      m_state = WAIT;
+      return true;
+   }
+   
+   return false;
+}
+
 
