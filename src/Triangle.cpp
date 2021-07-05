@@ -87,14 +87,12 @@ bool Triangle::isReverse() const
 
 const Edge& Triangle::edge(unsigned edge_ix) const
 {
-   if (edge_ix > 2) edge_ix = 2;
-   return m_edges[edge_ix];
+   return m_edges[edge_ix % 3];
 }
 
 const Vertex& Triangle::corner(unsigned corner_ix) const
 {
-   if (corner_ix > 2) corner_ix = 2;
-   return m_led_corners[corner_ix];
+   return m_led_corners[corner_ix % 3];
 }
 
 
