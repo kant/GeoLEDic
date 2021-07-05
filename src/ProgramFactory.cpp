@@ -5,6 +5,7 @@
 #include "programs/Diagnostic.hpp"
 #include "programs/Fire.hpp"
 #include "programs/MovingRainbow.hpp"
+#include "programs/Lightning.hpp"
 
 ProgramFactory::ProgramFactory(const DomeWrapper& dome, const Strips& strips):
       m_dome(dome),
@@ -26,6 +27,9 @@ Program* ProgramFactory::changeProgram(uint8_t program)
       break;
    case 3:
       m_current_program = new MovingRainbow(m_dome);
+      break;
+   case 4:
+      m_current_program = new Lightning(m_dome);
       break;
    case 127:
       m_current_program = new Diagnostic(m_dome, m_strips);
