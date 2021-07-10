@@ -32,13 +32,13 @@ Vector Vertex::operator-(const Vertex& v) const
 
 void Vertex::updateAngles()
 {
-   double r = sqrt(x*x + y*y + z*z);
-   double theta_f = asin(y/r);
+   float r = sqrt(x*x + y*y + z*z);
+   float theta_f = asin(y/r);
    unsigned theta_u = theta_f/(M_PI_2/NUM_THETA_STEPS);
    theta = theta_u < THETA_MAX ? theta_u : THETA_MAX;
    
    r = sqrt(x*x + z*z);
-   double phi_f = acos(z/r);
+   float phi_f = acos(z/r);
    if (x > 0)
    {
       phi_f = 2*M_PI - phi_f;
