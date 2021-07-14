@@ -20,7 +20,7 @@ public:
             const Vertex (&vertices)[3]);
    
 #ifdef WITH_FLOGL
-   void createLeds(std::vector<flogl::LED>& leds) const;
+   void createLeds(std::vector<flogl::LED>& leds, std::vector<flogl::Triangle>& triangles, int triangle_num) const;
 #endif
    
    CRGB_iterator begin();

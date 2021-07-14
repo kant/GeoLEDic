@@ -69,9 +69,8 @@ uint16_t interpolatePhi(const Vertex& from, const Vertex& to, int step, int num_
 #ifdef WITH_FLOGL
 Vertex::operator flogl::LED() const
 {
-   const auto LED_SIZE = 0.3f;
    const auto SCALE = 10.0f; // convert from meters to the OpenGL coordinate system
-   return {x * SCALE, y * SCALE, z * SCALE, LED_SIZE};
+   return {x * SCALE, y * SCALE, z * SCALE};
 }
 #endif
 

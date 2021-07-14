@@ -97,8 +97,10 @@ const Vertex& Triangle::corner(unsigned corner_ix) const
 
 
 #ifdef WITH_FLOGL
-void Triangle::createLeds(std::vector<flogl::LED>& leds) const
+void Triangle::createLeds(std::vector<flogl::LED>& leds, std::vector<flogl::Triangle>& triangles, int triangle_num) const
 {
+   flogl::Triangle triangle;
+   triangle.vertices[0].start_led_ix = leds.size();
    auto i = 0;
    for (const Edge& e: m_edges)
    {
@@ -117,7 +119,12 @@ void Triangle::createLeds(std::vector<flogl::LED>& leds) const
          led_ix++;
       }
       
+      triangle.vertices[i].x = start_corner.x * 10;
+      triangle.vertices[i].y = start_corner.y * 10;
+      triangle.vertices[i].z = start_corner.z * 10;
       i++;
    }
+   triangle.vertices[0].num_leds = leds.size() - triangle.vertices[0].start_led_ix;
+   triangles.push_back(triangle);
 }
 #endif

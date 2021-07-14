@@ -9,6 +9,7 @@ int main()
 {
    
    std::vector<flogl::LED> leds;
+   std::vector<flogl::Triangle> triangles;
 
    std::vector<flogl::Config::View> views =
      {
@@ -18,12 +19,15 @@ int main()
      };
 
    try {
+      int i = 0;
       for (const Triangle& t: dome)
       {
-         t.createLeds(leds);
+         t.createLeds(leds, triangles, i);
+         i++;
       }
       flogl::Flogl flogl(
                leds,
+               triangles,
                flogl::Config()
                   .views(views)
                   .keyboardHandler(&Serial));
