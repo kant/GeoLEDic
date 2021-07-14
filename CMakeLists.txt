@@ -38,7 +38,10 @@ add_subdirectory(flogl)
 
 
 add_executable(triangle examples/triangle.cpp)
+add_executable(triangle_lighting examples/triangle_lighting.cpp)
 # Disable annoying #pragma messages.
 set_source_files_properties(examples/triangle.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
+set_source_files_properties(examples/triangle_lighting.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
 
 target_link_libraries(triangle flogl)
+target_link_libraries(triangle_lighting flogl)

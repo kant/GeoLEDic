@@ -3,9 +3,6 @@
 #include <math.h>
 #include <unistd.h>
 
-float vsc = 0.5;
-float hsc = 0.3;
-
 using flogl::LED;
 
 std::vector<LED> led_coords =
@@ -104,7 +101,6 @@ std::vector<LED> led_coords =
    {-0.300000, 14.500000, -20},
    {-0.000000, 15.000000, -20}
 };
-
 
 CRGB* leds;
 

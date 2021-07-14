@@ -52,6 +52,8 @@ add_library(flogl
    ${FLOGL_SOURCES}
    LED.fragmentshader
    LED.vertexshader
+   lit_triangle.fragmentshader
+   lit_triangle.vertexshader
    ${FASTLED_SOURCES}
    )
 
