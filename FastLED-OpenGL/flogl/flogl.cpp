@@ -212,6 +212,8 @@ void Flogl::Impl::initialiseCommon()
 
 bool Flogl::Impl::draw()
 {
+   // wait for last iteration to finish rendering
+   glFinish();
    // Clear the screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    m_window.processInputs();

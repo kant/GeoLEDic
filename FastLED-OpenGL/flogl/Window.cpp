@@ -51,6 +51,7 @@ Window::Window(const Config& config):
       exit(EXIT_FAILURE);
    }
    glfwMakeContextCurrent(m_window);
+   glEnable(GL_MULTISAMPLE);
    glfwSetWindowUserPointer(m_window, this);
    glfwSetKeyCallback(m_window, &Window::doKeyCallback);
    glfwSetScrollCallback(m_window, &Window::doScrollCallback);
