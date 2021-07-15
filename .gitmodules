@@ -1,6 +1,3 @@
-[submodule "flogl"]
-	path = FastLED-OpenGL
-	url = https://github.com/samsta/FastLED-OpenGL.git
 [submodule "FastLED"]
 	path = FastLED
 	url = https://github.com/FastLED/FastLED.git
