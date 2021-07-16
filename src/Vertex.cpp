@@ -43,7 +43,7 @@ void Vertex::updateAngles()
    {
       phi_f = 2*M_PI - phi_f;
    }
-   phi = phi_f/(2*M_PI/NUM_PHI_STEPS);
+   phi = isnan(phi_f) ? 0 : phi_f/(2*M_PI/NUM_PHI_STEPS);
    if (phi > PHI_MAX) phi = PHI_MAX;
 }
 
