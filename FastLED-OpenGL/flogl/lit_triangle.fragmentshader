@@ -17,9 +17,14 @@ void main()
        vec3 diffuse = vec3(0);
        for (int i = 0; i < num_leds; i++)
        {
-          float distance = length(led_pos[i] - FragPos);
-          float attenuation = (0.5 + 10*distance + 10*(distance * distance));
-          diffuse += led_color[i] / attenuation;
+          vec3 diff = led_pos[i] - FragPos;
+          float distance2 = dot(diff, diff);
+          if (distance2 < 27)
+          {
+             float distance = sqrt(distance2);
+             float attenuation = 0.5 + 10*distance + 10*(distance2);
+             diffuse += led_color[i] / attenuation;
+          }
        }
        FragColor = vec4(diffuse, 1.0);
    }
