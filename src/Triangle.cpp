@@ -96,10 +96,10 @@ const Vertex& Triangle::corner(unsigned corner_ix) const
 }
 
 
-#ifdef WITH_FLOGL
-void Triangle::createLeds(std::vector<flogl::LED>& leds, std::vector<flogl::Triangle>& triangles, int triangle_num) const
+#ifdef WITH_GFX
+void Triangle::createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle>& triangles, int triangle_num) const
 {
-   flogl::Triangle triangle;
+   gfx::Triangle triangle;
    triangle.vertices[0].start_led_ix = leds.size();
    auto i = 0;
    for (const Edge& e: m_edges)

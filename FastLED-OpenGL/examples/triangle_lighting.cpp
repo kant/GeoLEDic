@@ -1,10 +1,10 @@
-#include "flogl/flogl.hpp"
+#include "gfx/gfx.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
 
-using flogl::LED;
-using flogl::Triangle;
+using gfx::LED;
+using gfx::Triangle;
 
 std::vector<LED> led_coords =
 {
@@ -217,15 +217,15 @@ void loop();
 
 int main()
 {
-   std::vector<flogl::Config::View> views =
+   std::vector<gfx::Config::View> views =
      {
      // x     y    z   FOV  horz vert
        {0,    8,   10,  45,    0,    0}  // front
      };
    leds = new CRGB[led_coords.size()];
-   flogl::Flogl flogl(led_coords,
+   gfx::Gfx gfx(led_coords,
                       triangles,
-                      flogl::Config().views(views));
+                      gfx::Config().views(views));
    
    CRGB* col = leds;
    for (LED& led: led_coords)
@@ -236,7 +236,7 @@ int main()
    do {
       usleep(30000);
       loop();
-   } while(flogl.draw());
+   } while(gfx.draw());
    
    delete[] leds;
    

@@ -37,8 +37,8 @@ set_source_files_properties(${FASTLED_SOURCES}
    )
 source_group(FastLED FILES ${FASTLED_SOURCES})
 
-set(FLOGL_SOURCES
-   flogl.cpp
+set(GFX_SOURCES
+   gfx.cpp
    shader.cpp
    texture.cpp
    Window.cpp
@@ -46,10 +46,10 @@ set(FLOGL_SOURCES
    )
 
 # Disable annoying #pragma messages.
-set_source_files_properties(${FLOGL_SOURCES} PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
+set_source_files_properties(${GFX_SOURCES} PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
 
-add_library(flogl
-   ${FLOGL_SOURCES}
+add_library(gfx
+   ${GFX_SOURCES}
    LED.fragmentshader
    LED.vertexshader
    lit_triangle.fragmentshader
@@ -63,6 +63,6 @@ add_custom_command(
    DEPENDS toblob LED.DDS
 )
 
-target_link_libraries(flogl
+target_link_libraries(gfx
    ${ALL_LIBS}
    )

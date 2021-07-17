@@ -1,9 +1,9 @@
 #ifndef GEOLEDIC_VERTEX_HPP
 #define GEOLEDIC_VERTEX_HPP
 
-#ifdef WITH_FLOGL
+#ifdef WITH_GFX
 #define FASTLED_INTERNAL // get rid of annoying version pragma
-#include "flogl/flogl.hpp"
+#include "gfx/Gfx.hpp"
 #endif
 #include <stdint.h>
 
@@ -36,8 +36,8 @@ struct Vertex {
    
   void updateAngles();
    
-#ifdef WITH_FLOGL
-  operator flogl::LED() const;
+#ifdef WITH_GFX
+  operator gfx::LED() const;
 #endif
 };
 

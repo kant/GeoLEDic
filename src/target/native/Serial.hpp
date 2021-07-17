@@ -1,16 +1,16 @@
 #ifndef GEOLEDIC_SERIAL_HPP
 #define GEOLEDIC_SERIAL_HPP
 
-#include "flogl/Config.hpp"
+#include "gfx/Config.hpp"
 #include <queue>
 
-class SerialFromKeyboard: public flogl::Config::KeyboardHandler
+class SerialFromKeyboard: public gfx::Config::KeyboardHandler
 {
 public:
    bool available();
    char read();
 
-   // flogl::Config::KeyboardHandler
+   // gfx::Config::KeyboardHandler
    virtual void handleKey(char c);
 
    void println(const char* msg = "");

@@ -1,9 +1,9 @@
-#ifndef FLOGL_CONFIG_HPP
-#define FLOGL_CONFIG_HPP
+#ifndef GFX_CONFIG_HPP
+#define GFX_CONFIG_HPP
 
 #include <vector>
 
-namespace flogl {
+namespace gfx {
   
 class Config
 {
@@ -33,6 +33,7 @@ public:
    Config():
       m_width(1024),
       m_height(768),
+      m_fps(30),
       m_views(1, View(0, 8, 5)),
       m_keyboard_handler(&m_null_handler)
    {
@@ -46,6 +47,9 @@ public:
    
    Config& views(std::vector<View>& views) { m_views = views; return *this; }
    const std::vector<View>& views() const { return m_views; }
+   
+   Config& framesPerSecond(float fps) { m_fps = fps; return *this; }
+   float framesPerSecond() const { return m_fps; }
    
    Config& keyboardHandler(KeyboardHandler* handler)
    {
@@ -64,10 +68,11 @@ private:
    
    int m_width;
    int m_height;
+   float m_fps;
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
 };
 
 }
 
-#endif // FLOGL_CONFIG_HPP
+#endif // GFX_CONFIG_HPP

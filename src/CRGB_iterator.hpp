@@ -2,8 +2,8 @@
 #define CRGB_iterator_hpp
 
 #define FASTLED_INTERNAL // get rid of annoying version pragma
-#ifdef WITH_FLOGL
-#include "flogl/flogl.hpp"
+#ifdef WITH_GFX
+#include "gfx/Gfx.hpp"
 #endif
 #include "FastLED.h"
 

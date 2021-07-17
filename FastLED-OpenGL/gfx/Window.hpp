@@ -6,7 +6,7 @@
 
 struct GLFWwindow;
 
-namespace flogl {
+namespace gfx {
 
 class Config;
   

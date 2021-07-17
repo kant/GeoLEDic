@@ -1,11 +1,11 @@
-#ifndef FLOGL_HPP
-#define FLOGL_HPP
+#ifndef GFX_HPP
+#define GFX_HPP
 
 #include "platform.h"
 #include "FastLED.h"
 #include "Config.hpp"
 
-namespace flogl {
+namespace gfx {
 
 struct LED{
    LED(float x, float y, float z):
@@ -51,19 +51,18 @@ struct Triangle {
    Vertex vertices[3];
 };
 
-class Flogl
+class Gfx
 {
 public:
-   Flogl(std::vector<LED>& led_coordinates, const Config& config = Config());
-   Flogl(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config = Config());
+   Gfx(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config = Config());
 
    bool draw();
    
-   ~Flogl();
+   ~Gfx();
 private:
    class Impl;
    Impl& m_i;
 };
 
 }
-#endif // FLOGL_HPP
+#endif // GFX_HPP

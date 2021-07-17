@@ -87,12 +87,12 @@ void Fire::run()
             float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/NUM_H);
             
             int v0 = floor(v);
-            int v1 = v0+1;
+            int v1 = std::min(v0+1, NUM_V-1);
             float rv0 =  v1 - v;
             float rv1 = 1 - rv0;
             int h0 = floor(h);
-            int h1 = h0+1;
-            float rh0 = h1 - h;
+            int h1 = h0 == NUM_H-1 ? 0 : h0+1;
+            float rh0 = (h0+1) - h;
             float rh1 = 1 - rh0;
             
             led = HeatColor(m_heat[h0][v0] * rh0 * rv0 +

@@ -1,5 +1,5 @@
-#ifndef FLOGL_PLATFORM_H
-#define FLOGL_PLATFORM_H
+#ifndef GFX_PLATFORM_H
+#define GFX_PLATFORM_H
 
 #include <stdint.h>
 
@@ -36,4 +36,4 @@ unsigned long micros();
 
 
 
-#endif // FLOGL_PLATFORM_H
+#endif // GFX_PLATFORM_H

@@ -11,7 +11,7 @@ add_subdirectory(src/target/native)
 add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
-                -DWITH_FLOGL=1
+                -DWITH_GFX=1
                 -Werror
                 -Wall)
 
@@ -51,7 +51,7 @@ endif()
 
 add_executable(GeoLEDic MACOSX_BUNDLE ${ICON} ${GEOLEDIC_SOURCES})
 
-target_link_libraries(GeoLEDic flogl ${TARGET_LIBRARIES}
+target_link_libraries(GeoLEDic gfx ${TARGET_LIBRARIES}
                                      geoledic-core)
 
 

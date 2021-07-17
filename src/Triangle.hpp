@@ -7,8 +7,8 @@
 #include "CRGB_iterator.hpp"
 
 #define FASTLED_INTERNAL // get rid of annoying version pragma
-#ifdef WITH_FLOGL
-#include "flogl/flogl.hpp"
+#ifdef WITH_GFX
+#include "gfx/Gfx.hpp"
 #endif
 #include "FastLED.h"
 
@@ -19,8 +19,8 @@ public:
             const Edge (&edges)[3],
             const Vertex (&vertices)[3]);
    
-#ifdef WITH_FLOGL
-   void createLeds(std::vector<flogl::LED>& leds, std::vector<flogl::Triangle>& triangles, int triangle_num) const;
+#ifdef WITH_GFX
+   void createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle>& triangles, int triangle_num) const;
 #endif
    
    CRGB_iterator begin();

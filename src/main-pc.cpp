@@ -1,17 +1,16 @@
 #include "GeoLEDic.hpp"
-#include "flogl/flogl.hpp"
+#include "gfx/Gfx.hpp"
 #include <vector>
-#include <unistd.h>
 #include "Serial.hpp"
 #include <iostream>
 
 int main()
 {
    
-   std::vector<flogl::LED> leds;
-   std::vector<flogl::Triangle> triangles;
+   std::vector<gfx::LED> leds;
+   std::vector<gfx::Triangle> triangles;
 
-   std::vector<flogl::Config::View> views =
+   std::vector<gfx::Config::View> views =
      {
      // x     y    z   FOV  horz vert
        {0,   30, 140,  45,    0,    0},  // front
@@ -25,19 +24,19 @@ int main()
          t.createLeds(leds, triangles, i);
          i++;
       }
-      flogl::Flogl flogl(
+      gfx::Gfx gfx(
                leds,
                triangles,
-               flogl::Config()
+               gfx::Config()
                   .views(views)
+                  .framesPerSecond(30)
                   .keyboardHandler(&Serial));
       
       setupGeoLEDic();
       
       do {
          loopGeoLEDic();
-         usleep(30000);
-      } while(flogl.draw());
+      } while(gfx.draw());
    }
    catch (std::exception& e)
    {

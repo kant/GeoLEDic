@@ -8,7 +8,7 @@
 #endif
 #include <GLFW/glfw3.h>
 
-namespace flogl {
+namespace gfx {
 
 Window::Window(const Config& config):
       m_config(config),

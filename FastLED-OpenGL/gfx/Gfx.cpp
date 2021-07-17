@@ -1,4 +1,4 @@
-#include "flogl.hpp"
+#include "Gfx.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,6 +18,7 @@
 #include "texture.hpp"
 #include "Window.hpp"
 #include <iostream>
+#include <unistd.h>
 
 
 // FastLED needs this symbol. Find a better place for it.
@@ -29,7 +30,7 @@ uint16_t XY(uint8_t, uint8_t)
    return 0;
 }
 
-namespace flogl {
+namespace gfx {
 
 using namespace glm;
 
@@ -84,20 +85,18 @@ struct LedColor
 #include "LedTexture.hpp"
 
 
-class Flogl::Impl
+class Gfx::Impl
 {
 public:
-   Impl(std::vector<LED>& led_coordinates, const Config& config);
    Impl(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config = Config());
-   void initialiseCommon();
-   
-   
    ~Impl();
 
    bool draw();
    
    void drawLeds();
    void drawLitTriangles();
+   
+   void controlFrameRate();
 
    std::vector<LED>& m_leds;
    std::vector<Triangle>* m_triangles;
@@ -117,52 +116,17 @@ public:
    GLuint         m_camera_up_worldspace_id;
    GLuint         m_view_proj_matrix_id;
    GLuint         m_texture_id;
+   double         m_last_time;
+   const double   m_frame_time;
 };
 
-Flogl::Impl::Impl(std::vector<LED>& leds, const Config& config):
-   m_leds(leds),
-   m_triangles(nullptr),
-   m_window(config),
-   m_led_position_size_data(new LedPosition[m_leds.size()]),
-   m_led_color_data(new LedColor[m_leds.size()])
-{
-   initialiseCommon();
-}
-
-Flogl::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const Config& config):
+Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const Config& config):
    m_leds(leds),
    m_triangles(&triangles),
    m_window(config),
    m_led_position_size_data(new LedPosition[m_leds.size()]),
-   m_led_color_data(new LedColor[m_leds.size()])
-{
-   initialiseCommon();
-   
-   m_triangle_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), TRIANGLE_FRAGMENT_SHADER.c_str());
-   
-   // first, configure the cube's VAO (and VBO)
-   glGenVertexArrays(1, &m_triangle_vertex_array_id);
-   glGenBuffers(1, &m_triangle_vertex_buffer);
-
-   glBindVertexArray(m_triangle_vertex_array_id);
-
-   glBindBuffer(GL_ARRAY_BUFFER, m_triangle_vertex_buffer);
-   glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * m_triangles->size(), m_triangles->data(), GL_STATIC_DRAW);
-
-
-   // position attribute for triangles
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-   glEnableVertexAttribArray(0);
-
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-   glBindVertexArray(0);
-   
-   // front facing side of the triangles is with vertices going clockwise
-   glFrontFace(GL_CW);
-}
-
-
-void Flogl::Impl::initialiseCommon()
+   m_led_color_data(new LedColor[m_leds.size()]),
+   m_frame_time(1.0/config.framesPerSecond())
 {
    // Enable depth test
    glEnable(GL_DEPTH_TEST);
@@ -208,12 +172,50 @@ void Flogl::Impl::initialiseCommon()
    glBindBuffer(GL_ARRAY_BUFFER, m_leds_color_buffer);
    // Initialize with empty (NULL) buffer : it will be updated later, each frame.
    glBufferData(GL_ARRAY_BUFFER, m_leds.size() * sizeof(LedColor), NULL, GL_STREAM_DRAW);
+
+   m_triangle_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), TRIANGLE_FRAGMENT_SHADER.c_str());
+   
+   // first, configure the cube's VAO (and VBO)
+   glGenVertexArrays(1, &m_triangle_vertex_array_id);
+   glGenBuffers(1, &m_triangle_vertex_buffer);
+
+   glBindVertexArray(m_triangle_vertex_array_id);
+
+   glBindBuffer(GL_ARRAY_BUFFER, m_triangle_vertex_buffer);
+   glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * m_triangles->size(), m_triangles->data(), GL_STATIC_DRAW);
+
+
+   // position attribute for triangles
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+   glEnableVertexAttribArray(0);
+
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+   glBindVertexArray(0);
+   
+   // front facing side of the triangles is with vertices going clockwise
+   glFrontFace(GL_CW);
 }
 
-bool Flogl::Impl::draw()
+void Gfx::Impl::controlFrameRate()
 {
+   if (m_last_time != 0)
+   {
+      double dt = glfwGetTime() - m_last_time;
+      if (dt < m_frame_time)
+      {
+         usleep((m_frame_time - dt)*1000000);
+      }
+   }
+   m_last_time = glfwGetTime();
+   
    // wait for last iteration to finish rendering
    glFinish();
+}
+
+bool Gfx::Impl::draw()
+{
+   controlFrameRate();
+   
    // Clear the screen
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    m_window.processInputs();
@@ -240,7 +242,7 @@ bool Flogl::Impl::draw()
    return not m_window.shouldClose();
 }
  
-void Flogl::Impl::drawLeds()
+void Gfx::Impl::drawLeds()
 {
    const glm::mat4& view_matrix = m_window.getViewMatrix();
    glm::vec3 camera_position(glm::inverse(view_matrix)[3]);
@@ -337,7 +339,7 @@ void Flogl::Impl::drawLeds()
    glDisableVertexAttribArray(2);
 }
 
-void Flogl::Impl::drawLitTriangles()
+void Gfx::Impl::drawLitTriangles()
 {
    glUseProgram(m_triangle_program_id);
 
@@ -363,7 +365,7 @@ void Flogl::Impl::drawLitTriangles()
    }
 }
 
-Flogl::Impl::~Impl()
+Gfx::Impl::~Impl()
 {
    delete[] m_led_position_size_data;
    delete[] m_led_color_data;
@@ -377,23 +379,18 @@ Flogl::Impl::~Impl()
    glDeleteVertexArrays(1, &m_vertex_array_id);
 }
 
-Flogl::Flogl(std::vector<LED>& led_coordinates, const Config& config):
-    m_i(*new Flogl::Impl(led_coordinates, config))
-{
-}
-
-Flogl::Flogl(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config):
-    m_i(*new Flogl::Impl(led_coordinates, triangles, config))
+Gfx::Gfx(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config):
+    m_i(*new Gfx::Impl(led_coordinates, triangles, config))
 {
 }
 
 
-bool Flogl::draw()
+bool Gfx::draw()
 {
    return m_i.draw();
 }
 
-Flogl::~Flogl()
+Gfx::~Gfx()
 {
    delete &m_i;
 }

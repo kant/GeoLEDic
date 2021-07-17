@@ -7,13 +7,13 @@ if(FASTLED_DIR STREQUAL "")
    message("FASTLED_DIR not set, searching default locations")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/flogl/cmake/Modules")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gfx/cmake/Modules")
 find_package(FastLED REQUIRED)
 
 include_directories(
    ${GLFW_INCLUDE_DIR}
    ${GLM_INCLUDE_DIR}
-   flogl
+   gfx
    .
    )
 
@@ -34,14 +34,10 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
       )
 endif()
 
-add_subdirectory(flogl)
+add_subdirectory(gfx)
 
 
-add_executable(triangle examples/triangle.cpp)
 add_executable(triangle_lighting examples/triangle_lighting.cpp)
 # Disable annoying #pragma messages.
-set_source_files_properties(examples/triangle.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
 set_source_files_properties(examples/triangle_lighting.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
-
-target_link_libraries(triangle flogl)
-target_link_libraries(triangle_lighting flogl)
+target_link_libraries(triangle_lighting gfx)

@@ -4,7 +4,7 @@
 namespace 
 {
    const unsigned NONE(~0U);
-#ifdef WITH_FLOGL
+#ifdef WITH_GFX
    // need to see a bit more on the dark background in the model
    // as we don't have the actual beams
    CRGB OFF(40,40,40);

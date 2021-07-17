@@ -2,7 +2,7 @@
 #include "MidiSource.hpp"
 #include "ProgramFactory.hpp"
 #include "programs/Diagnostic.hpp"
-#ifdef WITH_FLOGL
+#ifdef WITH_GFX
 #include "Serial.hpp"
 #endif
 
@@ -41,7 +41,7 @@ void loopGeoLEDic()
       }
    }
 
-#if defined(USB_MIDI_SERIAL) or defined(WITH_FLOGL)
+#if defined(USB_MIDI_SERIAL) or defined(WITH_GFX)
    static Diagnostic* diagnostic_mode = nullptr;
    while (Serial.available())
    {
