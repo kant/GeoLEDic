@@ -9,7 +9,8 @@
 
 namespace gfx {
 
-Menu::Menu(const Config& /*config*/, GLFWwindow* window):
+Menu::Menu(Config& config, GLFWwindow* window):
+   m_config(config),
    m_window(window)
 {
    // Setup Dear ImGui context
@@ -36,9 +37,17 @@ void Menu::draw()
    ImGui::NewFrame();
    
    ImGui::Begin("Settings");
+   if (ImGui::CollapsingHeader("Shader Settings"))
+   {
+      ImGui::SliderFloat("Cutoff Distance", &m_config.m_cutoff_distance, 0.0f, 10.0f);
+      ImGui::Text("Attenuation:");
+      ImGui::SliderFloat("Constant", &m_config.m_attenuation_constant, 0.0f, 20.0f);
+      ImGui::SliderFloat("Linear", &m_config.m_attenuation_linear, 0.0f, 20.0f);
+      ImGui::SliderFloat("Square", &m_config.m_attenuation_square, 0.0f, 20.0f);
+   }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();
-   
+         
    ImGui::Render();
    int display_w, display_h;
    glfwGetFramebufferSize(m_window, &display_w, &display_h);

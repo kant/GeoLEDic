@@ -102,6 +102,7 @@ public:
 
    std::vector<LED>& m_leds;
    std::vector<Triangle>* m_triangles;
+   Config              m_config;
    Window              m_window;
    Menu                m_menu;
    GLuint              m_vertex_array_id;
@@ -126,11 +127,12 @@ public:
 Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const Config& config):
    m_leds(leds),
    m_triangles(&triangles),
-   m_window(config),
-   m_menu(config, m_window.get()),
+   m_config(config),
+   m_window(m_config),
+   m_menu(m_config, m_window.get()),
    m_led_position_data(m_leds.size()),
    m_led_color_data(m_leds.size()),
-   m_frame_time(1.0/config.framesPerSecond())
+   m_frame_time(1.0/m_config.framesPerSecond())
 {
    copy(m_leds.begin(), m_leds.end(), m_led_position_data.begin());
    
@@ -352,6 +354,12 @@ void Gfx::Impl::drawLitTriangles()
    glm::mat4 model = glm::mat4(1.0f);
    glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "model"), 1, GL_FALSE, &model[0][0]);
    
+   float cutoff = m_config.cutoffDistance();
+   glUniform1f(glGetUniformLocation(m_triangle_program_id, "cutoff_distance_square"), cutoff * cutoff);
+   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_constant"), m_config.attenuationConstant());
+   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_linear"), m_config.attenuationLinear());
+   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_square"), m_config.attenuationSquare());
+
    for (unsigned k = 0; k < m_triangles->size(); k++)
    {
       // led color and position

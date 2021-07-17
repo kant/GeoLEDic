@@ -10,12 +10,13 @@ namespace gfx {
 class Menu
 {
 public:
-   Menu(const Config& config, GLFWwindow* window);
+   Menu(Config& config, GLFWwindow* window);
    ~Menu();
    
    void draw();
    
 private:
+   Config&      m_config;
    GLFWwindow*  m_window;
 };
 

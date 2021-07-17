@@ -8,7 +8,10 @@ in vec3 FragPos;
 uniform vec3 led_pos[NUM_LEDS];
 uniform vec3 led_color[NUM_LEDS];
 uniform int num_leds;
-
+uniform float cutoff_distance_square;
+uniform float attenuation_constant;
+uniform float attenuation_linear;
+uniform float attenuation_square;
 
 void main()
 {
@@ -18,11 +21,11 @@ void main()
        for (int i = 0; i < num_leds; i++)
        {
           vec3 diff = led_pos[i] - FragPos;
-          float distance2 = dot(diff, diff);
-          if (distance2 < 27)
+          float distance_square = dot(diff, diff);
+          if (distance_square < cutoff_distance_square)
           {
-             float distance = sqrt(distance2);
-             float attenuation = 0.5 + 10*distance + 10*(distance2);
+             float distance = sqrt(distance_square);
+             float attenuation = attenuation_constant + attenuation_linear*distance + attenuation_square*distance_square;
              diffuse += led_color[i] / attenuation;
           }
        }

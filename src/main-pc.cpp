@@ -30,6 +30,9 @@ int main()
                gfx::Config()
                   .views(views)
                   .framesPerSecond(30)
+                  .attenuationConstant(0.4)
+                  .attenuationLinear(13.0)
+                  .attenuationSquare(9)
                   .keyboardHandler(&Serial));
       
       setupGeoLEDic();

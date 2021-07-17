@@ -9,6 +9,8 @@ class Config
 {
 public:
    
+   friend class Menu;
+   
    struct View
    {
       View(int x, int y, int z, float fov_deg = 45.f, float horizontal_angle_deg = 0.f, float vertical_angle_deg = 0.f):
@@ -34,6 +36,10 @@ public:
       m_width(1024),
       m_height(768),
       m_fps(30),
+      m_cutoff_distance(5.5),
+      m_attenuation_constant(0.5),
+      m_attenuation_linear(10),
+      m_attenuation_square(10),
       m_views(1, View(0, 8, 5)),
       m_keyboard_handler(&m_null_handler)
    {
@@ -50,6 +56,18 @@ public:
    
    Config& framesPerSecond(float fps) { m_fps = fps; return *this; }
    float framesPerSecond() const { return m_fps; }
+   
+   Config& cutoffDistance(float cutoff) { m_cutoff_distance = cutoff; return *this; }
+   float cutoffDistance() const { return m_cutoff_distance; }
+   
+   Config& attenuationConstant(float attenuation) { m_attenuation_constant = attenuation; return *this; }
+   float attenuationConstant() const { return m_attenuation_constant; }
+   
+   Config& attenuationLinear(float attenuation) { m_attenuation_linear = attenuation; return *this; }
+   float attenuationLinear() const { return m_attenuation_linear; }
+   
+   Config& attenuationSquare(float attenuation) { m_attenuation_square = attenuation; return *this; }
+   float attenuationSquare() const { return m_attenuation_square; }
    
    Config& keyboardHandler(KeyboardHandler* handler)
    {
@@ -69,6 +87,10 @@ private:
    int m_width;
    int m_height;
    float m_fps;
+   float m_cutoff_distance;
+   float m_attenuation_constant;
+   float m_attenuation_linear;
+   float m_attenuation_square;
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
 };
