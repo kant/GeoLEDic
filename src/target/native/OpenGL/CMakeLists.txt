@@ -1,21 +1,11 @@
-cmake_minimum_required (VERSION 3.0)
-project (FastLED-OpenGL)
-
-set(FASTLED_DIR "" CACHE PATH "Path to FastLED installation")
-
-if(FASTLED_DIR STREQUAL "")
-   message("FASTLED_DIR not set, searching default locations")
-endif()
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/gfx/cmake/Modules")
-find_package(FastLED REQUIRED)
-
 include_directories(
    ${GLFW_INCLUDE_DIR}
    ${GLM_INCLUDE_DIR}
+   ../FastLED
    gfx
    .
    )
+include_directories(SYSTEM ${FASTLED_DIR}/src)
 
 add_definitions(
    -std=c++11
@@ -36,8 +26,7 @@ endif()
 
 add_subdirectory(gfx)
 
-
 add_executable(manualtest_triangle test/manualtest_triangle.cpp)
 # Disable annoying #pragma messages.
 set_source_files_properties(test/manualtest_triangle.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
-target_link_libraries(manualtest_triangle gfx)
+target_link_libraries(manualtest_triangle gfx FastLED)

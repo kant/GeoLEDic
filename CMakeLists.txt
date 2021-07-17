@@ -5,8 +5,6 @@ cmake_policy(SET CMP0087 NEW) # use generator expression in install(CODE)
 set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
 
-add_subdirectory(src/target/native/OpenGL)
-add_subdirectory(src/target/native/${CMAKE_SYSTEM_NAME})
 add_subdirectory(src/target/native)
 add_subdirectory(src/programs)
 
@@ -21,8 +19,9 @@ endif()
 
 include_directories(src
                     src/target/native
+                    src/target/native/FastLED
                     src/target/native/OpenGL)
-include_directories(SYSTEM FastLED/src)
+include_directories(SYSTEM "${FASTLED_DIR}/src")
 
 # The core sources are the ones built for unit tests as well
 set(GEOLEDIC_CORE_SOURCES src/CRGB_iterator.cpp
@@ -51,8 +50,10 @@ endif()
 
 add_executable(GeoLEDic MACOSX_BUNDLE ${ICON} ${GEOLEDIC_SOURCES})
 
-target_link_libraries(GeoLEDic gfx ${TARGET_LIBRARIES}
-                                     geoledic-core)
+target_link_libraries(GeoLEDic gfx
+                               ${TARGET_LIBRARIES}
+                               FastLED
+                               geoledic-core)
 
 
 add_custom_target(regenerate-dome COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py ${CMAKE_CURRENT_SOURCE_DIR}/src

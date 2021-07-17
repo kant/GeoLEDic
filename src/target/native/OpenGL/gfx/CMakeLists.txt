@@ -1,7 +1,3 @@
-# CMake entry point
-cmake_minimum_required (VERSION 3.0)
-project (FastLED-OpenGL-Lib)
-
 find_package(OpenGL REQUIRED)
 if (NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
    find_package(GLEW REQUIRED)
@@ -15,7 +11,9 @@ include_directories(
    ${CMAKE_CURRENT_BINARY_DIR}
    ${GLFW_INCLUDE_DIR}
    ${GLM_INCLUDE_DIR}
+   ../../FastLED
    )
+include_directories(SYSTEM ${FASTLED_DIR}/src)
 
 set(ALL_LIBS
    ${OPENGL_LIBRARY}
@@ -23,22 +21,10 @@ set(ALL_LIBS
    ${GLFW_LIBRARY}
 )
 
-
 add_executable(toblob util/toblob.cpp)
 
-set(FASTLED_SOURCES
-   "${FastLED_SRC}/colorutils.cpp"
-   "${FastLED_SRC}/colorpalettes.cpp"
-   "${FastLED_SRC}/hsv2rgb.cpp"
-   "${FastLED_SRC}/lib8tion.cpp"
-   )
-set_source_files_properties(${FASTLED_SOURCES}
-   PROPERTIES COMPILE_FLAGS "-include platform.h -Wno-mismatched-tags -Wno-unused-private-field"
-   )
-source_group(FastLED FILES ${FASTLED_SOURCES})
-
 set(GFX_SOURCES
-   gfx.cpp
+   Gfx.cpp
    shader.cpp
    texture.cpp
    Window.cpp
@@ -54,7 +40,6 @@ add_library(gfx
    LED.vertexshader
    lit_triangle.fragmentshader
    lit_triangle.vertexshader
-   ${FASTLED_SOURCES}
    )
 
 add_custom_command(
