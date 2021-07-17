@@ -1,4 +1,4 @@
-#include "gfx/gfx.hpp"
+#include "gfx/Gfx.hpp"
 #include <FastLED.h>
 #include <math.h>
 #include <unistd.h>
