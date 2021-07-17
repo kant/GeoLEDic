@@ -34,6 +34,7 @@ uint16_t XY(uint8_t, uint8_t)
 namespace gfx {
 
 using namespace glm;
+using namespace std;
 
 namespace {
 const std::string VERTEX_SHADER =
@@ -89,7 +90,7 @@ struct LedColor
 class Gfx::Impl
 {
 public:
-   Impl(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config = Config());
+   Impl(vector<LED>& led_coordinates, vector<Triangle>& triangles, const Config& config = Config());
    ~Impl();
 
    bool draw();
@@ -101,25 +102,25 @@ public:
 
    std::vector<LED>& m_leds;
    std::vector<Triangle>* m_triangles;
-   Window         m_window;
-   Menu           m_menu;
-   GLuint         m_vertex_array_id;
-   GLuint         m_triangle_vertex_array_id;
-   GLuint         m_program_id;
-   GLuint         m_triangle_program_id;
-   LedPosition*   m_led_position_size_data;
-   LedColor*      m_led_color_data;
-   GLuint         m_vertex_buffer;
-   GLuint         m_triangle_vertex_buffer;
-   GLuint         m_leds_position_buffer;
-   GLuint         m_leds_color_buffer;
-   GLuint         m_texture;
-   GLuint         m_camera_right_worldspace_id;
-   GLuint         m_camera_up_worldspace_id;
-   GLuint         m_view_proj_matrix_id;
-   GLuint         m_texture_id;
-   double         m_last_time;
-   const double   m_frame_time;
+   Window              m_window;
+   Menu                m_menu;
+   GLuint              m_vertex_array_id;
+   GLuint              m_triangle_vertex_array_id;
+   GLuint              m_program_id;
+   GLuint              m_triangle_program_id;
+   vector<LedPosition> m_led_position_data;
+   vector<LedColor>    m_led_color_data;
+   GLuint              m_vertex_buffer;
+   GLuint              m_triangle_vertex_buffer;
+   GLuint              m_leds_position_buffer;
+   GLuint              m_leds_color_buffer;
+   GLuint              m_texture;
+   GLuint              m_camera_right_worldspace_id;
+   GLuint              m_camera_up_worldspace_id;
+   GLuint              m_view_proj_matrix_id;
+   GLuint              m_texture_id;
+   double              m_last_time;
+   const double        m_frame_time;
 };
 
 Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const Config& config):
@@ -127,10 +128,12 @@ Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const 
    m_triangles(&triangles),
    m_window(config),
    m_menu(config, m_window.get()),
-   m_led_position_size_data(new LedPosition[m_leds.size()]),
-   m_led_color_data(new LedColor[m_leds.size()]),
+   m_led_position_data(m_leds.size()),
+   m_led_color_data(m_leds.size()),
    m_frame_time(1.0/config.framesPerSecond())
 {
+   copy(m_leds.begin(), m_leds.end(), m_led_position_data.begin());
+   
    // Enable depth test
    glEnable(GL_DEPTH_TEST);
    // Accept fragment if it closer to the camera than the former one
@@ -223,14 +226,7 @@ bool Gfx::Impl::draw()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
    m_window.processInputs();
 
-   int i = 0;
-   for (LED& p: m_leds)
-   {
-      // Fill the GPU buffer
-      m_led_position_size_data[i] = p;
-      m_led_color_data[i] = p;
-      i++;
-   }
+   copy(m_leds.begin(), m_leds.end(), m_led_color_data.begin());
 
    if (m_triangles != nullptr and m_window.shouldDrawLitTriangles())
    {
@@ -261,11 +257,11 @@ void Gfx::Impl::drawLeds()
    
    glBindBuffer(GL_ARRAY_BUFFER, m_leds_position_buffer);
    glBufferData(GL_ARRAY_BUFFER, m_leds.size() * sizeof(LedPosition), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-   glBufferSubData(GL_ARRAY_BUFFER, 0, m_leds.size() * sizeof(LedPosition), m_led_position_size_data);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, m_leds.size() * sizeof(LedPosition), m_led_position_data.data());
    
    glBindBuffer(GL_ARRAY_BUFFER, m_leds_color_buffer);
    glBufferData(GL_ARRAY_BUFFER, m_leds.size() * sizeof(LedColor), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-   glBufferSubData(GL_ARRAY_BUFFER, 0, m_leds.size() * sizeof(LedColor), m_led_color_data);
+   glBufferSubData(GL_ARRAY_BUFFER, 0, m_leds.size() * sizeof(LedColor), m_led_color_data.data());
    
    
    glEnable(GL_BLEND);
@@ -316,7 +312,7 @@ void Gfx::Impl::drawLeds()
       2,                                // attribute. No particular reason for 1, but must match the layout in the shader.
       3,                                // size : r + g + b => 3
       GL_FLOAT,                         // type
-      GL_FALSE,                          // normalized?
+      GL_FALSE,                         // normalized?
       0,                                // stride
       (void*)0                          // array buffer offset
    );
@@ -327,8 +323,8 @@ void Gfx::Impl::drawLeds()
    // The second parameter is the "rate at which generic vertex attributes advance when rendering multiple instances"
    // http://www.opengl.org/sdk/docs/man/xhtml/glVertexAttribDivisor.xml
    glVertexAttribDivisor(0, 0); // leds vertices : always reuse the same 4 vertices -> 0
-   glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
-   glVertexAttribDivisor(2, 1); // color : one per quad                                  -> 1
+   glVertexAttribDivisor(1, 1); // positions : one per quad (its center)            -> 1
+   glVertexAttribDivisor(2, 1); // color : one per quad                             -> 1
    
    // Draw the leds !
    // This draws many times a small triangle_strip (which looks like a quad).
@@ -352,7 +348,7 @@ void Gfx::Impl::drawLitTriangles()
    {
       // led color and position
       glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[(*m_triangles)[k].vertices[0].start_led_ix].r);
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_size_data[(*m_triangles)[k].vertices[0].start_led_ix].x);
+      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[(*m_triangles)[k].vertices[0].start_led_ix].x);
       glUniform1i(glGetUniformLocation(m_triangle_program_id, "num_leds"), (*m_triangles)[k].vertices[0].num_leds);
 
       // view/projection transformations
@@ -372,9 +368,6 @@ void Gfx::Impl::drawLitTriangles()
 
 Gfx::Impl::~Impl()
 {
-   delete[] m_led_position_size_data;
-   delete[] m_led_color_data;
-   
    // Cleanup VBO and shader
    glDeleteBuffers(1, &m_leds_color_buffer);
    glDeleteBuffers(1, &m_leds_position_buffer);
