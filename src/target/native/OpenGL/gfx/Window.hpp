@@ -25,6 +25,8 @@ public:
    
    bool shouldDrawLitTriangles() const;
    bool shouldClose() const;
+
+   GLFWwindow* get();
    
 private:
    glm::vec3 getDirection() const;

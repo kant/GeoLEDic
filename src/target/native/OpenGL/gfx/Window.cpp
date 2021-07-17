@@ -10,6 +10,11 @@
 
 namespace gfx {
 
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
+
 Window::Window(const Config& config):
       m_config(config),
       m_window(NULL),
@@ -29,6 +34,7 @@ Window::Window(const Config& config):
       m_should_close(false)
 {
    // Initialise GLFW
+   glfwSetErrorCallback(glfw_error_callback);
    if(not glfwInit())
    {
       fprintf( stderr, "Failed to initialize GLFW\n" );
@@ -156,6 +162,10 @@ void Window::processInputs()
    m_last_time = currentTime;
 }
 
+GLFWwindow* Window::get()
+{
+   return m_window;
+}
 
 const glm::mat4& Window::getViewMatrix() const
 {

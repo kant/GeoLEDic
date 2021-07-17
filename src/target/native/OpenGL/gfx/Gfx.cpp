@@ -14,6 +14,7 @@
 #endif
 #include <GLFW/glfw3.h>
 
+#include "Menu.hpp"
 #include "shader.hpp"
 #include "texture.hpp"
 #include "Window.hpp"
@@ -101,6 +102,7 @@ public:
    std::vector<LED>& m_leds;
    std::vector<Triangle>* m_triangles;
    Window         m_window;
+   Menu           m_menu;
    GLuint         m_vertex_array_id;
    GLuint         m_triangle_vertex_array_id;
    GLuint         m_program_id;
@@ -124,6 +126,7 @@ Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const 
    m_leds(leds),
    m_triangles(&triangles),
    m_window(config),
+   m_menu(config, m_window.get()),
    m_led_position_size_data(new LedPosition[m_leds.size()]),
    m_led_color_data(new LedColor[m_leds.size()]),
    m_frame_time(1.0/config.framesPerSecond())
@@ -238,6 +241,8 @@ bool Gfx::Impl::draw()
       drawLeds();
    }
    
+   m_menu.draw();
+      
    m_window.swapBuffers();
    return not m_window.shouldClose();
 }
