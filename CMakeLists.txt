@@ -5,7 +5,7 @@ cmake_policy(SET CMP0087 NEW) # use generator expression in install(CODE)
 set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
 
-add_subdirectory(FastLED-OpenGL)
+add_subdirectory(src/target/native/OpenGL)
 add_subdirectory(src/target/native/${CMAKE_SYSTEM_NAME})
 add_subdirectory(src/target/native)
 add_subdirectory(src/programs)
@@ -19,9 +19,9 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
    add_definitions(-Wno-deprecated-register)
 endif()
 
-include_directories(FastLED-OpenGL
-                    src
-                    src/target/native)
+include_directories(src
+                    src/target/native
+                    src/target/native/OpenGL)
 include_directories(SYSTEM FastLED/src)
 
 # The core sources are the ones built for unit tests as well
