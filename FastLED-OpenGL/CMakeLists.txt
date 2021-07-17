@@ -37,7 +37,7 @@ endif()
 add_subdirectory(gfx)
 
 
-add_executable(triangle_lighting examples/triangle_lighting.cpp)
+add_executable(manualtest_triangle test/manualtest_triangle.cpp)
 # Disable annoying #pragma messages.
-set_source_files_properties(examples/triangle_lighting.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
-target_link_libraries(triangle_lighting gfx)
+set_source_files_properties(test/manualtest_triangle.cpp PROPERTIES COMPILE_FLAGS " -DFASTLED_INTERNAL")
+target_link_libraries(manualtest_triangle gfx)
