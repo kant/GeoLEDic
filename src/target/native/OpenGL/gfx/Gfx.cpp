@@ -344,20 +344,20 @@ void Gfx::Impl::drawLitTriangles()
 {
    glUseProgram(m_triangle_program_id);
 
+   // view/projection transformations
+   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
+   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
+
+   // world transformation
+   glm::mat4 model = glm::mat4(1.0f);
+   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "model"), 1, GL_FALSE, &model[0][0]);
+   
    for (unsigned k = 0; k < m_triangles->size(); k++)
    {
       // led color and position
       glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[(*m_triangles)[k].vertices[0].start_led_ix].r);
       glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[(*m_triangles)[k].vertices[0].start_led_ix].x);
       glUniform1i(glGetUniformLocation(m_triangle_program_id, "num_leds"), (*m_triangles)[k].vertices[0].num_leds);
-
-      // view/projection transformations
-      glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
-      glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
-
-      // world transformation
-      glm::mat4 model = glm::mat4(1.0f);
-      glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "model"), 1, GL_FALSE, &model[0][0]);
 
       // render the triangle
       glBindVertexArray(m_triangle_vertex_array_id);
