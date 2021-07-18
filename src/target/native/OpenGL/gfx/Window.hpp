@@ -23,7 +23,6 @@ public:
 
    void swapBuffers();
    
-   bool shouldDrawLitTriangles() const;
    bool shouldClose() const;
 
    GLFWwindow* get();
@@ -54,7 +53,6 @@ private:
    double        m_last_time;
 
    bool          m_control_mouse;
-   bool          m_draw_lit_triangles;
    bool          m_shift_pressed;
    bool          m_should_close;
 };

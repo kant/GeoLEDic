@@ -29,7 +29,6 @@ Window::Window(const Config& config):
       m_projection_matrix(),
       m_last_time(0.0),
       m_control_mouse(false),
-      m_draw_lit_triangles(true),
       m_shift_pressed(false),
       m_should_close(false)
 {
@@ -204,11 +203,6 @@ void Window::swapBuffers()
    glfwPollEvents();
 }
 
-bool Window::shouldDrawLitTriangles() const
-{
-   return m_draw_lit_triangles;
-}
-
 bool Window::shouldClose() const
 {
    return m_should_close or
@@ -252,9 +246,6 @@ void Window::keyCallback(int key, int scan_code, int action, int mods)
          {
             glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
          }
-         break;
-      case GLFW_KEY_T:
-         m_draw_lit_triangles = not m_draw_lit_triangles;
          break;
       case GLFW_KEY_0:
       case GLFW_KEY_1:

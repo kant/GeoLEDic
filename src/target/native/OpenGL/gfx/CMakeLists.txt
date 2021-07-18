@@ -23,8 +23,6 @@ set(ALL_LIBS
    ${GLFW_LIBRARY}
 )
 
-add_executable(toblob util/toblob.cpp)
-
 set(IMGUI_SRC ${CMAKE_SOURCE_DIR}/imgui)
 include_directories(${IMGUI_SRC})
 set(IMGUI_SOURCES ${IMGUI_SRC}/imgui.cpp
@@ -39,9 +37,7 @@ set(GFX_SOURCES
    Gfx.cpp
    Menu.cpp
    shader.cpp
-   texture.cpp
    Window.cpp
-   "${CMAKE_CURRENT_BINARY_DIR}/LedTexture.hpp"
    )
 
 # Disable annoying #pragma messages.
@@ -50,17 +46,9 @@ set_source_files_properties(${GFX_SOURCES} PROPERTIES COMPILE_FLAGS " -DFASTLED_
 add_library(gfx
    ${GFX_SOURCES}
    ${IMGUI_SOURCES}
-   LED.fragmentshader
-   LED.vertexshader
    lit_triangle.fragmentshader
    lit_triangle.vertexshader
    )
-
-add_custom_command(
-   OUTPUT LedTexture.hpp
-   COMMAND toblob  "${CMAKE_CURRENT_SOURCE_DIR}/LED.DDS" "${CMAKE_CURRENT_BINARY_DIR}" LedTexture
-   DEPENDS toblob LED.DDS
-)
 
 target_link_libraries(gfx
    ${ALL_LIBS}
