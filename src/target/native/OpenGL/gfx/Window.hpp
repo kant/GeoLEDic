@@ -26,9 +26,9 @@ public:
    bool shouldClose() const;
 
    GLFWwindow* get();
-   
-private:
    glm::vec3 getDirection() const;
+
+private:
    
    static void doKeyCallback(GLFWwindow* window, int key, int scan_code, int action, int mods);
    void keyCallback(int key, int scan_code, int action, int mods);

@@ -12,12 +12,15 @@ uniform float cutoff_distance_square;
 uniform float attenuation_constant;
 uniform float attenuation_linear;
 uniform float attenuation_square;
+uniform vec3 direction;
+uniform vec3 normal;
 
 void main()
 {
    if (gl_FrontFacing)
    {
-       vec3 diffuse = vec3(0);
+       float directional = (1 + max(dot(normal, direction), 0.0))/2;
+       vec3 diffuse = vec3(0.0);
        for (int i = 0; i < num_leds; i++)
        {
           vec3 diff = led_pos[i] - FragPos;
@@ -29,11 +32,12 @@ void main()
              diffuse += led_color[i] / attenuation;
           }
        }
-       FragColor = vec4(diffuse, 1.0);
+       FragColor = vec4(diffuse, 1.0) * directional;
    }
    else
    {
-      FragColor = vec4(0.1, 0.1, 0.1, 1);
+     float directional = max(dot(-normal, direction), 0.0);
+     FragColor = vec4(0.3, 0.3, 0.3, 1) * directional;
    }
 }
 

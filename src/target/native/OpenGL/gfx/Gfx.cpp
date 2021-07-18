@@ -74,6 +74,11 @@ struct LedColor
    }
 };
 
+vec3 toVec3(const Vertex& v)
+{
+   return vec3(v.x, v.y, v.z);
+}
+
 }
 
 class Gfx::Impl
@@ -90,7 +95,7 @@ public:
    void controlFrameRate();
 
    std::vector<LED>& m_leds;
-   std::vector<Triangle>* m_triangles;
+   std::vector<Triangle>& m_triangles;
    Config              m_config;
    Window              m_window;
    Menu                m_menu;
@@ -105,7 +110,7 @@ public:
 
 Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const Config& config):
    m_leds(leds),
-   m_triangles(&triangles),
+   m_triangles(triangles),
    m_config(config),
    m_window(m_config),
    m_menu(m_config, m_window.get()),
@@ -129,7 +134,7 @@ Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const 
    glBindVertexArray(m_triangle_vertex_array_id);
 
    glBindBuffer(GL_ARRAY_BUFFER, m_triangle_vertex_buffer);
-   glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * m_triangles->size(), m_triangles->data(), GL_STATIC_DRAW);
+   glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * m_triangles.size(), m_triangles.data(), GL_STATIC_DRAW);
 
    // position attribute for triangles
    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
@@ -173,6 +178,7 @@ bool Gfx::Impl::draw()
    // view/projection transformations
    glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
    glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
+   glUniform3fv(glGetUniformLocation(m_triangle_program_id, "direction"), 1, &m_window.getDirection()[0]);
 
    // world transformation
    glm::mat4 model = glm::mat4(1.0f);
@@ -183,13 +189,18 @@ bool Gfx::Impl::draw()
    glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_constant"), m_config.attenuationConstant());
    glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_linear"), m_config.attenuationLinear());
    glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_square"), m_config.attenuationSquare());
+   
 
-   for (unsigned k = 0; k < m_triangles->size(); k++)
+   for (unsigned k = 0; k < m_triangles.size(); k++)
    {
+      Triangle& t(m_triangles[k]);
+      vec3 normal = glm::normalize(glm::cross(toVec3(t.vertices[1]) - toVec3(t.vertices[0]), toVec3(t.vertices[2]) - toVec3(t.vertices[0])));
+      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "normal"), 1, &normal[0]);
+
       // led color and position
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[(*m_triangles)[k].vertices[0].start_led_ix].r);
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[(*m_triangles)[k].vertices[0].start_led_ix].x);
-      glUniform1i(glGetUniformLocation(m_triangle_program_id, "num_leds"), (*m_triangles)[k].vertices[0].num_leds);
+      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[t.vertices[0].start_led_ix].r);
+      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[t.vertices[0].start_led_ix].x);
+      glUniform1i(glGetUniformLocation(m_triangle_program_id, "num_leds"), t.vertices[0].num_leds);
 
       // render the triangle
       glBindVertexArray(m_triangle_vertex_array_id);
