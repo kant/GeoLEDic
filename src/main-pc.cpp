@@ -12,9 +12,10 @@ int main()
 
    std::vector<gfx::Config::View> views =
      {
-     // x     y    z   FOV  horz vert
-       {0,   30, 140,  45,    0,    0},  // front
-       {0, -140, -20,  45,    0,   90},  // up
+       // x     y    z   FOV  horz vert
+       {  0,   30, 140,  45,    0,    0},  // front
+       {  0, -140, -20,  45,    0,   90},  // up
+       {-78,   12, 102,  45,  -35,    6},  // slightly left
      };
 
    try {
