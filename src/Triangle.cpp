@@ -9,6 +9,9 @@ Triangle::Triangle(
    const Vertex (&vertices)[3]):
       m_edges(),
       m_led_corners(),
+#ifdef WITH_GFX
+      m_triangle_corners(),
+#endif
       m_first_corner_led(edges[0].firstLedOnEdge()),
       m_first_led(INT_MAX),
       m_last_led(0),
@@ -17,6 +20,9 @@ Triangle::Triangle(
 {
    float fac = 0.95;
    std::copy(&edges[0], &edges[3], &m_edges[0]);
+#ifdef WITH_GFX
+   std::copy(&vertices[0], &vertices[3], &m_triangle_corners[0]);
+#endif
    // the LEDs are not on the triangle's edge, but slightly inset.
    m_led_corners[0] = inset(vertices[0], vertices[1], vertices[2], fac);
    m_led_corners[1] = inset(vertices[1], vertices[2], vertices[0], fac);
@@ -99,8 +105,10 @@ const Vertex& Triangle::corner(unsigned corner_ix) const
 #ifdef WITH_GFX
 void Triangle::createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle>& triangles, int triangle_num) const
 {
-   gfx::Triangle triangle;
-   triangle.vertices[0].start_led_ix = leds.size();
+   gfx::Triangle led_triangle;   // the triangle with the diffused LED lighting
+   gfx::Triangle outer_triangle; // the triangle that's part of the outer shell
+   led_triangle.vertices[0].start_led_ix = leds.size();
+   
    auto i = 0;
    for (const Edge& e: m_edges)
    {
@@ -119,12 +127,18 @@ void Triangle::createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle
          led_ix++;
       }
       
-      triangle.vertices[i].x = start_corner.x * 10;
-      triangle.vertices[i].y = start_corner.y * 10;
-      triangle.vertices[i].z = start_corner.z * 10;
+      led_triangle.vertices[i].x = start_corner.x * 10;
+      led_triangle.vertices[i].y = start_corner.y * 10;
+      led_triangle.vertices[i].z = start_corner.z * 10;
+      
+      outer_triangle.vertices[i].x = m_triangle_corners[i].x * 10.01;
+      outer_triangle.vertices[i].y = m_triangle_corners[i].y * 10.01;
+      outer_triangle.vertices[i].z = m_triangle_corners[i].z * 10.01;
+
       i++;
    }
-   triangle.vertices[0].num_leds = leds.size() - triangle.vertices[0].start_led_ix;
-   triangles.push_back(triangle);
+   led_triangle.vertices[0].num_leds = leds.size() - led_triangle.vertices[0].start_led_ix;
+   triangles.push_back(outer_triangle);
+   triangles.push_back(led_triangle);
 }
 #endif

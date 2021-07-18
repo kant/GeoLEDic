@@ -20,10 +20,10 @@ struct LED{
 
 struct Vertex {
    Vertex():
-      x(0), y(0), z(0)
+      x(0), y(0), z(0), start_led_ix(0), num_leds(0)
    {}
    Vertex(float x, float y, float z):
-      x(x), y(y), z(z)
+      x(x), y(y), z(z), start_led_ix(0), num_leds(0)
    {}
    float x, y, z;
    int start_led_ix;

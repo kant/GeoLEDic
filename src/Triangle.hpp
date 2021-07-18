@@ -38,6 +38,9 @@ private:
       
    Edge   m_edges[3];
    Vertex m_led_corners[3];
+#ifdef WITH_GFX
+   Vertex m_triangle_corners[3];
+#endif
    unsigned m_first_corner_led;
    unsigned m_first_led;
    unsigned m_last_led;

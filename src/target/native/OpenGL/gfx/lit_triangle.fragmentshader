@@ -17,7 +17,7 @@ uniform vec3 normal;
 
 void main()
 {
-   if (gl_FrontFacing)
+   if (gl_FrontFacing && num_leds > 0)
    {
        float directional = (1 + max(dot(normal, direction), 0.0))/2;
        vec3 diffuse = vec3(0.0);
