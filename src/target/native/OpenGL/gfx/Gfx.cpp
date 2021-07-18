@@ -99,11 +99,11 @@ public:
    Config              m_config;
    Window              m_window;
    Menu                m_menu;
-   GLuint              m_triangle_vertex_array_id;
-   GLuint              m_triangle_program_id;
+   GLuint              m_vertex_array_id;
+   GLuint              m_program_id;
    vector<LedPosition> m_led_position_data;
    vector<LedColor>    m_led_color_data;
-   GLuint              m_triangle_vertex_buffer;
+   GLuint              m_vertex_buffer;
    double              m_last_time;
    const double        m_frame_time;
 };
@@ -125,15 +125,15 @@ Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const 
    // Accept fragment if it closer to the camera than the former one
    glDepthFunc(GL_LESS);
       
-   m_triangle_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), TRIANGLE_FRAGMENT_SHADER.c_str());
+   m_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), TRIANGLE_FRAGMENT_SHADER.c_str());
    
    // first, configure the cube's VAO (and VBO)
-   glGenVertexArrays(1, &m_triangle_vertex_array_id);
-   glGenBuffers(1, &m_triangle_vertex_buffer);
+   glGenVertexArrays(1, &m_vertex_array_id);
+   glGenBuffers(1, &m_vertex_buffer);
 
-   glBindVertexArray(m_triangle_vertex_array_id);
+   glBindVertexArray(m_vertex_array_id);
 
-   glBindBuffer(GL_ARRAY_BUFFER, m_triangle_vertex_buffer);
+   glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer);
    glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * m_triangles.size(), m_triangles.data(), GL_STATIC_DRAW);
 
    // position attribute for triangles
@@ -173,37 +173,37 @@ bool Gfx::Impl::draw()
 
    copy(m_leds.begin(), m_leds.end(), m_led_color_data.begin());
 
-   glUseProgram(m_triangle_program_id);
+   glUseProgram(m_program_id);
 
    // view/projection transformations
-   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
-   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
-   glUniform3fv(glGetUniformLocation(m_triangle_program_id, "direction"), 1, &m_window.getDirection()[0]);
+   glUniformMatrix4fv(glGetUniformLocation(m_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
+   glUniformMatrix4fv(glGetUniformLocation(m_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
+   glUniform3fv(glGetUniformLocation(m_program_id, "direction"), 1, &m_window.getDirection()[0]);
 
    // world transformation
    glm::mat4 model = glm::mat4(1.0f);
-   glUniformMatrix4fv(glGetUniformLocation(m_triangle_program_id, "model"), 1, GL_FALSE, &model[0][0]);
+   glUniformMatrix4fv(glGetUniformLocation(m_program_id, "model"), 1, GL_FALSE, &model[0][0]);
    
    float cutoff = m_config.cutoffDistance();
-   glUniform1f(glGetUniformLocation(m_triangle_program_id, "cutoff_distance_square"), cutoff * cutoff);
-   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_constant"), m_config.attenuationConstant());
-   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_linear"), m_config.attenuationLinear());
-   glUniform1f(glGetUniformLocation(m_triangle_program_id, "attenuation_square"), m_config.attenuationSquare());
+   glUniform1f(glGetUniformLocation(m_program_id, "cutoff_distance_square"), cutoff * cutoff);
+   glUniform1f(glGetUniformLocation(m_program_id, "attenuation_constant"), m_config.attenuationConstant());
+   glUniform1f(glGetUniformLocation(m_program_id, "attenuation_linear"), m_config.attenuationLinear());
+   glUniform1f(glGetUniformLocation(m_program_id, "attenuation_square"), m_config.attenuationSquare());
    
 
    for (unsigned k = 0; k < m_triangles.size(); k++)
    {
       Triangle& t(m_triangles[k]);
       vec3 normal = glm::normalize(glm::cross(toVec3(t.vertices[1]) - toVec3(t.vertices[0]), toVec3(t.vertices[2]) - toVec3(t.vertices[0])));
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "normal"), 1, &normal[0]);
+      glUniform3fv(glGetUniformLocation(m_program_id, "normal"), 1, &normal[0]);
 
       // led color and position
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[t.vertices[0].start_led_ix].r);
-      glUniform3fv(glGetUniformLocation(m_triangle_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[t.vertices[0].start_led_ix].x);
-      glUniform1i(glGetUniformLocation(m_triangle_program_id, "num_leds"), t.vertices[0].num_leds);
+      glUniform3fv(glGetUniformLocation(m_program_id, "led_color"), m_leds.size()*sizeof(LedPosition), &m_led_color_data[t.vertices[0].start_led_ix].r);
+      glUniform3fv(glGetUniformLocation(m_program_id, "led_pos"), m_leds.size()*sizeof(LedColor), &m_led_position_data[t.vertices[0].start_led_ix].x);
+      glUniform1i(glGetUniformLocation(m_program_id, "num_leds"), t.vertices[0].num_leds);
 
       // render the triangle
-      glBindVertexArray(m_triangle_vertex_array_id);
+      glBindVertexArray(m_vertex_array_id);
       glDrawArrays(GL_TRIANGLES, k*3, 3);
       glBindVertexArray(0);
    }
@@ -217,8 +217,8 @@ bool Gfx::Impl::draw()
 Gfx::Impl::~Impl()
 {
    // Cleanup VBO and shader
-   glDeleteProgram(m_triangle_program_id);
-   glDeleteVertexArrays(1, &m_triangle_vertex_array_id);
+   glDeleteProgram(m_program_id);
+   glDeleteVertexArrays(1, &m_vertex_array_id);
 }
 
 Gfx::Gfx(std::vector<LED>& led_coordinates, std::vector<Triangle>& triangles, const Config& config):
