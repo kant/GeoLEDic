@@ -179,10 +179,6 @@ bool Gfx::Impl::draw()
    glUniformMatrix4fv(glGetUniformLocation(m_program_id, "projection"), 1, GL_FALSE, &m_window.getProjectionMatrix()[0][0]);
    glUniformMatrix4fv(glGetUniformLocation(m_program_id, "view"), 1, GL_FALSE, &m_window.getViewMatrix()[0][0]);
    glUniform3fv(glGetUniformLocation(m_program_id, "direction"), 1, &m_window.getDirection()[0]);
-
-   // world transformation
-   glm::mat4 model = glm::mat4(1.0f);
-   glUniformMatrix4fv(glGetUniformLocation(m_program_id, "model"), 1, GL_FALSE, &model[0][0]);
    
    float cutoff = m_config.cutoffDistance();
    glUniform1f(glGetUniformLocation(m_program_id, "cutoff_distance_square"), cutoff * cutoff);
