@@ -1,6 +1,7 @@
 #include "Triangle.hpp"
 #include <climits>
 #include <algorithm>
+#include <math.h>
 #include "assert.hpp"
 
 void inset(Vertex (&corners)[3], float distance)
