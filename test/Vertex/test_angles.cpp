@@ -83,10 +83,11 @@ TEST(Angles, interpolateThetaForward)
    ASSERT_NEAR(128, v1.theta, 1);
    ASSERT_EQ(255, v2.theta);
    
-   EXPECT_NEAR(128, interpolateTheta(v1, v2, 0, 4), 1);
-   EXPECT_NEAR(160, interpolateTheta(v1, v2, 1, 4), 1);
-   EXPECT_NEAR(192, interpolateTheta(v1, v2, 2, 4), 1);
-   EXPECT_NEAR(224, interpolateTheta(v1, v2, 3, 4), 1);
+   EXPECT_NEAR(128, interpolateTheta(v1, v2, 0, 5), 1);
+   EXPECT_NEAR(160, interpolateTheta(v1, v2, 1, 5), 1);
+   EXPECT_NEAR(192, interpolateTheta(v1, v2, 2, 5), 1);
+   EXPECT_NEAR(224, interpolateTheta(v1, v2, 3, 5), 1);
+   EXPECT_NEAR(255, interpolateTheta(v1, v2, 4, 5), 1);
 }
 
 TEST(Angles, interpolateThetaBackward)
@@ -96,11 +97,27 @@ TEST(Angles, interpolateThetaBackward)
    ASSERT_NEAR(128, v1.theta, 1);
    ASSERT_EQ(255, v2.theta);
    
-   EXPECT_NEAR(255, interpolateTheta(v2, v1, 0, 4), 1);
-   EXPECT_NEAR(224, interpolateTheta(v2, v1, 1, 4), 1);
-   EXPECT_NEAR(192, interpolateTheta(v2, v1, 2, 4), 1);
-   EXPECT_NEAR(160, interpolateTheta(v2, v1, 3, 4), 1);
+   EXPECT_NEAR(255, interpolateTheta(v2, v1, 0, 5), 1);
+   EXPECT_NEAR(224, interpolateTheta(v2, v1, 1, 5), 1);
+   EXPECT_NEAR(192, interpolateTheta(v2, v1, 2, 5), 1);
+   EXPECT_NEAR(160, interpolateTheta(v2, v1, 3, 5), 1);
+   EXPECT_NEAR(128, interpolateTheta(v2, v1, 4, 5), 1);
 }
+
+TEST(Angles, interpolateThetaBothWaysIdentical)
+{
+   Vertex v1(0, 0, 0);
+   Vertex v2(0, 1, 6);
+
+   const unsigned NUM = 10;
+   for (unsigned k = 0; k < NUM; k++)
+   {
+      EXPECT_EQ(interpolateTheta(v1, v2, k, NUM),
+                interpolateTheta(v2, v1, NUM-k-1, NUM)) << "k=" << k;
+   }
+   
+}
+
 
 TEST(Angles, interpolatePhiForward)
 {
@@ -109,10 +126,11 @@ TEST(Angles, interpolatePhiForward)
    ASSERT_NEAR(256, v1.phi, 1);
    ASSERT_NEAR(512, v2.phi, 1);
 
-   EXPECT_NEAR(256, interpolatePhi(v1, v2, 0, 4), 1);
-   EXPECT_NEAR(320, interpolatePhi(v1, v2, 1, 4), 1);
-   EXPECT_NEAR(384, interpolatePhi(v1, v2, 2, 4), 1);
-   EXPECT_NEAR(448, interpolatePhi(v1, v2, 3, 4), 1);
+   EXPECT_NEAR(256, interpolatePhi(v1, v2, 0, 5), 1);
+   EXPECT_NEAR(320, interpolatePhi(v1, v2, 1, 5), 1);
+   EXPECT_NEAR(384, interpolatePhi(v1, v2, 2, 5), 1);
+   EXPECT_NEAR(448, interpolatePhi(v1, v2, 3, 5), 1);
+   EXPECT_NEAR(512, interpolatePhi(v1, v2, 4, 5), 1);
 }
 
 TEST(Angles, interpolatePhiBackward)
@@ -122,10 +140,11 @@ TEST(Angles, interpolatePhiBackward)
    ASSERT_EQ(256, v1.phi);
    ASSERT_NEAR(512, v2.phi, 1);
 
-   EXPECT_NEAR(512, interpolatePhi(v2, v1, 0, 4), 1);
-   EXPECT_NEAR(448, interpolatePhi(v2, v1, 1, 4), 1);
-   EXPECT_NEAR(384, interpolatePhi(v2, v1, 2, 4), 1);
-   EXPECT_NEAR(320, interpolatePhi(v2, v1, 3, 4), 1);
+   EXPECT_NEAR(512, interpolatePhi(v2, v1, 0, 5), 1);
+   EXPECT_NEAR(448, interpolatePhi(v2, v1, 1, 5), 1);
+   EXPECT_NEAR(384, interpolatePhi(v2, v1, 2, 5), 1);
+   EXPECT_NEAR(320, interpolatePhi(v2, v1, 3, 5), 1);
+   EXPECT_NEAR(256, interpolatePhi(v2, v1, 4, 5), 1);
 }
 
 TEST(Angles, interpolatePhiAcross0)
@@ -135,10 +154,11 @@ TEST(Angles, interpolatePhiAcross0)
    ASSERT_NEAR(128, v1.phi, 1);
    ASSERT_NEAR(896, v2.phi, 1);
    
-   EXPECT_NEAR(128, interpolatePhi(v1, v2, 0, 4), 1);
-   EXPECT_NEAR(64,  interpolatePhi(v1, v2, 1, 4), 1);
-   EXPECT_NEAR(0,   interpolatePhi(v1, v2, 2, 4), 1);
-   EXPECT_NEAR(960, interpolatePhi(v1, v2, 3, 4), 1);
+   EXPECT_NEAR(128, interpolatePhi(v1, v2, 0, 5), 1);
+   EXPECT_NEAR(64,  interpolatePhi(v1, v2, 1, 5), 1);
+   EXPECT_NEAR(0,   interpolatePhi(v1, v2, 2, 5), 1);
+   EXPECT_NEAR(960, interpolatePhi(v1, v2, 3, 5), 1);
+   EXPECT_NEAR(896, interpolatePhi(v1, v2, 4, 5), 1);
 }
 
 TEST(Angles, interpolatePhiAcross0TheOtherWay)
@@ -148,8 +168,24 @@ TEST(Angles, interpolatePhiAcross0TheOtherWay)
    ASSERT_NEAR(128, v1.phi, 1);
    ASSERT_NEAR(896, v2.phi, 1);
    
-   EXPECT_NEAR(896,  interpolatePhi(v2, v1, 0, 4), 1);
-   EXPECT_NEAR(960,  interpolatePhi(v2, v1, 1, 4), 1);
-   EXPECT_NEAR(1023, interpolatePhi(v2, v1, 2, 4), 1);
-   EXPECT_NEAR(64,   interpolatePhi(v2, v1, 3, 4), 1);
+   EXPECT_NEAR(896,  interpolatePhi(v2, v1, 0, 5), 1);
+   EXPECT_NEAR(960,  interpolatePhi(v2, v1, 1, 5), 1);
+   EXPECT_NEAR(0,    interpolatePhi(v2, v1, 2, 5), 1);
+   EXPECT_NEAR(64,   interpolatePhi(v2, v1, 3, 5), 1);
+   EXPECT_NEAR(128,  interpolatePhi(v2, v1, 4, 5), 1);
+}
+
+
+TEST(Angles, interpolatePhiBothWaysIdentical)
+{
+   Vertex v1(-1, 0, 0);
+   Vertex v2( 0, 0, 1);
+
+   const unsigned NUM = 10;
+   for (unsigned k = 0; k < NUM; k++)
+   {
+      EXPECT_EQ(interpolatePhi(v1, v2, k, NUM),
+                interpolatePhi(v2, v1, NUM-k-1, NUM)) << "k=" << k;
+   }
+   
 }
