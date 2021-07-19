@@ -13,8 +13,15 @@ struct Vector {
   Vector operator*(float v) const;
   Vector operator/(float v) const;
 
+  float length() const;
+
   float x, y, z;
 
 };
+
+Vector cross(const Vector& a, const Vector& b);
+float dot(const Vector& a, const Vector& b);
+Vector normalise(const Vector& v);
+float angleRad(const Vector& a, const Vector& b);
 
 #endif

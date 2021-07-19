@@ -3,6 +3,24 @@
 #include <algorithm>
 #include "assert.hpp"
 
+void inset(Vertex (&corners)[3], float distance)
+{
+   Vertex new_corners[3];
+   for (unsigned k = 0; k < 3; k++)
+   {
+      Vector e1 = corners[(k+1)%3] - corners[k];
+      Vector e2 = corners[(k+2)%3] - corners[k];
+      
+      float theta = angleRad(e1, e2);
+      float scale = distance/sin(theta);
+      
+      new_corners[k] = corners[k] + normalise(e1) *scale + normalise(e2) * scale;
+   }
+   
+   std::copy(&new_corners[0], &new_corners[3], &corners[0]);
+}
+
+
 Triangle::Triangle(
    CRGB* strip,
    const Edge (&edges)[3],
@@ -18,15 +36,12 @@ Triangle::Triangle(
       m_reverse(edges[0].isReverse()),
       m_strip(strip)
 {
-   float fac = 0.95;
    std::copy(&edges[0], &edges[3], &m_edges[0]);
 #ifdef WITH_GFX
    std::copy(&vertices[0], &vertices[3], &m_triangle_corners[0]);
 #endif
-   // the LEDs are not on the triangle's edge, but slightly inset.
-   m_led_corners[0] = inset(vertices[0], vertices[1], vertices[2], fac);
-   m_led_corners[1] = inset(vertices[1], vertices[2], vertices[0], fac);
-   m_led_corners[2] = inset(vertices[2], vertices[0], vertices[1], fac);
+   std::copy(&vertices[0], &vertices[3], &m_led_corners[0]);
+   inset(m_led_corners, 0.0254); // half the width of a 2" beam
  
    bool has_split_edge = false;
    // find the first and the last led of strip
@@ -72,13 +87,6 @@ CRGB_iterator Triangle::begin()
 CRGB_iterator Triangle::end()
 {
    return {&m_strip[m_first_corner_led], CRGB_iterator::invalid_iterator_tag()};
-}
-
-Vertex Triangle::inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac)
-{
-   return Vertex(Vector(v1) * fac +
-                 Vector(v2) * ((1-fac)/2) +
-                 Vector(v3) * ((1-fac)/2));
 }
 
 unsigned Triangle::size() const

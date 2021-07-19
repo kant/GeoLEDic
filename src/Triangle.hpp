@@ -12,6 +12,9 @@
 #endif
 #include "FastLED.h"
 
+// move edges towards triangle center by 'distance'
+void inset(Vertex (&corners)[3], float distance);
+
 class Triangle {
 public:
    Triangle(
@@ -34,8 +37,6 @@ public:
    bool isReverse() const;
    
 private:
-   Vertex inset(const Vertex& v1, const Vertex& v2, const Vertex& v3, float fac);
-      
    Edge   m_edges[3];
    Vertex m_led_corners[3];
 #ifdef WITH_GFX
