@@ -1,6 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project(GeoLEDic VERSION 0.0.1)
 cmake_policy(SET CMP0087 NEW) # use generator expression in install(CODE)
+cmake_policy(SET CMP0072 NEW) # Use GLVND if available
 
 set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
