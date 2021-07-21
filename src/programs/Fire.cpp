@@ -5,7 +5,10 @@
 Fire::Fire(const DomeWrapper& dome):
    m_dome(dome),
    m_sparking(10),
-   m_cooling(55)
+   m_cooling(55),
+   m_palette(&HeatColors_p),
+   m_reverse_palette(false),
+   m_reverse_direction(false)
 {
    memset(m_heat, 0, sizeof(m_heat));
 }
@@ -31,6 +34,35 @@ void Fire::controlChange(uint8_t cc_num, uint8_t value)
       case 17:
          m_sparking = value;
          break;
+      case 18:
+         switch (value)
+         {
+         default:
+         case 0:
+            m_palette = &HeatColors_p;
+            break;
+         case 1:
+            m_palette = &OceanColors_p;
+            break;
+         case 2:
+            m_palette = &CloudColors_p;
+            break;
+         case 3:
+            m_palette = &ForestColors_p;
+            break;
+         case 4:
+            m_palette = &LavaColors_p;
+            break;
+         case 5:
+            m_palette = &RainbowColors_p;
+            break;
+         case 6:
+            m_palette = &PartyColors_p;
+            break;
+         }
+      case 19:
+         m_reverse_direction = value&1;
+         m_reverse_palette   = value&2;
       default:
          break;
    }
@@ -85,6 +117,11 @@ void Fire::run()
          {
             float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/NUM_V);
             float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/NUM_H);
+
+            if (m_reverse_direction)
+            {
+               v = NUM_V - v;
+            }
             
             int v0 = floor(v);
             int v1 = std::min(v0+1, NUM_V-1);
@@ -94,11 +131,19 @@ void Fire::run()
             int h1 = h0 == NUM_H-1 ? 0 : h0+1;
             float rh0 = (h0+1) - h;
             float rh1 = 1 - rh0;
-            
-            led = HeatColor(m_heat[h0][v0] * rh0 * rv0 +
+
+            uint8_t index = m_heat[h0][v0] * rh0 * rv0 +
                             m_heat[h0][v1] * rh0 * rv1 +
                             m_heat[h1][v0] * rh1 * rv0 +
-                            m_heat[h1][v1] * rh1 * rv1);
+                            m_heat[h1][v1] * rh1 * rv1;
+
+            if (m_reverse_palette)
+            {
+               index = 255 - index;
+            }
+            
+            led = ColorFromPalette(*m_palette, index);
+            
             led_ix++;
          }
       }
