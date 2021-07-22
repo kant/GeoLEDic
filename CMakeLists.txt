@@ -37,6 +37,7 @@ set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
                      src/Dome.cpp
                      src/GeoLEDic.cpp
+                     src/Notes.cpp
                      src/ProgramFactory.cpp
                      src/main-pc.cpp)
 

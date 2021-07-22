@@ -6,19 +6,8 @@ SparklesAndTriangles::SparklesAndTriangles(const DomeWrapper& dome):
    m_green(0),
    m_blue(0),
    m_sparkle_probability(0),
-   m_iteration(0),
-   m_notes()
+   m_iteration(0)
 {}
-
-void SparklesAndTriangles::noteOn(uint8_t note, uint8_t velocity)
-{
-   m_notes[note] = velocity;
-}
-
-void SparklesAndTriangles::noteOff(uint8_t note)
-{
-   m_notes[note] = 0;
-}
 
 void SparklesAndTriangles::controlChange(uint8_t cc_num, uint8_t value)
 {

@@ -4,24 +4,13 @@
 
 Fire::Fire(const DomeWrapper& dome):
    m_dome(dome),
-   m_sparking(10),
+   m_sparking(0),
    m_cooling(55),
    m_palette(&HeatColors_p),
    m_reverse_palette(false),
    m_reverse_direction(false)
 {
    memset(m_heat, 0, sizeof(m_heat));
-}
-
-void Fire::noteOn(uint8_t note, uint8_t velocity)
-{
-   (void)note;
-   (void)velocity;
-}
-
-void Fire::noteOff(uint8_t note)
-{
-   (void)note;
 }
 
 void Fire::controlChange(uint8_t cc_num, uint8_t value)
@@ -96,6 +85,15 @@ void Fire::calcFire()
       {
          int v = random8(7);
          m_heat[h][v] = qadd8(m_heat[h][v], random8(160,255));
+      }
+      
+      // ignite new sparks on note press. Place middle of dome at middle of keyboard
+      uint8_t note = h + NOTE_C4 - NUM_H/2;
+      if (m_notes[note])
+      {
+         uint8_t heat = m_notes[note]*2;
+         m_heat[h][0] = heat;
+         m_heat[h][1] = heat;
       }
    }
 }
