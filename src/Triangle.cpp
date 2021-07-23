@@ -111,9 +111,11 @@ const Vertex& Triangle::corner(unsigned corner_ix) const
 }
 
 
+
 #ifdef WITH_GFX
 void Triangle::createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle>& triangles, int triangle_num) const
 {
+   const float SCALE_AWAY_FROM_ORIGIN = 1.001;
    gfx::Triangle led_triangle;   // the triangle with the diffused LED lighting
    gfx::Triangle outer_triangle; // the triangle that's part of the outer shell
    led_triangle.vertices[0].start_led_ix = leds.size();
@@ -136,13 +138,14 @@ void Triangle::createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle
          led_ix++;
       }
       
-      led_triangle.vertices[i].x = start_corner.x * 10;
-      led_triangle.vertices[i].y = start_corner.y * 10;
-      led_triangle.vertices[i].z = start_corner.z * 10;
+      led_triangle.vertices[i].x = start_corner.x;
+      led_triangle.vertices[i].y = start_corner.y;
+      led_triangle.vertices[i].z = start_corner.z;
       
-      outer_triangle.vertices[i].x = m_triangle_corners[i].x * 10.01;
-      outer_triangle.vertices[i].y = m_triangle_corners[i].y * 10.01;
-      outer_triangle.vertices[i].z = m_triangle_corners[i].z * 10.01;
+      // scale the outer triangle away from origin to prevent z-fighting
+      outer_triangle.vertices[i].x = m_triangle_corners[i].x * SCALE_AWAY_FROM_ORIGIN;
+      outer_triangle.vertices[i].y = m_triangle_corners[i].y * SCALE_AWAY_FROM_ORIGIN;
+      outer_triangle.vertices[i].z = m_triangle_corners[i].z * SCALE_AWAY_FROM_ORIGIN;
 
       i++;
    }

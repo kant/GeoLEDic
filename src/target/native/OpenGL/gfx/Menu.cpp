@@ -41,9 +41,9 @@ void Menu::draw()
    {
       ImGui::SliderFloat("Cutoff Distance", &m_config.m_cutoff_distance, 0.0f, 10.0f);
       ImGui::Text("Attenuation:");
-      ImGui::SliderFloat("Constant", &m_config.m_attenuation_constant, 0.0f, 20.0f);
-      ImGui::SliderFloat("Linear", &m_config.m_attenuation_linear, 0.0f, 20.0f);
-      ImGui::SliderFloat("Square", &m_config.m_attenuation_square, 0.0f, 20.0f);
+      ImGui::SliderFloat("Constant", &m_config.m_attenuation_constant, 0.0f, 10.0f);
+      ImGui::SliderFloat("Linear", &m_config.m_attenuation_linear, 0.0f, 300.0f);
+      ImGui::SliderFloat("Square", &m_config.m_attenuation_square, 0.0f, 1000.0f);
    }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();

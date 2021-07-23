@@ -13,7 +13,7 @@ public:
    
    struct View
    {
-      View(int x, int y, int z, float fov_deg = 45.f, float horizontal_angle_deg = 0.f, float vertical_angle_deg = 0.f):
+      View(float x, float y, float z, float fov_deg = 45.f, float horizontal_angle_deg = 0.f, float vertical_angle_deg = 0.f):
          x(x),
          y(y),
          z(z),
@@ -21,7 +21,7 @@ public:
          horizontal_angle_deg(horizontal_angle_deg),
          vertical_angle_deg(vertical_angle_deg)
       {}
-      int x, y, z;
+      float x, y, z;
       float fov_deg, horizontal_angle_deg, vertical_angle_deg;
    };
    

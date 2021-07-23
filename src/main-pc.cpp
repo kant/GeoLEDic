@@ -12,10 +12,10 @@ int main()
 
    std::vector<gfx::Config::View> views =
      {
-       // x     y    z   FOV  horz vert
-       {  0,   30, 140,  45,    0,    0},  // front
-       {  0, -140, -20,  45,    0,   90},  // up
-       {-78,   12, 102,  45,  -35,    6},  // slightly left
+       //  x     y     z   FOV  horz vert
+       {   0,   3,    14,  45,    0,    0},  // front
+       {   0, -14,    -2,  45,    0,   90},  // up
+       {-7.8, 1.2,  10.2,  45,  -35,    6},  // slightly left
      };
 
    try {
@@ -31,9 +31,10 @@ int main()
                gfx::Config()
                   .views(views)
                   .framesPerSecond(30)
+                  .cutoffDistance(0.6)
                   .attenuationConstant(0.4)
-                  .attenuationLinear(13.0)
-                  .attenuationSquare(9)
+                  .attenuationLinear(130.0)
+                  .attenuationSquare(900.0)
                   .keyboardHandler(&Serial));
       
       setupGeoLEDic();
