@@ -8,15 +8,13 @@ class Notes: public Program
 {
 public:
    Notes();
-   virtual void noteOn(uint8_t note, uint8_t velocity);
-   virtual void noteOff(uint8_t note);
+   virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
+   virtual void noteOff(uint8_t note, uint8_t channel);
    
-   enum Constants {
-      NUM_NOTES = 128
-   };
+   uint8_t note(uint8_t note) const;
    
-protected:
-   unsigned m_notes[NUM_NOTES];
+private:
+   uint8_t m_notes[NOTE_HIGHEST+1];
 };
 
 #endif /* Notes_hpp */

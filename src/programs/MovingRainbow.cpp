@@ -10,15 +10,17 @@ MovingRainbow::MovingRainbow(const DomeWrapper& dome):
    m_iteration_v(0)
 {}
 
-void MovingRainbow::noteOn(uint8_t note, uint8_t velocity)
+void MovingRainbow::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
 {
    (void)note;
    (void)velocity;
+   (void)channel;
 }
 
-void MovingRainbow::noteOff(uint8_t note)
+void MovingRainbow::noteOff(uint8_t note, uint8_t channel)
 {
    (void)note;
+   (void)channel;
 }
 
 void MovingRainbow::controlChange(uint8_t cc_num, uint8_t value)

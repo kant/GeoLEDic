@@ -9,8 +9,8 @@ class Lightning: public Program
 public:
    Lightning(const DomeWrapper& dome);
    
-   virtual void noteOn(uint8_t note, uint8_t velocity);
-   virtual void noteOff(uint8_t note);
+   virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
+   virtual void noteOff(uint8_t note, uint8_t channel);
    virtual void controlChange(uint8_t cc_num, uint8_t value);
    virtual void run();
    

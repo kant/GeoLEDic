@@ -9,15 +9,17 @@ Lightning::Lightning(const DomeWrapper& dome):
    memset(m_lit_map, 0, sizeof(m_lit_map));
 }
 
-void Lightning::noteOn(uint8_t note, uint8_t velocity)
+void Lightning::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
 {
    (void)note;
    (void)velocity;
+   (void)channel;
 }
 
-void Lightning::noteOff(uint8_t note)
+void Lightning::noteOff(uint8_t note, uint8_t channel)
 {
    (void)note;
+   (void)channel;
 }
 
 void Lightning::controlChange(uint8_t cc_num, uint8_t value)

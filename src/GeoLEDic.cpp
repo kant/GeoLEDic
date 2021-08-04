@@ -25,10 +25,10 @@ void loopGeoLEDic()
       switch (msg->type())
       {
          case MidiMessage::NOTE_ON:
-            program->noteOn(msg->data[1], msg->data[2]);
+            program->noteOn(msg->data[1], msg->data[2], msg->channel());
             break;
          case MidiMessage::NOTE_OFF:
-            program->noteOff(msg->data[1]);
+            program->noteOff(msg->data[1], msg->channel());
             break;
          case MidiMessage::PROGRAM_CHANGE:
             program = factory.changeProgram(msg->data[1]);

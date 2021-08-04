@@ -3,15 +3,27 @@
 
 Notes::Notes()
 {
-   std::fill(m_notes, m_notes+NUM_NOTES, 0);
+   std::fill(m_notes, m_notes+NOTE_HIGHEST+1, 0);
 }
 
-void Notes::noteOn(uint8_t note, uint8_t velocity)
+void Notes::noteOn(uint8_t note, uint8_t velocity, uint8_t /*channel*/)
 {
-   m_notes[note] = velocity;
+   if (note <= NOTE_HIGHEST)
+   {
+      m_notes[note] = velocity;
+   }
 }
 
-void Notes::noteOff(uint8_t note)
+void Notes::noteOff(uint8_t note, uint8_t /*channel*/)
 {
-   m_notes[note] = 0;
+   if (note <= NOTE_HIGHEST)
+   {
+      m_notes[note] = 0;
+   }
+}
+
+uint8_t Notes::note(uint8_t note) const
+{
+   if (note > NOTE_HIGHEST) return 0;
+   return m_notes[note];
 }

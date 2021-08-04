@@ -88,10 +88,10 @@ void Fire::calcFire()
       }
       
       // ignite new sparks on note press. Place middle of dome at middle of keyboard
-      uint8_t note = h + NOTE_C4 - NUM_H/2;
-      if (m_notes[note])
+      uint8_t n = h + NOTE_C4 - NUM_H/2;
+      if (note(n))
       {
-         uint8_t heat = m_notes[note]*2;
+         uint8_t heat = note(n)*2;
          m_heat[h][0] = heat;
          m_heat[h][1] = heat;
       }

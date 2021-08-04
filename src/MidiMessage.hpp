@@ -13,7 +13,7 @@ struct MidiMessage
    };
    
    Type type() const { return Type(data[0] >> 4); }
-   unsigned channel() { return data[0] & 0xF; }
+   unsigned channel() const { return data[0] & 0xF; }
    
    uint8_t data[4];
    unsigned length;
