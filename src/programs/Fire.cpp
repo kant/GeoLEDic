@@ -24,7 +24,7 @@ void Fire::controlChange(uint8_t cc_num, uint8_t value)
          m_sparking = value;
          break;
       case 18:
-         switch (value)
+         switch (value/16)
          {
          default:
          case 0:
@@ -50,8 +50,11 @@ void Fire::controlChange(uint8_t cc_num, uint8_t value)
             break;
          }
       case 19:
-         m_reverse_direction = value&1;
-         m_reverse_palette   = value&2;
+         m_reverse_direction = value/64;
+         break;
+      case 20:
+         m_reverse_palette   = value/64;
+         break;
       default:
          break;
    }
@@ -114,7 +117,7 @@ void Fire::run()
          for (CRGB& led: e)
          {
             float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/NUM_V);
-            float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/NUM_H);
+            float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/(NUM_H-1));
 
             if (m_reverse_direction)
             {
@@ -129,7 +132,7 @@ void Fire::run()
             int h1 = h0 == NUM_H-1 ? 0 : h0+1;
             float rh0 = (h0+1) - h;
             float rh1 = 1 - rh0;
-
+            
             uint8_t index = m_heat[h0][v0] * rh0 * rv0 +
                             m_heat[h0][v1] * rh0 * rv1 +
                             m_heat[h1][v0] * rh1 * rv0 +

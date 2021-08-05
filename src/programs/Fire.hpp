@@ -15,7 +15,7 @@ public:
 private:
    enum {
       NUM_V = 32,
-      NUM_H = 64
+      NUM_H = 49
    };
    
    void calcFire();
