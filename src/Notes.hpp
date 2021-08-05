@@ -13,8 +13,15 @@ public:
    
    uint8_t note(uint8_t note) const;
    
-private:
+protected:
    uint8_t m_notes[NOTE_HIGHEST+1];
 };
+
+class NotesWithMappings: public Notes
+{
+public:
+   virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
+};
+
 
 #endif /* Notes_hpp */

@@ -4,7 +4,7 @@
 #include "DomeWrapper.hpp"
 #include "Notes.hpp"
 
-class SparklesAndTriangles: public Notes
+class SparklesAndTriangles: public NotesWithMappings
 {
 public:
    SparklesAndTriangles(const DomeWrapper& dome);
