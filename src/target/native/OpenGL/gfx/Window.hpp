@@ -44,7 +44,6 @@ private:
    float         m_horizontal_angle_rad;
    float         m_vertical_angle_rad;
    float         m_fov_deg;
-   float         m_speed;
    float         m_scroll_speed;
    float         m_mouse_speed;
 

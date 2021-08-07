@@ -40,6 +40,7 @@ public:
       m_attenuation_constant(0.5),
       m_attenuation_linear(10),
       m_attenuation_square(10),
+      m_strafing_speed(20),
       m_views(1, View(0, 8, 5)),
       m_keyboard_handler(&m_null_handler)
    {
@@ -69,6 +70,9 @@ public:
    Config& attenuationSquare(float attenuation) { m_attenuation_square = attenuation; return *this; }
    float attenuationSquare() const { return m_attenuation_square; }
    
+   Config& strafingSpeed(float speed) { m_strafing_speed = speed; return *this; }
+   float strafingSpeed() const { return m_strafing_speed; }
+
    Config& keyboardHandler(KeyboardHandler* handler)
    {
       if (handler) m_keyboard_handler = handler;
@@ -91,6 +95,7 @@ private:
    float m_attenuation_constant;
    float m_attenuation_linear;
    float m_attenuation_square;
+   float m_strafing_speed;
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
 };

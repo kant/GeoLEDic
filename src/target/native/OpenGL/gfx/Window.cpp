@@ -22,7 +22,6 @@ Window::Window(const Config& config):
       m_horizontal_angle_rad(),
       m_vertical_angle_rad(),
       m_fov_deg(),
-      m_speed(20.0f),
       m_scroll_speed(1.0f),
       m_mouse_speed(0.001f),
       m_view_matrix(),
@@ -134,19 +133,19 @@ void Window::processInputs()
 
    // Move up 
    if (glfwGetKey(m_window, GLFW_KEY_UP) == GLFW_PRESS){
-     m_position += up * deltaTime * m_speed;
+     m_position += up * deltaTime * m_config.strafingSpeed();
    }
    // Move down
    if (glfwGetKey(m_window, GLFW_KEY_DOWN) == GLFW_PRESS){
-     m_position -= up * deltaTime * m_speed;
+     m_position -= up * deltaTime * m_config.strafingSpeed();
    }
    // Strafe right
    if (glfwGetKey(m_window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-     m_position += right * deltaTime * m_speed;
+     m_position += right * deltaTime * m_config.strafingSpeed();
    }
    // Strafe left
    if (glfwGetKey(m_window, GLFW_KEY_LEFT) == GLFW_PRESS){
-     m_position -= right * deltaTime * m_speed;
+     m_position -= right * deltaTime * m_config.strafingSpeed();
    }
 
    // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
