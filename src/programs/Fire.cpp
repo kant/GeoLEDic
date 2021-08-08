@@ -49,6 +49,7 @@ void Fire::controlChange(uint8_t cc_num, uint8_t value)
             m_palette = &PartyColors_p;
             break;
          }
+         break;
       case 19:
          m_reverse_direction = value/64;
          break;
