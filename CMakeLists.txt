@@ -27,6 +27,7 @@ include_directories(SYSTEM "${FASTLED_DIR}/src")
 # The core sources are the ones built for unit tests as well
 set(GEOLEDIC_CORE_SOURCES src/CRGB_iterator.cpp
                           src/Edge.cpp
+                          src/Notes.cpp
                           src/Triangle.cpp
                           src/Vector.cpp
                           src/Vertex.cpp)
@@ -37,7 +38,6 @@ set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
                      ${PROGRAMS_SOURCES}
                      src/Dome.cpp
                      src/GeoLEDic.cpp
-                     src/Notes.cpp
                      src/ProgramFactory.cpp
                      src/main-pc.cpp)
 
