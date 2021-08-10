@@ -2,7 +2,7 @@
 #define GEOLEDIC_SparklesAndTriangles_hpp
 
 #include "DomeWrapper.hpp"
-#include "Notes.hpp"
+#include "NotesWithMappings.hpp"
 
 class SparklesAndTriangles: public NotesWithMappings
 {

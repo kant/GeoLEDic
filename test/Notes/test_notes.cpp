@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
-#include "Notes.hpp"
+#include "NotesWithMappings.hpp"
 
 namespace {
 const unsigned NUM_TRIANGLES = 123;

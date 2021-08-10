@@ -1,13 +1,13 @@
-#ifndef Notes_hpp
-#define Notes_hpp
+#ifndef NotesWithMappings_hpp
+#define NotesWithMappings_hpp
 
 #include "Program.hpp"
 #include "MidiDefs.hpp"
 
-class Notes: public Program
+class NotesWithMappings: public Program
 {
 public:
-   Notes();
+   NotesWithMappings();
    virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
    virtual void noteOff(uint8_t note, uint8_t channel);
    
@@ -17,4 +17,4 @@ protected:
    uint8_t m_notes[NOTE_HIGHEST+1];
 };
 
-#endif /* Notes_hpp */
+#endif /* NotesWithMappings_hpp */
