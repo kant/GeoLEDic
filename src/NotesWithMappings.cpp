@@ -54,40 +54,6 @@ PentagonNoteMap pentagon3 =
    {0, 1, 2, 3}
 };
 
-void setPentagon(uint8_t (&notes)[NOTE_HIGHEST+1], uint8_t note, uint8_t velocity)
-{
-   PentagonNoteMap* pentagon = nullptr;
-   if (note >= NOTE_C2 && note < NOTE_C2 + pentagon0.size())
-   {
-      note -= NOTE_C2;
-      pentagon = &pentagon0;
-   }
-   else if (note >= NOTE_C3 && note < NOTE_C3 + pentagon1.size())
-   {
-      note -= NOTE_C3;
-      pentagon = &pentagon1;
-   }
-   else if (note >= NOTE_C4 && note < NOTE_C4 + pentagon2.size())
-   {
-      note -= NOTE_C4;
-      pentagon = &pentagon2;
-   }
-   else if (note >= NOTE_C5 && note < NOTE_C5 + pentagon3.size())
-   {
-      note -= NOTE_C5;
-      pentagon = &pentagon3;
-   }
-   else
-   {
-      return;
-   }
-   
-   for (uint8_t mapped_note: pentagon->at(note))
-   {
-      notes[mapped_note] = velocity;
-   }
-}
-
 typedef std::vector<std::vector<uint8_t> >  BlobNoteMap;
 BlobNoteMap blobs =
 {
@@ -151,30 +117,17 @@ BlobNoteMap blobs =
    {118, 119, 120, 121, 122}
 };
 
-void setBlob(uint8_t (&notes)[NOTE_HIGHEST+1], uint8_t note, uint8_t velocity)
-{
-   if (note < NOTE_C2) return;
-   note -= NOTE_C2;
-   
-   if (note >= blobs.size()) return;
-   
-   for (uint8_t mapped_note: blobs[note])
-   {
-      notes[mapped_note] = velocity;
-   }
-}
-
 }
 
 NotesWithMappings::NotesWithMappings()
 {
-   std::fill(m_notes, m_notes+NOTE_HIGHEST+1, 0);
+   std::fill(m_notes_old, m_notes_old+NOTE_HIGHEST+1, 0);
 }
 
 uint8_t NotesWithMappings::note(uint8_t note) const
 {
    if (note > NOTE_HIGHEST) return 0;
-   return m_notes[note];
+   return m_notes_old[note];
 }
 
 void NotesWithMappings::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
@@ -183,16 +136,13 @@ void NotesWithMappings::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
    {
       case 0:
       default:
-         if (note <= NOTE_HIGHEST)
-         {
-            m_notes[note] = velocity;
-         }
+         setNote(note, velocity, CHANNEL_SINGLE_TRIANGLE, note);
          break;
       case 1:
-         setPentagon(m_notes, note, velocity);
+         setPentagon(note, velocity);
          break;
       case 2:
-         setBlob(m_notes, note, velocity);
+         setBlob(note, velocity);
          break;
    }
 }
@@ -200,4 +150,131 @@ void NotesWithMappings::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
 void NotesWithMappings::noteOff(uint8_t note, uint8_t channel)
 {
    noteOn(note, 0, channel);
+}
+
+void NotesWithMappings::setNote(uint8_t note, uint8_t velocity, Channel channel, uint8_t index_in_channel)
+{
+   if (note > NOTE_HIGHEST) return;
+   
+   if (velocity == 0)
+   {
+      clearNote(note, channel, index_in_channel);
+      return;
+   }
+   
+   m_notes[note].set({channel, index_in_channel, velocity});
+   m_notes_old[note] = m_notes[note].velocity();
+}
+
+void NotesWithMappings::clearNote(uint8_t note, Channel channel, uint8_t index_in_channel)
+{
+   if (m_notes.count(note) == 0) return;
+   
+   m_notes[note].clear(channel, index_in_channel);
+   m_notes_old[note] = m_notes[note].velocity();
+   
+   // if the velocity is 0, then there's no setter remaining, so we can remove the item
+   if (m_notes[note].velocity() == 0)
+   {
+      m_notes.erase(note);
+   }
+}
+
+void NotesWithMappings::setBlob(uint8_t note, uint8_t velocity)
+{
+   if (note < NOTE_C2) return;
+   note -= NOTE_C2;
+   
+   if (note >= blobs.size()) return;
+      
+   for (uint8_t mapped_note: blobs[note])
+   {
+      setNote(mapped_note, velocity, CHANNEL_BLOBS, note);
+   }
+}
+
+void NotesWithMappings::setPentagon(uint8_t note, uint8_t velocity)
+{
+   PentagonNoteMap* pentagon = nullptr;
+   if (note >= NOTE_C2 && note < NOTE_C2 + pentagon0.size())
+   {
+      note -= NOTE_C2;
+      pentagon = &pentagon0;
+   }
+   else if (note >= NOTE_C3 && note < NOTE_C3 + pentagon1.size())
+   {
+      note -= NOTE_C3;
+      pentagon = &pentagon1;
+   }
+   else if (note >= NOTE_C4 && note < NOTE_C4 + pentagon2.size())
+   {
+      note -= NOTE_C4;
+      pentagon = &pentagon2;
+   }
+   else if (note >= NOTE_C5 && note < NOTE_C5 + pentagon3.size())
+   {
+      note -= NOTE_C5;
+      pentagon = &pentagon3;
+   }
+   else
+   {
+      return;
+   }
+   
+   for (uint8_t mapped_note: pentagon->at(note))
+   {
+      setNote(mapped_note, velocity, CHANNEL_BLOBS, note);
+   }
+}
+
+NotesWithMappings::Setter::Setter():
+   channel(), index(), velocity()
+{
+}
+
+NotesWithMappings::Setter::Setter(Channel channel, uint8_t index, uint8_t velocity):
+   channel(channel), index(index), velocity(velocity)
+{
+}
+
+NotesWithMappings::Setters::Setters(): num_setters(0)
+{
+}
+
+void NotesWithMappings::Setters::set(const Setter& setter)
+{
+   if (num_setters == MAX_SETTERS) return; // can't set another one, 'polyphony' exhausted
+   setters[num_setters] = setter;
+   num_setters++;
+}
+
+void NotesWithMappings::Setters::clear(Channel channel, uint8_t index_in_channel)
+{
+   bool found = false;
+   for (unsigned k = 0; k < num_setters; k++)
+   {
+      if (setters[k].channel == channel and setters[k].index == index_in_channel)
+      {
+         found = true;
+         num_setters--;
+         /*
+          If it's the last one, we're done and there's no need to compact the list
+          */
+         if (k == num_setters) break;
+      }
+      
+      if (found)
+      {
+         // we have removed an item, so shift the remainder of the list
+         setters[k] = setters[k+1];
+      }
+   }
+}
+
+uint8_t NotesWithMappings::Setters::velocity() const
+{
+   if (num_setters == 0 or num_setters > MAX_SETTERS) return 0; // not set, or invalid
+   
+   // return the velocity of the latest setter
+   return setters[num_setters-1].velocity;
 }
