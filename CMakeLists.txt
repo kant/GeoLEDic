@@ -28,7 +28,7 @@ include_directories(SYSTEM "${FASTLED_DIR}/src")
 set(GEOLEDIC_CORE_SOURCES src/CRGB_iterator.cpp
                           src/Edge.cpp
                           src/Notes.cpp
-                          src/NotesWithMappings.cpp
+                          src/ShapesFromNotes.cpp
                           src/Triangle.cpp
                           src/Vector.cpp
                           src/Vertex.cpp)

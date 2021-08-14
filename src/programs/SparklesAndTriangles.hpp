@@ -2,9 +2,9 @@
 #define GEOLEDIC_SparklesAndTriangles_hpp
 
 #include "DomeWrapper.hpp"
-#include "NotesWithMappings.hpp"
+#include "ShapesFromNotes.hpp"
 
-class SparklesAndTriangles: public NotesWithMappings
+class SparklesAndTriangles: public ShapesFromNotes
 {
 public:
    SparklesAndTriangles(const DomeWrapper& dome);
