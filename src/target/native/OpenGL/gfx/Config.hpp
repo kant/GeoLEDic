@@ -2,6 +2,8 @@
 #define GFX_CONFIG_HPP
 
 #include <vector>
+#include <map>
+#include <string>
 
 namespace gfx {
   
@@ -32,6 +34,15 @@ public:
       virtual void handleKey(char c) = 0;
    };
    
+   class MidiPorts {
+   public:
+      typedef int PortId;
+      virtual ~MidiPorts(){};
+      virtual void updateAvailablePorts(std::map<PortId, std::string>& port_map, PortId& selected_port) = 0;
+      virtual void selectPort(PortId selected_port) = 0;
+   };
+
+   
    Config():
       m_width(1024),
       m_height(768),
@@ -42,7 +53,8 @@ public:
       m_attenuation_square(10),
       m_strafing_speed(20),
       m_views(1, View(0, 8, 5)),
-      m_keyboard_handler(&m_null_handler)
+      m_keyboard_handler(&m_null_handler),
+      m_midi_ports(nullptr)
    {
    }
    
@@ -80,6 +92,13 @@ public:
    }
    KeyboardHandler& keyboardHandler() const { return *m_keyboard_handler; }
    
+   Config& midiPorts(MidiPorts* ports)
+   {
+      if (ports) m_midi_ports = ports;
+      return *this;
+   }
+   MidiPorts* midiPorts() const { return m_midi_ports; }
+   
 private:
    
    class NullKeyboardHandler: public KeyboardHandler
@@ -98,6 +117,7 @@ private:
    float m_strafing_speed;
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
+   MidiPorts* m_midi_ports;
 };
 
 }

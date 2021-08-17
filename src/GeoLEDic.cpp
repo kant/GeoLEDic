@@ -1,5 +1,4 @@
 #include "GeoLEDic.hpp"
-#include "MidiSource.hpp"
 #include "ProgramFactory.hpp"
 #include "programs/Diagnostic.hpp"
 #ifdef WITH_GFX
@@ -77,3 +76,10 @@ void loopGeoLEDic()
 
    program->run();
 }
+
+#ifdef WITH_GFX
+gfx::Config::MidiPorts* getMidiPorts()
+{
+   return midi_source.getMidiPorts();
+}
+#endif

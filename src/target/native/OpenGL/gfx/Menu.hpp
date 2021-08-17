@@ -16,8 +16,13 @@ public:
    void draw();
    
 private:
+   
+   void showMidiSources();
+   
    Config&      m_config;
    GLFWwindow*  m_window;
+   
+   std::map<Config::MidiPorts::PortId, std::string> m_midi_sources;
 };
 
 }

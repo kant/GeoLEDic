@@ -36,7 +36,8 @@ int main()
                   .attenuationConstant(0.4)
                   .attenuationLinear(130.0)
                   .attenuationSquare(900.0)
-                  .keyboardHandler(&Serial));
+                  .keyboardHandler(&Serial)
+                  .midiPorts(getMidiPorts()));
       
       setupGeoLEDic();
       

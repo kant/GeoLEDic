@@ -6,6 +6,7 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include <iostream>
 
 namespace gfx {
 
@@ -29,7 +30,7 @@ Menu::~Menu()
    ImGui_ImplGlfw_Shutdown();
    ImGui::DestroyContext();
 }
-   
+
 void Menu::draw()
 {
    ImGui_ImplOpenGL3_NewFrame();
@@ -37,7 +38,13 @@ void Menu::draw()
    ImGui::NewFrame();
    
    ImGui::Begin("Settings");
-   if (ImGui::CollapsingHeader("Shader Settings"))
+   
+   if (m_config.midiPorts() and ImGui::CollapsingHeader("MIDI Source"))
+   {
+      showMidiSources();
+   }
+   
+   if (ImGui::CollapsingHeader("Shader"))
    {
       ImGui::SliderFloat("Cutoff Distance", &m_config.m_cutoff_distance, 0.0f, 10.0f);
       ImGui::Text("Attenuation:");
@@ -47,7 +54,7 @@ void Menu::draw()
    }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();
-         
+
    ImGui::Render();
    int display_w, display_h;
    glfwGetFramebufferSize(m_window, &display_w, &display_h);
@@ -55,4 +62,32 @@ void Menu::draw()
    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
    
+void Menu::showMidiSources()
+{
+   Config::MidiPorts::PortId initial_selected_port, selected_port = 0;
+   m_config.midiPorts()->updateAvailablePorts(m_midi_sources, selected_port);
+   initial_selected_port = selected_port;
+   
+   ImGui::Bullet();
+   if (ImGui::Selectable("None", selected_port == 0))
+   {
+      selected_port = 0;
+   }
+   
+   for (auto& port: m_midi_sources)
+   {
+      ImGui::Bullet();
+      if (ImGui::Selectable(port.second.c_str(), selected_port == port.first))
+      {
+         selected_port = port.first;
+      }
+   }
+   
+   if (selected_port != initial_selected_port)
+   {
+      m_config.midiPorts()->selectPort(selected_port);
+   }
+}
+
+
 }

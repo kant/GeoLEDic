@@ -183,3 +183,8 @@ const MidiMessage* MidiSource::read()
 {
    return m_i.read();
 }
+
+gfx::Config::MidiPorts* MidiSource::getMidiPorts()
+{
+   return nullptr; // not implemented
+}
