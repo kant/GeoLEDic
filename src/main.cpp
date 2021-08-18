@@ -4,10 +4,6 @@
 #include "FastLED.h"
 #include "GeoLEDic.hpp"
 
-#define LED_PIN     1
-#define COLOR_ORDER RGB
-#define CHIPSET     WS2813
-
 #define FRAME_RATE 24
 static const unsigned FRAME_INTERVAL_MS = 1000 / FRAME_RATE;
 
