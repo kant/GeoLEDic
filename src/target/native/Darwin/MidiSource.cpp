@@ -65,12 +65,20 @@ public:
          std::stringstream description;
          CFStringRef name;
          char tmp[64];
-         MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &name);
-         CFStringGetCString(name, tmp, sizeof(tmp), 0);
-         description << tmp << ": ";
-         MIDIObjectGetStringProperty(dev, kMIDIPropertyName, &name);
-         CFStringGetCString(name, tmp, sizeof(tmp), 0);
-         description << tmp;
+         if (MIDIObjectGetStringProperty(dev, kMIDIPropertyModel, &name) == noErr)
+         {
+            CFStringGetCString(name, tmp, sizeof(tmp), 0);
+            description << tmp << ": ";
+         }
+         if (MIDIObjectGetStringProperty(dev, kMIDIPropertyName, &name) == noErr)
+         {
+            CFStringGetCString(name, tmp, sizeof(tmp), 0);
+            description << tmp;
+         }
+         if (description.str().size() == 0)
+         {
+            description << "Unknown device " << i;
+         }
          m_midi_sources[dev] = description.str();         
       }
       
