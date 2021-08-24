@@ -2,47 +2,9 @@
 
 MovingRainbow::MovingRainbow(const DomeWrapper& dome):
    m_dome(dome),
-   m_stride_h(0),
-   m_speed_h(0),
-   m_stride_v(4),
-   m_speed_v(2),
    m_iteration_h(0),
    m_iteration_v(0)
 {}
-
-void MovingRainbow::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
-{
-   (void)note;
-   (void)velocity;
-   (void)channel;
-}
-
-void MovingRainbow::noteOff(uint8_t note, uint8_t channel)
-{
-   (void)note;
-   (void)channel;
-}
-
-void MovingRainbow::controlChange(uint8_t cc_num, uint8_t value)
-{
-   switch (cc_num)
-   {
-      case 16:
-         m_speed_v = value;
-         break;
-      case 17:
-         m_stride_v = value;
-         break;
-      case 18:
-         m_speed_h = value;
-         break;
-      case 19:
-         m_stride_h = value;
-         break;
-      default:
-         break;
-   }
-}
 
 void MovingRainbow::run()
 {
@@ -61,8 +23,8 @@ void MovingRainbow::run()
          int led_ix = 0;
          for (CRGB& led: e)
          {
-            unsigned v = (unsigned(interpolateTheta(c0, c1, led_ix, e.size())) * m_stride_v)/4 + m_iteration_v;
-            unsigned h = (unsigned(interpolatePhi(c0, c1, led_ix, e.size())) * m_stride_h)/4 + m_iteration_h;
+            unsigned v = (unsigned(interpolateTheta(c0, c1, led_ix, e.size())) * getStrideVertical())/4 + m_iteration_v;
+            unsigned h = (unsigned(interpolatePhi(c0, c1, led_ix, e.size())) * getStrideHorizontal())/4 + m_iteration_h;
 
             hsv.hue = (h + v)/4;
             led = hsv;
@@ -70,6 +32,6 @@ void MovingRainbow::run()
          }
       }
    }
-   m_iteration_h += m_speed_h;
-   m_iteration_v += m_speed_v;
+   m_iteration_h += getSpeedHorizontal();
+   m_iteration_v += getSpeedVertical();
 }

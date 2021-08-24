@@ -2,22 +2,17 @@
 #define GEOLEDIC_SparklesAndTriangles_hpp
 
 #include "DomeWrapper.hpp"
-#include "ShapesFromNotes.hpp"
+#include "generated/SparklesAndTriangles.hpp"
 
-class SparklesAndTriangles: public ShapesFromNotes
+class SparklesAndTriangles: public generated::SparklesAndTriangles
 {
 public:
    SparklesAndTriangles(const DomeWrapper& dome);
    
-   virtual void controlChange(uint8_t cc_num, uint8_t value);
    virtual void run();
-   
+
 private:
    const DomeWrapper& m_dome;
-   int m_red;
-   int m_green;
-   int m_blue;
-   int m_sparkle_probability;
    int m_iteration;
    
 };

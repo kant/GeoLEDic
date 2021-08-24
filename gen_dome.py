@@ -412,21 +412,15 @@ with open(fbase + ".cpp", 'w') as f:
    print "};"
    sys.stdout = original_stdout
 
-with open(fbase + ".hpp", 'w') as f:
+with open(fbase + "Defs.hpp", 'w') as f:
    original_stdout = sys.stdout
    sys.stdout = f
    print \
-   "#ifndef GEOLEDIC_DOME_HPP\n" \
-   "#define GEOLEDIC_DOME_HPP\n" \
-   "\n" \
-   "#include \"Triangle.hpp\"\n" \
+   "#ifndef GEOLEDIC_DOMEDEFS_HPP\n" \
+   "#define GEOLEDIC_DOMEDEFS_HPP\n" \
    "\n" \
    "#define DOME_NUM_TRIANGLES 123\n" \
    "#define NUM_STRIPS %d\n" \
    "#define LEDS_PER_STRIP %d\n" \
-   "\n" \
-   "extern CRGB leds[NUM_STRIPS * LEDS_PER_STRIP];\n" \
-   "extern Triangle dome[DOME_NUM_TRIANGLES];" \
-   "\n" \
    "#endif\n" % (len(led_counts), max(led_counts))
    sys.stdout = original_stdout

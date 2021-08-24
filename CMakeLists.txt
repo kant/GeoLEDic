@@ -8,7 +8,6 @@ set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLE
 
 add_subdirectory(conf)
 add_subdirectory(src/target/native)
-add_subdirectory(src/programs)
 
 add_definitions(-std=c++11
                 -DWITH_GFX=1
@@ -22,11 +21,15 @@ endif()
 include_directories(src
                     src/target/native
                     src/target/native/FastLED
-                    src/target/native/OpenGL)
+                    src/target/native/OpenGL
+                    ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(SYSTEM "${FASTLED_DIR}/src")
 
+add_subdirectory(src/programs)
+
 # The core sources are the ones built for unit tests as well
-set(GEOLEDIC_CORE_SOURCES src/CRGB_iterator.cpp
+set(GEOLEDIC_CORE_SOURCES src/Controls.cpp
+                          src/CRGB_iterator.cpp
                           src/Edge.cpp
                           src/Notes.cpp
                           src/ShapesFromNotes.cpp
@@ -37,7 +40,7 @@ add_library(geoledic-core STATIC ${GEOLEDIC_CORE_SOURCES})
 
 
 set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
-                     ${PROGRAMS_SOURCES}
+                     $<TARGET_OBJECTS:programs>
                      src/Dome.cpp
                      src/GeoLEDic.cpp
                      src/ProgramFactory.cpp

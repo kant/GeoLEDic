@@ -1,10 +1,10 @@
 #ifndef Notes_hpp
 #define Notes_hpp
 
-#include "Program.hpp"
+#include "Controls.hpp"
 #include "MidiDefs.hpp"
 
-class Notes: public Program
+class Notes: public Controls
 {
 public:
    Notes();

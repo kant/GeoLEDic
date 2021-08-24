@@ -2,9 +2,6 @@
 
 DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
    m_dome(dome),
-   m_sparkle_probability(511),
-   m_stride(1),
-   m_speed(1),
    m_iteration(0)
 {}
 
@@ -21,26 +18,9 @@ void DefaultRainbow::noteOff(uint8_t note, uint8_t channel)
    (void)channel;
 }
 
-void DefaultRainbow::controlChange(uint8_t cc_num, uint8_t value)
-{
-   switch (cc_num)
-   {
-      case 16:
-         m_speed = value;
-         break;
-      case 17:
-         m_stride = value;
-         break;
-      case 19:
-         m_sparkle_probability = value ? 4 * (128 - value) : 0;
-         break;
-      default:
-         break;
-   }
-}
-
 void DefaultRainbow::run()
 {
+   int sparkle_probability = getSparkleProbability() ? 4 * (128 - getSparkleProbability()) : 0;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
@@ -48,13 +28,13 @@ void DefaultRainbow::run()
       hsv.hue = t_ix + m_iteration;
       hsv.val = 150; // 255 is blindingly bright
       hsv.sat = 240;
-      int next_sparkle = m_sparkle_probability ? random16(m_sparkle_probability) : -1;
+      int next_sparkle = sparkle_probability ? random16(sparkle_probability) : -1;
       for (CRGB& led: t)
       {
          if (next_sparkle == 0)
          {
             led = CRGB::White;
-            next_sparkle =  random16(m_sparkle_probability) + 1;
+            next_sparkle =  random16(sparkle_probability) + 1;
          }
          else if (led.r > 20 && led.r == led.g && led.g == led.b)
          {
@@ -64,9 +44,9 @@ void DefaultRainbow::run()
          {
             led = hsv;
          }
-         hsv.hue += m_stride;
+         hsv.hue += getStride();
          next_sparkle--;
       }
    }
-   m_iteration += m_speed;
+   m_iteration += getSpeed();
 }

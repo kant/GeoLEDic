@@ -2,39 +2,9 @@
 
 Lightning::Lightning(const DomeWrapper& dome):
    m_dome(dome),
-   m_probability(128),
-   m_forking_probability(1024),
    m_iteration(0)
 {
    memset(m_lit_map, 0, sizeof(m_lit_map));
-}
-
-void Lightning::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
-{
-   (void)note;
-   (void)velocity;
-   (void)channel;
-}
-
-void Lightning::noteOff(uint8_t note, uint8_t channel)
-{
-   (void)note;
-   (void)channel;
-}
-
-void Lightning::controlChange(uint8_t cc_num, uint8_t value)
-{
-   switch (cc_num)
-   {
-      case 16:
-         m_probability = int(value)*128;
-         break;
-      case 17:
-         m_forking_probability = int(value)*128;
-         break;
-      default:
-         break;
-   }
 }
 
 void Lightning::run()
@@ -49,12 +19,12 @@ void Lightning::run()
          const Vertex& c0(t.corner(k));
          const Vertex& c1(t.corner(k+1));
 
-         uint16_t r = random16();
+         uint8_t r = random8();
          
          // start lightning bolts at the top
          if (c0.theta > 250 or c1.theta > 250)
          {
-            if (r < m_probability)
+            if (r < getLightningProbability())
             {
                CRGB flash_col = r&1 ? CRGB::LightCyan : CRGB::LightBlue;
                fill_solid(&*e.begin(), e.size(), flash_col);
@@ -77,7 +47,7 @@ void Lightning::run()
                h = c1.phi / (Vertex::NUM_PHI_STEPS/NUM_H);
             }
             
-            if (m_lit_map[h][v].b > 100 && r < m_forking_probability)
+            if (m_lit_map[h][v].b > 100 && r < getForkingProbability())
             {
                CRGB flash_col = m_lit_map[h][v];
                flash_col.addToRGB(10);

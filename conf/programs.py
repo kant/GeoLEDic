@@ -2,6 +2,7 @@ programs = [
     {
         'program':'DefaultRainbow',
         'name':'Default Rainbow',
+        'base': 'Notes',
         'controls': [
             {
                 'name': 'Speed',
@@ -20,6 +21,7 @@ programs = [
     {
         'program':'SparklesAndTriangles',
         'name':'Sparkles and Triangles',
+        'base': 'ShapesFromNotes',
         'keyzones' : [
             {
                 'name': 'Pentagon 0',
@@ -79,6 +81,7 @@ programs = [
     },
     {
         'program':'Fire',
+        'base': 'Notes',
         'controls': [
             {
                 'name': 'Cooling',
@@ -119,6 +122,7 @@ programs = [
     {
         'program':'MovingRainbow',
         'name':'Moving Rainbow',
+        'base': 'Notes',
         'controls': [
             {
                 'name': 'Speed Vertical',
@@ -140,6 +144,7 @@ programs = [
     },
     {
         'program':'Lightning',
+        'base': 'Notes',
         'controls': [
             {
                 'name': 'Lightning Probability',
@@ -157,7 +162,7 @@ programs = [
 
 def get():    
     # fill in defaults and expand values where needed (e.g. enums)
-    for i in xrange(0, len(programs)):
+    for i in range(0, len(programs)):
 
         if not 'name' in programs[i]:
             programs[i]['name'] = programs[i]['program']
@@ -174,5 +179,5 @@ def get():
                 if cc['type'] == 'enum':
                     # spread enum values on range 0..127 to make it easier to use them with a knob
                     n = len(cc['enums'])
-                    cc['values'] = range(0, n*(127/n), 127/n)
+                    cc['values'] = range(0, n*int(127/n), int(127/n))
     return programs

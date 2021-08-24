@@ -1,73 +1,48 @@
 #include "Fire.hpp"
 #include <math.h>
 
+namespace {
+
+const TProgmemRGBPalette16* palette(Fire::Palette palette)
+{
+   switch (palette)
+   {
+   default:
+   case Fire::Palette_Fire:
+      return &HeatColors_p;
+   case Fire::Palette_Ocean:
+      return &OceanColors_p;
+   case Fire::Palette_Cloud:
+      return &CloudColors_p;
+   case Fire::Palette_Forest:
+      return &ForestColors_p;
+   case Fire::Palette_Lava:
+      return &LavaColors_p;
+   case Fire::Palette_Rainbow:
+      return &RainbowColors_p;
+   case Fire::Palette_Party:
+      return &PartyColors_p;
+   }
+}
+
+}
+
 Fire::Fire(const DomeWrapper& dome):
-   m_dome(dome),
-   m_sparking(0),
-   m_cooling(55),
-   m_palette(&HeatColors_p),
-   m_reverse_palette(false),
-   m_reverse_direction(false)
+   m_dome(dome)
 {
    memset(m_heat, 0, sizeof(m_heat));
 }
 
-void Fire::controlChange(uint8_t cc_num, uint8_t value)
-{
-   switch (cc_num)
-   {
-      case 16:
-         m_cooling = value;
-         break;
-      case 17:
-         m_sparking = value;
-         break;
-      case 18:
-         switch (value/16)
-         {
-         default:
-         case 0:
-            m_palette = &HeatColors_p;
-            break;
-         case 1:
-            m_palette = &OceanColors_p;
-            break;
-         case 2:
-            m_palette = &CloudColors_p;
-            break;
-         case 3:
-            m_palette = &ForestColors_p;
-            break;
-         case 4:
-            m_palette = &LavaColors_p;
-            break;
-         case 5:
-            m_palette = &RainbowColors_p;
-            break;
-         case 6:
-            m_palette = &PartyColors_p;
-            break;
-         }
-         break;
-      case 19:
-         m_reverse_direction = value/64;
-         break;
-      case 20:
-         m_reverse_palette   = value/64;
-         break;
-      default:
-         break;
-   }
-}
-
 void Fire::calcFire()
 {
+   int cooling = getCooling();
+   int sparking = getSparking();
    for (unsigned h = 0; h < NUM_H; h++)
    {
       // Step 1.  Cool down every cell a little
       for(unsigned v = 0; v < NUM_V; v++)
       {
-         m_heat[h][v] = qsub8(m_heat[h][v],  random8(0, ((m_cooling * 10) / NUM_V) + 2));
+         m_heat[h][v] = qsub8(m_heat[h][v],  random8(0, ((cooling * 10) / NUM_V) + 2));
       }
         
       // Step 2.  Heat from each cell drifts 'up' and diffuses a little sideways
@@ -84,7 +59,7 @@ void Fire::calcFire()
       }
           
       // Step 3.  Randomly ignite new 'sparks' of heat near the bottom
-      if(random8() < m_sparking)
+      if(random8() < sparking)
       {
          int v = random8(7);
          m_heat[h][v] = qadd8(m_heat[h][v], random8(160,255));
@@ -104,6 +79,7 @@ void Fire::calcFire()
 void Fire::run()
 {
    calcFire();
+   auto* pal = palette(getPalette());
 
    for (Triangle& t: m_dome)
    {
@@ -119,7 +95,7 @@ void Fire::run()
             float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/NUM_V);
             float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/(NUM_H-1));
 
-            if (m_reverse_direction)
+            if (isDownwards())
             {
                v = NUM_V - v;
             }
@@ -138,12 +114,12 @@ void Fire::run()
                             m_heat[h1][v0] * rh1 * rv0 +
                             m_heat[h1][v1] * rh1 * rv1;
 
-            if (m_reverse_palette)
+            if (isReversePalette())
             {
                index = 255 - index;
             }
             
-            led = ColorFromPalette(*m_palette, index);
+            led = ColorFromPalette(*pal, index);
             
             led_ix++;
          }

@@ -1,12 +1,12 @@
 #ifndef ShapesFromNotes_hpp
 #define ShapesFromNotes_hpp
 
-#include "Program.hpp"
+#include "Controls.hpp"
 #include "MidiDefs.hpp"
-#include "Dome.hpp"
+#include "DomeDefs.hpp"
 #include <map>
 
-class ShapesFromNotes: public Program
+class ShapesFromNotes: public Controls
 {
 public:
    enum Shape {
