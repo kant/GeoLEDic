@@ -40,7 +40,6 @@ add_library(geoledic-core STATIC ${GEOLEDIC_CORE_SOURCES})
 
 
 set(GEOLEDIC_SOURCES ${TARGET_SOURCES}
-                     $<TARGET_OBJECTS:programs>
                      src/Dome.cpp
                      src/GeoLEDic.cpp
                      src/ProgramFactory.cpp
@@ -60,7 +59,8 @@ add_executable(GeoLEDic MACOSX_BUNDLE ${ICON} ${GEOLEDIC_SOURCES})
 target_link_libraries(GeoLEDic gfx
                                ${TARGET_LIBRARIES}
                                FastLED
-                               geoledic-core)
+                               geoledic-core
+                               programs)
 
 
 add_custom_target(regenerate-dome COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py ${CMAKE_CURRENT_SOURCE_DIR}/src

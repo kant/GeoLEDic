@@ -3,7 +3,7 @@ execute_process(COMMAND python ${CMAKE_SOURCE_DIR}/conf/makeProgramBaseClasses.p
 execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/generated)
 
 foreach(source IN LISTS GENERATED_BASE_CLASS_SOURCES)
-    string(REGEX REPLACE ".cpp" ".hpp" header ${source})
+    string(REGEX REPLACE "generated.cpp" ".hpp" header ${source})
     add_custom_command(OUTPUT ${source} ${header}
                        COMMAND python ${CMAKE_SOURCE_DIR}/conf/makeProgramBaseClasses.py ${source} 
                        DEPENDS ${CMAKE_SOURCE_DIR}/conf/makeProgramBaseClasses.py
@@ -11,7 +11,7 @@ foreach(source IN LISTS GENERATED_BASE_CLASS_SOURCES)
 
 endforeach()
 
-add_library(programs OBJECT
+add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/SparklesAndTriangles.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/DefaultRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Diagnostic.cpp

@@ -61,18 +61,17 @@ def getImplementations(program):
 command = sys.argv[2] if len(sys.argv) > 2 else ''
 basename = sys.argv[1]
 
-if command in ['--headers','--sources']:
-    ext = 'cpp' if command == '--sources' else 'hpp'
+if command == '--sources':
     filenames = ''
     for p in programs.get():
-        filenames = filenames + "%s/%s.%s;" % (basename, p['program'], ext)
+        filenames = filenames + "%s/%s.generated.cpp;" % (basename, p['program'])
     # don't use print as we don't want a newline
     sys.stdout.write(filenames[:-1])
     exit(1)
 
 
-header    = basename.replace('.cpp','.hpp')
-classname = basename.replace('.cpp','').split('/')[-1]
+header    = basename.replace('.generated.cpp','.hpp')
+classname = basename.replace('.generated.cpp','').split('/')[-1]
 
 CPP_TEMPLATE = '''
 #include "${classname}.hpp"
