@@ -57,10 +57,10 @@ endif()
 add_executable(GeoLEDic MACOSX_BUNDLE ${ICON} ${GEOLEDIC_SOURCES})
 
 target_link_libraries(GeoLEDic gfx
+                               programs
                                ${TARGET_LIBRARIES}
                                FastLED
-                               geoledic-core
-                               programs)
+                               geoledic-core)
 
 
 add_custom_target(regenerate-dome COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/gen_dome.py ${CMAKE_CURRENT_SOURCE_DIR}/src
