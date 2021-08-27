@@ -6,10 +6,13 @@
 struct MidiMessage
 {
    enum Type {
-      NOTE_OFF = 0x8,
-      NOTE_ON  = 0x9,
-      CONTROL_CHANGE = 0xB,
-      PROGRAM_CHANGE = 0xC
+      NOTE_OFF         = 0x8,
+      NOTE_ON          = 0x9,
+      AFTERTOUCH       = 0xA,
+      CONTROL_CHANGE   = 0xB,
+      PROGRAM_CHANGE   = 0xC,
+      CHANNEL_PRESSURE = 0xD,
+      PITCH_WHEEL      = 0xE
    };
    
    Type type() const { return Type(data[0] >> 4); }

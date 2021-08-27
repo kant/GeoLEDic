@@ -10,6 +10,29 @@
 #include <sstream>
 #include <pthread.h>
 
+namespace {
+
+int messageSize(uint8_t first_byte)
+{
+   switch (first_byte >> 4)
+   {
+      case MidiMessage::NOTE_OFF:
+      case MidiMessage::NOTE_ON:
+      case MidiMessage::AFTERTOUCH:
+      case MidiMessage::CONTROL_CHANGE:
+      case MidiMessage::PITCH_WHEEL:
+         return 3;
+      case MidiMessage::PROGRAM_CHANGE:
+      case MidiMessage::CHANNEL_PRESSURE:
+         return 2;
+      default:
+         // discard remainder, SYSEX etc not handled
+         return -1;
+   }
+}
+
+}
+
 class MidiSource::Impl: public gfx::Config::MidiPorts
 {
 public:
@@ -103,11 +126,24 @@ public:
       // push messages into a queue to hand them over to the working thread which
       // will consume them via read()
       pthread_mutex_lock(&m_mutex);
-      for (unsigned int i = 0; i < packets->numPackets; ++i) {
-         MidiMessage msg;
-         msg.length = std::min(UInt16(sizeof(msg.data)), packet->length);
-         std::copy(packet->data, packet->data + msg.length, msg.data);
-         m_packets.push(msg);
+      for (unsigned int i = 0; i < packets->numPackets; ++i)
+      {
+         int remaining_length = packet->length;
+         const uint8_t* p = packet->data;
+         while (remaining_length > 0)
+         {
+            int length = messageSize(*p);
+            
+            if (length < 0) break; // skip remainder of message
+            if (length > remaining_length) break; 
+
+            MidiMessage msg;
+            msg.length = length;
+            std::copy_n(p, length, msg.data);
+            p += length;
+            remaining_length -= length;
+            m_packets.push(msg);
+         }
          packet = MIDIPacketNext(packet);
       }
       pthread_mutex_unlock(&m_mutex);
