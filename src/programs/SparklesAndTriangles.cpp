@@ -7,7 +7,7 @@ SparklesAndTriangles::SparklesAndTriangles(const DomeWrapper& dome):
 
 void SparklesAndTriangles::run()
 {
-   int sparkle_probability = getSparkleProbability() ? 2 * (128 - getSparkleProbability()) : 0;
+   int sparkle_spacing = getSparkleProbability() ? 100 * (128 - getSparkleProbability()) : 0;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
@@ -18,13 +18,17 @@ void SparklesAndTriangles::run()
       else
       {
          int c = 0;
-         int next_sparkle = sparkle_probability ? random8(sparkle_probability) : -1;
+         int next_sparkle = sparkle_spacing ? random16(sparkle_spacing) : -1;
          for(CRGB& led: t)
          {
-            if (c == next_sparkle)
+            if (next_sparkle == 0)
             {
-               next_sparkle += random8(sparkle_probability) + 1;
+               next_sparkle += random16(sparkle_spacing) + 1;
                led = CRGB::White;
+            }
+            else if (led.r > 20 && led.r == led.g && led.g == led.b)
+            {
+               led.subtractFromRGB(20);
             }
             else
             {
@@ -37,6 +41,7 @@ void SparklesAndTriangles::run()
                           colg < 255 ? colg : 255,
                           colb < 255 ? colb : 255);
             }
+            next_sparkle--;
             c++;
          }
       }
