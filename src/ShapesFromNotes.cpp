@@ -268,6 +268,16 @@ ShapesFromNotes::Associations::Associations(): num_associations(0)
 void ShapesFromNotes::Associations::set(const Association& setter)
 {
    if (num_associations == MAX_ASSOCIATIONS) return; // can't set another one, 'polyphony' exhausted
+   
+   // reject duplicates
+   for (unsigned k = 0; k < num_associations; k++)
+   {
+      if (associations[k].shape_id == setter.shape_id and associations[k].shape_type == setter.shape_type)
+      {
+         return;
+      }
+   }
+
    associations[num_associations] = setter;
    num_associations++;
 }

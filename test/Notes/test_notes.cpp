@@ -238,6 +238,17 @@ TEST_F(TestShapesFromNotes, setAllClearAll)
    expectNotesSet({});
 }
 
+// Native Instrument's Komplete Kontrol seems buggy in that it sends duplicate note on messages
+// occasionally. Let's not end up with stuck notes because of that!
+TEST_F(TestShapesFromNotes, duplicateNoteOn)
+{
+   const uint8_t NOTE_VELOCITY = 1;
+   noteOn(NOTE_C2, NOTE_VELOCITY, SHAPE_PENTAGON);
+   noteOn(NOTE_C2, NOTE_VELOCITY, SHAPE_PENTAGON);
+   
+   noteOff(NOTE_C2, SHAPE_PENTAGON);
+   expectNotesSet({});
+}
 
 // fuzz inputs (occasionally invalid on purpose) and see if it crashes
 TEST_F(TestShapesFromNotes, fuzz)
