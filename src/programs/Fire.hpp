@@ -21,6 +21,7 @@ private:
    
    const DomeWrapper& m_dome;
    uint8_t m_heat[NUM_H][NUM_V];
+   float m_h_offset;
 };
 
 #endif /* Fire_hpp */

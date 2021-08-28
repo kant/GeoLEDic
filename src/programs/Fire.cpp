@@ -1,4 +1,5 @@
 #include "Fire.hpp"
+#include "Palettes.hpp"
 #include <math.h>
 
 namespace {
@@ -11,9 +12,9 @@ const TProgmemRGBPalette16* palette(Fire::Palette palette)
    case Fire::Palette_Fire:
       return &HeatColors_p;
    case Fire::Palette_Ocean:
-      return &OceanColors_p;
+      return &OceanFromBlack_p;
    case Fire::Palette_Cloud:
-      return &CloudColors_p;
+      return &Clouds_p;
    case Fire::Palette_Forest:
       return &ForestColors_p;
    case Fire::Palette_Lava:
@@ -28,7 +29,8 @@ const TProgmemRGBPalette16* palette(Fire::Palette palette)
 }
 
 Fire::Fire(const DomeWrapper& dome):
-   m_dome(dome)
+   m_dome(dome),
+   m_h_offset(0)
 {
    memset(m_heat, 0, sizeof(m_heat));
 }
@@ -65,8 +67,11 @@ void Fire::calcFire()
          m_heat[h][v] = qadd8(m_heat[h][v], random8(160,255));
       }
       
-      // ignite new sparks on note press. Place middle of dome at middle of keyboard
-      uint8_t n = h + NOTE_C4 - NUM_H/2;
+      // ignite new sparks on note press.
+      // ensure note stay in the same place even if rotation is on
+      uint8_t hnote = NUM_H + h - m_h_offset;
+      if (hnote >= NUM_H) hnote -= NUM_H;
+      uint8_t n = hnote + NOTE_C2;
       if (note(n))
       {
          uint8_t heat = note(n)*2;
@@ -94,6 +99,9 @@ void Fire::run()
          {
             float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/NUM_V);
             float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/(NUM_H-1));
+            h += m_h_offset;
+            if (h  >= NUM_H ) h = h - NUM_H;
+
 
             if (isDownwards())
             {
@@ -125,4 +133,6 @@ void Fire::run()
          }
       }
    }
+   m_h_offset += float(getRotationSpeed())/100.f;
+   if (m_h_offset >= NUM_H) m_h_offset = 0;
 }

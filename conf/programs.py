@@ -82,6 +82,15 @@ programs = [
     {
         'program':'Fire',
         'base': 'Notes',
+        'keyzones' : [
+            {
+                'name': 'Sparks',
+                'from': 36,
+                'to': 85,
+                'channel': 0,
+                'transpose': 0
+            },
+        ],
         'controls': [
             {
                 'name': 'Cooling',
@@ -90,6 +99,10 @@ programs = [
             {
                 'name': 'Sparking',
                 'number': 17
+            },
+            {
+               'name': 'Rotation Speed',
+               'number': 18
             },
             {
                 'name': 'Downwards',
@@ -105,7 +118,7 @@ programs = [
                 'name': 'Palette',
                 'short_name': 'Pal',
                 'type': 'enum',
-                'number': 18,
+                'number': 21,
                 'enums': [
                     'Fire',
                     'Ocean',

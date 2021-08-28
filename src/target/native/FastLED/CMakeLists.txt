@@ -7,9 +7,10 @@ set(FASTLED_SOURCES
    "${FASTLED_SRC}/colorpalettes.cpp"
    "${FASTLED_SRC}/hsv2rgb.cpp"
    "${FASTLED_SRC}/lib8tion.cpp"
+   "${CMAKE_SOURCE_DIR}/src/Palettes.cpp"
    )
 set_source_files_properties(${FASTLED_SOURCES}
-   PROPERTIES COMPILE_FLAGS "-include platform.h -Wno-mismatched-tags -Wno-unused-private-field"
+   PROPERTIES COMPILE_FLAGS "-isystem ${FASTLED_SRC} -include platform.h -Wno-mismatched-tags -Wno-unused-private-field"
    )
 source_group(FastLED FILES ${FASTLED_SOURCES})
 
