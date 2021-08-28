@@ -8,8 +8,14 @@ foreach(source IN LISTS GENERATED_BASE_CLASS_SOURCES)
                        COMMAND python ${CMAKE_SOURCE_DIR}/conf/makeProgramBaseClasses.py ${source} 
                        DEPENDS ${CMAKE_SOURCE_DIR}/conf/makeProgramBaseClasses.py
                                ${CMAKE_SOURCE_DIR}/conf/programs.py)
-
 endforeach()
+
+set(GENERATED_FACTORY ${CMAKE_BINARY_DIR}/generated/ProgramFactory.cpp)
+add_custom_command(OUTPUT ${GENERATED_FACTORY}
+                   COMMAND python ${CMAKE_SOURCE_DIR}/conf/makeProgramFactory.py ${GENERATED_FACTORY}
+                   DEPENDS ${CMAKE_SOURCE_DIR}/conf/makeProgramFactory.py
+                           ${CMAKE_SOURCE_DIR}/conf/programs.py)
+
 
 add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/SparklesAndTriangles.cpp
@@ -18,4 +24,5 @@ add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/Fire.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/MovingRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Lightning.cpp
-            ${GENERATED_BASE_CLASS_SOURCES})
+            ${GENERATED_BASE_CLASS_SOURCES}
+            ${GENERATED_FACTORY})
