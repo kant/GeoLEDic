@@ -13,7 +13,7 @@ void SparklesAndTriangles::run()
       Triangle& t(m_dome[t_ix]);
       if (getTriangleValue(t_ix) > 0)
       {
-         std::fill(t.begin(), t.end(), ColorFromPalette(RainbowColors_p, getTriangleValue(t_ix)*2));
+         std::fill_n(t.firstLed(), t.size(), ColorFromPalette(RainbowColors_p, getTriangleValue(t_ix)*2, getBrightness()));
       }
       else
       {

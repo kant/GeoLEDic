@@ -26,7 +26,7 @@ void DefaultRainbow::run()
       Triangle& t(m_dome[t_ix]);
       CHSV hsv;
       hsv.hue = t_ix + m_iteration;
-      hsv.val = 150; // 255 is blindingly bright
+      hsv.val = getBrightness();
       hsv.sat = 240;
       int next_sparkle = sparkle_spacing ? random16(sparkle_spacing) : -1;
       for (CRGB& led: t)

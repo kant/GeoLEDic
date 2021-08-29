@@ -246,7 +246,7 @@ def writeDatFile(progs):
     },\n\
     "touchstrip": {\n\
         "MIDIType": "3",\n\
-        "MIDIId": "11",\n\
+        "MIDIId": "7",\n\
         "Channel": "0",\n\
         "Min": "0",\n\
         "Max": "127",\n\

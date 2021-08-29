@@ -85,6 +85,11 @@ CRGB_iterator Triangle::begin()
    };
 }
 
+CRGB* Triangle::firstLed()
+{
+   return &m_strip[m_first_led];
+}
+
 CRGB_iterator Triangle::end()
 {
    return {&m_strip[m_first_corner_led], CRGB_iterator::invalid_iterator_tag()};

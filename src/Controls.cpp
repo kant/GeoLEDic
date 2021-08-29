@@ -1,6 +1,11 @@
 #include "Controls.hpp"
 #include <algorithm>
 
+namespace {
+   const uint8_t BRIGHTNESS_CC = 7;
+   uint8_t brightness = 180;
+}
+
 Controls::Controls()
 {
    std::fill_n(m_control_values, sizeof(m_control_values), 0);
@@ -9,7 +14,17 @@ Controls::Controls()
 void Controls::controlChange(uint8_t cc_num, uint8_t value)
 {
    if (cc_num >= sizeof(m_control_values)) return;
+   if (cc_num == BRIGHTNESS_CC)
+   {
+      brightness = value << 1;
+   }
+
    m_control_values[cc_num] = value;
+}
+
+uint8_t Controls::getBrightness() const
+{
+   return brightness;
 }
 
 uint8_t Controls::getControlValue(uint8_t cc_num) const

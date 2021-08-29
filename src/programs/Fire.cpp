@@ -1,5 +1,6 @@
 #include "Fire.hpp"
 #include "Palettes.hpp"
+#include "colorutils.h"
 #include <math.h>
 
 namespace {
@@ -127,7 +128,7 @@ void Fire::run()
                index = 255 - index;
             }
             
-            led = ColorFromPalette(*pal, index);
+            led = ColorFromPalette(*pal, index, getBrightness());
             
             led_ix++;
          }

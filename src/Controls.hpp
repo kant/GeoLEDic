@@ -11,6 +11,8 @@ public:
    virtual void controlChange(uint8_t cc_num, uint8_t value);
 
 protected:
+   uint8_t getBrightness() const;
+
    uint8_t getControlValue(uint8_t cc_num) const;
 
 private:

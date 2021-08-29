@@ -11,7 +11,7 @@ void MovingRainbow::run()
    for (Triangle& t: m_dome)
    {
       CHSV hsv;
-      hsv.val = 150; // 255 is blindingly bright
+      hsv.val = getBrightness();
       hsv.sat = 255;
       
       for (unsigned k = 0; k < 3; k ++)

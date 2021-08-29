@@ -26,8 +26,14 @@ public:
    void createLeds(std::vector<gfx::LED>& leds, std::vector<gfx::Triangle>& triangles, int triangle_num) const;
 #endif
    
+   // begin() starts on first corner (bottom left by convention), the iterator then goes clockwise to end()
    CRGB_iterator begin();
    CRGB_iterator end();
+   
+   // unlike begin(), firstLed() points to the first LED on the strip that's part of the triangle,
+   //  so it could be anywhere on the triangle
+   CRGB* firstLed();
+   
    unsigned size() const;
    
    const Edge& edge(unsigned ix) const;
