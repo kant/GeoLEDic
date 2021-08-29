@@ -24,5 +24,6 @@ add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/Fire.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/MovingRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Lightning.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/Noise.cpp
             ${GENERATED_BASE_CLASS_SOURCES}
             ${GENERATED_FACTORY})

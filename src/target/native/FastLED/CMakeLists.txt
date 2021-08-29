@@ -7,6 +7,7 @@ set(FASTLED_SOURCES
    "${FASTLED_SRC}/colorpalettes.cpp"
    "${FASTLED_SRC}/hsv2rgb.cpp"
    "${FASTLED_SRC}/lib8tion.cpp"
+   "${FASTLED_SRC}/noise.cpp"
    "${CMAKE_SOURCE_DIR}/src/Palettes.cpp"
    )
 set_source_files_properties(${FASTLED_SOURCES}

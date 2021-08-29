@@ -177,6 +177,51 @@ programs = [
                 'number': 17,
             }
         ]
+    },
+    {
+      'program':'Noise',
+      'base': 'Notes',
+      'controls': [
+         {
+            'name': 'Speed X',
+            'number': 16,
+         },
+         {
+            'name': 'Scale X',
+            'number': 17,
+         },
+         {
+            'name': 'Speed Y',
+            'number': 18,
+         },
+         {
+            'name': 'Scale Y',
+            'number': 19,
+         },
+         {
+            'name': 'Speed T',
+            'number': 20,
+         },
+         {
+            'name': 'Rotation Speed',
+            'number': 21,
+         },
+         {
+             'name': 'Palette',
+             'short_name': 'Pal',
+             'type': 'enum',
+             'number': 22,
+             'enums': [
+                 'Fire',
+                 'Ocean',
+                 'Cloud',
+                 'Forest',
+                 'Lava',
+                 'Rainbow',
+                 'Party'
+             ]
+         }
+      ]
     }
 ]
 
