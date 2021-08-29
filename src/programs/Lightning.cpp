@@ -21,13 +21,16 @@ void Lightning::run()
 
          uint8_t r = random8();
          
-         // start lightning bolts at the top
-         if (c0.theta > 250 or c1.theta > 250)
+         // start lightning bolts at the top, which means
+         // - only triangles from 118 up
+         // - only edges 0 and 1 as they are the vertical ones
+         if (t_ix >= 118 && k < 2)
          {
-            if (r < getLightningProbability())
+            uint8_t bolt_num = (t_ix - 118) * 2 + k;
+            if (r < getLightningProbability() or m_notes[bolt_num + NOTE_C3   ])
             {
-               CRGB flash_col = r&1 ? CRGB::LightCyan : CRGB::LightBlue;
-               fill_solid(&*e.begin(), e.size(), flash_col);
+               static const CRGB flash_colors[] = {CRGB::LightCyan, CRGB::LightBlue, CRGB::GhostWhite, CRGB::LightSeaGreen};
+               std::fill_n(e.begin(), e.size(), flash_colors[r & 3]);
             }
          }
          
@@ -47,11 +50,14 @@ void Lightning::run()
                h = c1.phi / (Vertex::NUM_PHI_STEPS/NUM_H);
             }
             
-            if (m_lit_map[h][v].b > 100 && r < getForkingProbability())
+            //forking probability reduces the further down we go
+            uint8_t forking_probability = getForkingProbability()/(NUM_V - v + 1);
+            
+            if (m_lit_map[h][v].b > 100 && r < forking_probability)
             {
                CRGB flash_col = m_lit_map[h][v];
                flash_col.addToRGB(10);
-               fill_solid(&*e.begin(), e.size(), flash_col);
+               std::fill_n(e.begin(), e.size(), flash_col);
             }
          }
          else if (c0.theta < 2 && c1.theta < 2)
@@ -63,7 +69,7 @@ void Lightning::run()
             unsigned h1 = c0.phi / (Vertex::NUM_PHI_STEPS/NUM_H);
             if (m_lit_map[h0][v].b > 10 or m_lit_map[h1][v].b > 10)
             {
-               fill_solid(&*e.begin(), e.size(), CRGB::Orange);
+               std::fill_n(e.begin(), e.size(), CRGB::Orange);
             }
          }
          

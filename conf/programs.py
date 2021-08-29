@@ -158,6 +158,15 @@ programs = [
     {
         'program':'Lightning',
         'base': 'Notes',
+        'keyzones' : [
+            {
+                'name': 'Lightning Bolts',
+                'from': 48,
+                'to': 57,
+                'channel': 0,
+                'transpose': 0
+            },
+        ],
         'controls': [
             {
                 'name': 'Lightning Probability',
