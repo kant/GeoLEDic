@@ -49,8 +49,17 @@ void Noise::run()
    calcNoise();
    auto* pal = palette(getPalette());
 
-   for (Triangle& t: m_dome)
+   for (auto t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
+      Triangle& t(m_dome[t_ix]);
+      // if the keyboard is used to light up triangles, only show the
+      //  ones actually set by the keyboard
+      if (isKeyActivated() and getTriangleValue(t_ix) == 0)
+      {
+         std::fill_n(t.begin(), t.size(), CRGB::Black);
+         continue;
+      }
+      
       for (unsigned k = 0; k < 3; k++)
       {
          const Edge& e(t.edge(k));

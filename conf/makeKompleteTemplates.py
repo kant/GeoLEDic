@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import programs
+import copy
 
 INDENT_STEP = "    "
 
@@ -28,6 +29,8 @@ def writeKeyZone(indent, keyzone):
 
 
 def writeKeyZones(indent, keyzones):
+    # copy as we modify elements
+    keyzones = copy.deepcopy(keyzones)
     # disable keys in the gaps between zones
     i = 0
     last_to = 0

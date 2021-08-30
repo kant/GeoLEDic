@@ -1,3 +1,43 @@
+keyzones = {
+   'ShapesFromNotes': [
+      {
+          'name': 'Pentagon 0',
+          'from': 12,
+          'to': 17,
+          'channel': 1,
+          'transpose': 24
+      },
+      {
+          'name': 'Pentagon 1',
+          'from': 24,
+          'to': 33,
+          'channel': 1,
+          'transpose': 24
+      },
+      {
+          'name': 'Pentagon 2',
+          'from': 36,
+          'to': 42,
+          'channel': 1,
+          'transpose': 24
+      },
+      {
+          'name': 'Pentagon 3',
+          'from': 48,
+          'to': 57,
+          'channel': 1,
+          'transpose': 24
+      },
+      {
+          'name': 'blobs',
+          'from': 60,
+          'to': 111,
+          'channel': 2,
+          'transpose': -24
+      }
+   ],
+}
+
 programs = [
     {
         'program':'DefaultRainbow',
@@ -22,44 +62,7 @@ programs = [
         'program':'SparklesAndTriangles',
         'name':'Sparkles and Triangles',
         'base': 'ShapesFromNotes',
-        'keyzones' : [
-            {
-                'name': 'Pentagon 0',
-                'from': 12,
-                'to': 17,
-                'channel': 1,
-                'transpose': 24
-            },
-            {
-                'name': 'Pentagon 1',
-                'from': 24,
-                'to': 33,
-                'channel': 1,
-                'transpose': 24
-            },
-            {
-                'name': 'Pentagon 2',
-                'from': 36,
-                'to': 42,
-                'channel': 1,
-                'transpose': 24
-            },
-            {
-                'name': 'Pentagon 3',
-                'from': 48,
-                'to': 57,
-                'channel': 1,
-                'transpose': 24
-            },
-            {
-                'name': 'blobs',
-                'from': 60,
-                'to': 111,
-                'channel': 2,
-                'transpose': -24
-            }
-
-        ],
+        'keyzones' : keyzones['ShapesFromNotes'],
         'controls': [
             {
                 'name': 'Red Worm',
@@ -180,7 +183,8 @@ programs = [
     },
     {
       'program':'Noise',
-      'base': 'Notes',
+      'base': 'ShapesFromNotes',
+      'keyzones': keyzones['ShapesFromNotes'],
       'controls': [
          {
             'name': 'Speed X',
@@ -220,7 +224,12 @@ programs = [
                  'Rainbow',
                  'Party'
              ]
-         }
+         },
+         {
+             'name': 'Key Activated',
+             'number': 23,
+             'type': 'toggle'
+         },
       ]
     }
 ]
