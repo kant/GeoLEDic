@@ -2,6 +2,7 @@
 #include "Palettes.hpp"
 #include "colorutils.h"
 #include <math.h>
+#include <algorithm>
 
 namespace {
 
@@ -41,7 +42,16 @@ Noise::Noise(const DomeWrapper& dome):
 
 void Noise::calcNoise()
 {
-   fill_raw_2dnoise8(&m_noise[0][0], NUM_H, NUM_V, 0, m_x, getScaleX()*2, m_y, getScaleY()*2, m_t);
+   unsigned sx = unsigned(getScaleX()) << 9;
+   unsigned sy = unsigned(getScaleY()) << 9;
+   for (unsigned h = 0; h < NUM_H; h++)
+   {
+      for (unsigned v = 0; v < NUM_V; v++)
+      {
+         int noise = 128 + inoise16_raw(m_x + h*sx, m_y + v*sy, m_t)/80;
+         m_noise[h][v] = std::max(std::min(noise, 255), 0);
+      }
+   }
 }
 
 void Noise::run()
@@ -69,7 +79,7 @@ void Noise::run()
          int led_ix = 0;
          for (CRGB& led: e)
          {
-            float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/NUM_V);
+            float v = float(interpolateTheta(c0, c1, led_ix, e.size())) / (Vertex::NUM_THETA_STEPS/(NUM_V-1));
             float h = float(interpolatePhi(c0, c1, led_ix, e.size())) / (Vertex::NUM_PHI_STEPS/(NUM_H-1));
             h += m_h_offset;
             if (h  >= NUM_H ) h = h - NUM_H;
@@ -94,9 +104,9 @@ void Noise::run()
          }
       }
    }
-   m_x += getSpeedX();
-   m_y += getSpeedY();
-   m_t += getSpeedT();
+   m_x += unsigned(getSpeedX()) << 8;
+   m_y += unsigned(getSpeedY()) << 8;
+   m_t += unsigned(getSpeedT()) << 8;
    m_h_offset += float(getRotationSpeed())/100.f;
    if (m_h_offset >= NUM_H) m_h_offset = 0;
 }
