@@ -15,6 +15,8 @@ namespace {
        return &HeatColors_p;
     case Noise::Palette_Ocean:
        return &OceanFromBlack_p;
+    case Noise::Palette_OceanStripes:
+       return &OceanStripes_p;
     case Noise::Palette_Cloud:
        return &Clouds_p;
     case Noise::Palette_Forest:
@@ -23,8 +25,12 @@ namespace {
        return &LavaColors_p;
     case Noise::Palette_Rainbow:
        return &RainbowColors_p;
+    case Noise::Palette_RainbowStripes:
+       return &RainbowStripeColors_p;
     case Noise::Palette_Party:
        return &PartyColors_p;
+     case Noise::Palette_PartyStripes:
+       return &PartyStripes_p;
     }
  }
 

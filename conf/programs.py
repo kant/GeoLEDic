@@ -232,12 +232,15 @@ programs = [
              'number': 25,
              'enums': [
                  'Fire',
+                 'Rainbow',
+                 'RainbowStripes',
+                 'Party',
+                 'PartyStripes',
                  'Ocean',
+                 'OceanStripes',
                  'Cloud',
                  'Forest',
                  'Lava',
-                 'Rainbow',
-                 'Party'
              ]
          },
 
