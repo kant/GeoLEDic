@@ -41,6 +41,8 @@ const std::string TRIANGLE_VERTEX_SHADER =
 #include "lit_triangle.vertexshader"
 ;
 
+const unsigned MAX_LEDS_PER_TRIANGLE = 400;
+
 const std::string TRIANGLE_FRAGMENT_SHADER =
 #include "lit_triangle.fragmentshader"
 ;
@@ -148,9 +150,23 @@ Gfx::Impl::Impl(std::vector<LED>& leds, std::vector<Triangle>& triangles, const 
    glEnable(GL_DEPTH_TEST);
    // Accept fragment if it closer to the camera than the former one
    glDepthFunc(GL_LESS);
-      
-   m_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), TRIANGLE_FRAGMENT_SHADER.c_str());
-
+   
+   for (unsigned k = 0; k < m_triangles.size(); k++)
+   {
+      Triangle& t(m_triangles[k]);
+      if (t.vertices[0].num_leds > MAX_LEDS_PER_TRIANGLE)
+      {
+         std::cerr << "Triangle " << k << " has " << t.vertices[0].num_leds << " LEDs but fragment shader only supports " << MAX_LEDS_PER_TRIANGLE << std::endl;
+         t.vertices[0].num_leds = MAX_LEDS_PER_TRIANGLE;
+      }
+   }
+   
+   const unsigned fragment_shader_maxchars = TRIANGLE_FRAGMENT_SHADER.size() + 10;
+   char* fragment_shader = new char[fragment_shader_maxchars];
+   snprintf(fragment_shader, fragment_shader_maxchars-1, TRIANGLE_FRAGMENT_SHADER.c_str(), MAX_LEDS_PER_TRIANGLE);
+   m_program_id = LoadShaders(TRIANGLE_VERTEX_SHADER.c_str(), fragment_shader);
+   delete [] fragment_shader;
+   
    // first, configure the cube's VAO (and VBO)
    glGenVertexArrays(1, &m_vertex_array_id);
    glGenBuffers(1, &m_vertex_buffer);

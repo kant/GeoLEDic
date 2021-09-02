@@ -3,7 +3,7 @@ out vec4 FragColor;
 
 in vec3 FragPos;
 
-#define NUM_LEDS 500
+#define NUM_LEDS %u
 
 uniform vec3 led_pos[NUM_LEDS];
 uniform vec3 led_color[NUM_LEDS];
