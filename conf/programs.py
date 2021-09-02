@@ -211,10 +211,25 @@ programs = [
             'number': 21,
          },
          {
+             'name': 'Key Activated',
+             'number': 22,
+             'type': 'toggle'
+         },
+         {
+             'name': 'X/Y Swapped',
+             'number': 23,
+             'type': 'toggle'
+         },
+         {
+             'name': 'No Interpolation',
+             'number': 24,
+             'type': 'toggle'
+         },
+         {
              'name': 'Palette',
              'short_name': 'Pal',
              'type': 'enum',
-             'number': 22,
+             'number': 25,
              'enums': [
                  'Fire',
                  'Ocean',
@@ -225,11 +240,7 @@ programs = [
                  'Party'
              ]
          },
-         {
-             'name': 'Key Activated',
-             'number': 23,
-             'type': 'toggle'
-         },
+
       ]
     }
 ]

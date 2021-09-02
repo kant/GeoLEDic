@@ -14,7 +14,7 @@ public:
 private:
    enum {
       NUM_V = 8,
-      NUM_H = 20
+      NUM_H = 16
    };
    
    void calcNoise();

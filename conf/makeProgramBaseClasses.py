@@ -11,7 +11,7 @@ def getProgram(classname):
 def getPrototypes(program, classname):
     prototypes = []
     for cc in program['controls']:
-        name = cc['name'].title().replace(' ','')
+        name = ''.join(e for e in cc['name'].title() if e.isalnum())
         if cc['type'] == 'toggle':
             cc['prototype'] = "bool %s::is%s() const" % (classname, name)
             prototypes.append("bool is%s() const;" % name)

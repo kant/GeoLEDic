@@ -48,8 +48,16 @@ void Noise::calcNoise()
    {
       for (unsigned v = 0; v < NUM_V; v++)
       {
-         int noise = 128 + inoise16_raw(m_x + h*sx, m_y + v*sy, m_t)/80;
-         m_noise[h][v] = std::max(std::min(noise, 255), 0);
+         int noise = 128 + inoise16_raw(m_x + h*sx, m_y + v*sy, m_t)/100;
+         noise = std::max(std::min(noise, 255), 0);
+         if (isXYSwapped())
+         {
+            (&m_noise[0][0])[h + v * NUM_H] = noise;
+         }
+         else
+         {
+            m_noise[h][v] = noise;
+         }
       }
    }
 }
@@ -84,20 +92,28 @@ void Noise::run()
             h += m_h_offset;
             if (h  >= NUM_H ) h = h - NUM_H;
 
-            int v0 = floor(v);
-            int v1 = std::min(v0+1, NUM_V-1);
-            float rv0 =  v1 - v;
-            float rv1 = 1 - rv0;
-            int h0 = floor(h);
-            int h1 = h0 == NUM_H-1 ? 0 : h0+1;
-            float rh0 = (h0+1) - h;
-            float rh1 = 1 - rh0;
+            uint8_t index = 0;
+            if (isNoInterpolation())
+            {
+               index = m_noise[int(h)][int(v)];
+            }
+            else
+            {
+               int v0 = int(v);
+               int v1 = std::min(v0+1, NUM_V-1);
+               float rv0 =  v1 - v;
+               float rv1 = 1 - rv0;
+               int h0 = int(h);
+               int h1 = h0 == NUM_H-1 ? 0 : h0+1;
+               float rh0 = (h0+1) - h;
+               float rh1 = 1 - rh0;
+               
+               index = m_noise[h0][v0] * rh0 * rv0 +
+                       m_noise[h0][v1] * rh0 * rv1 +
+                       m_noise[h1][v0] * rh1 * rv0 +
+                       m_noise[h1][v1] * rh1 * rv1;
+            }
             
-            uint8_t index = m_noise[h0][v0] * rh0 * rv0 +
-                            m_noise[h0][v1] * rh0 * rv1 +
-                            m_noise[h1][v0] * rh1 * rv0 +
-                            m_noise[h1][v1] * rh1 * rv1;
-
             led = ColorFromPalette(*pal, index, getBrightness());
             
             led_ix++;
