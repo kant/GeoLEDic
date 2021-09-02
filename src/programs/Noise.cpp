@@ -73,7 +73,7 @@ void Noise::run()
    calcNoise();
    auto* pal = palette(getPalette());
 
-   for (auto t_ix = 0; t_ix < m_dome.size(); t_ix++)
+   for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
       // if the keyboard is used to light up triangles, only show the
