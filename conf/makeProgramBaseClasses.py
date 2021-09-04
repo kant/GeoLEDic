@@ -41,6 +41,7 @@ def getEnums(program):
         
 def getImplementations(program):
     implementations = []
+    defaults = ""
     for cc in program['controls']:
         getter = "getControlValue(%d)" % cc['number']
         impl = cc['prototype'] + "\n{\n"
@@ -55,7 +56,11 @@ def getImplementations(program):
             impl = impl + "        return %s_%s;\n    }\n}" % (cc['enum_type'], cc['enums'][0])
         else:
             impl = impl + "    return %s;\n}" % getter
+            if 'default' in cc:
+                defaults = defaults + "    setControlValue(%u, %u); // default for %s\n" % (cc['number'],cc['default'],cc['name'])
         implementations.append(impl)
+    # add constructor with defaults at beginning
+    implementations.insert(0, "%s::%s()\n{\n%s}" % (program['program'], program['program'], defaults))
     return implementations
 
 command = sys.argv[2] if len(sys.argv) > 2 else ''
@@ -94,6 +99,7 @@ namespace generated {
 class $classname: public $base
 {
 public:
+    $classname();
     virtual ~$classname(){}
 
     $enums

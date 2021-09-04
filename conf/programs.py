@@ -47,14 +47,17 @@ programs = [
             {
                 'name': 'Speed',
                 'number': 16,
+                'default': 1
             },
             {
                 'name': 'Stride',
                 'number': 17,
+                'default': 1
             },
             {
                 'name': 'Sparkle Probability',
                 'number': 19,
+                'default': 50
             }
         ]
     },
@@ -97,11 +100,13 @@ programs = [
         'controls': [
             {
                 'name': 'Cooling',
-                'number': 16
+                'number': 16,
+                'default': 50
             },
             {
                 'name': 'Sparking',
-                'number': 17
+                'number': 17,
+                'default': 100
             },
             {
                'name': 'Rotation Speed',
@@ -143,10 +148,12 @@ programs = [
             {
                 'name': 'Speed Vertical',
                 'number': 16,
+                'default': 2
             },
             {
                 'name': 'Stride Vertical',
                 'number': 17,
+                'default': 10
             },
             {
                 'name': 'Speed Horizontal',
@@ -174,10 +181,12 @@ programs = [
             {
                 'name': 'Lightning Probability',
                 'number': 16,
+                'default': 2
             },
             {
                 'name': 'Forking Probability',
                 'number': 17,
+                'default': 80
             }
         ]
     },
@@ -193,6 +202,7 @@ programs = [
          {
             'name': 'Scale X',
             'number': 17,
+            'default': 50
          },
          {
             'name': 'Speed Y',
@@ -201,10 +211,12 @@ programs = [
          {
             'name': 'Scale Y',
             'number': 19,
+            'default': 50
          },
          {
             'name': 'Speed T',
             'number': 20,
+            'default': 3
          },
          {
             'name': 'Rotation Speed',
@@ -231,13 +243,13 @@ programs = [
              'type': 'enum',
              'number': 25,
              'enums': [
-                 'Fire',
-                 'Rainbow',
-                 'RainbowStripes',
                  'Party',
                  'PartyStripes',
+                 'Rainbow',
+                 'RainbowStripes',
                  'Ocean',
                  'OceanStripes',
+                 'Fire',
                  'Cloud',
                  'Forest',
                  'Lava',

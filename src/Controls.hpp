@@ -14,6 +14,7 @@ protected:
    uint8_t getBrightness() const;
 
    uint8_t getControlValue(uint8_t cc_num) const;
+   void setControlValue(uint8_t cc_num, uint8_t value);
 
 private:
    uint8_t m_control_values[128];
