@@ -41,7 +41,7 @@ const std::string TRIANGLE_VERTEX_SHADER =
 #include "lit_triangle.vertexshader"
 ;
 
-const unsigned MAX_LEDS_PER_TRIANGLE = 400;
+const int MAX_LEDS_PER_TRIANGLE = 400;
 
 const std::string TRIANGLE_FRAGMENT_SHADER =
 #include "lit_triangle.fragmentshader"
