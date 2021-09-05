@@ -1,5 +1,6 @@
 #include "Fire.hpp"
 #include "Palettes.hpp"
+#include "ProgramHelpers.hpp"
 #include "colorutils.h"
 #include <math.h>
 
@@ -103,25 +104,12 @@ void Fire::run()
             h += m_h_offset;
             if (h  >= NUM_H ) h = h - NUM_H;
 
-
             if (isDownwards())
             {
                v = NUM_V - v;
             }
             
-            int v0 = floor(v);
-            int v1 = std::min(v0+1, NUM_V-1);
-            float rv0 =  v1 - v;
-            float rv1 = 1 - rv0;
-            int h0 = floor(h);
-            int h1 = h0 == NUM_H-1 ? 0 : h0+1;
-            float rh0 = (h0+1) - h;
-            float rh1 = 1 - rh0;
-            
-            uint8_t index = m_heat[h0][v0] * rh0 * rv0 +
-                            m_heat[h0][v1] * rh0 * rv1 +
-                            m_heat[h1][v0] * rh1 * rv0 +
-                            m_heat[h1][v1] * rh1 * rv1;
+            uint8_t index = interpolate(m_heat, h, v);
 
             if (isReversePalette())
             {

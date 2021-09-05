@@ -1,6 +1,7 @@
 #include "Noise.hpp"
 #include "Palettes.hpp"
 #include "colorutils.h"
+#include "ProgramHelpers.hpp"
 #include <math.h>
 #include <algorithm>
 
@@ -105,19 +106,7 @@ void Noise::run()
             }
             else
             {
-               int v0 = int(v);
-               int v1 = std::min(v0+1, NUM_V-1);
-               float rv0 =  v1 - v;
-               float rv1 = 1 - rv0;
-               int h0 = int(h);
-               int h1 = h0 == NUM_H-1 ? 0 : h0+1;
-               float rh0 = (h0+1) - h;
-               float rh1 = 1 - rh0;
-               
-               index = m_noise[h0][v0] * rh0 * rv0 +
-                       m_noise[h0][v1] * rh0 * rv1 +
-                       m_noise[h1][v0] * rh1 * rv0 +
-                       m_noise[h1][v1] * rh1 * rv1;
+               index = interpolate(m_noise, h, v);
             }
             
             led = ColorFromPalette(*pal, index, getBrightness());
