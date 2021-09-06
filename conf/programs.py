@@ -52,7 +52,8 @@ programs = [
             {
                 'name': 'Stride',
                 'number': 17,
-                'default': 1
+                'default': 1,
+                'description': 'Larger stride means faster cycling through the color wheel, i.e. more repetitions of the rainbow'
             },
             {
                 'name': 'Sparkle Probability',
@@ -70,14 +71,17 @@ programs = [
             {
                 'name': 'Red Worm',
                 'number': 16,
+                'description': 'Brightness of the red worm chasing around the triangles'
             },
             {
                 'name': 'Green Worm',
                 'number': 17,
+                'description': 'Brightness of the green worm chasing around the triangles'
             },
             {
                 'name': 'Blue Worm',
                 'number': 18,
+                'description': 'Brightness of the blue worm chasing around the triangles'
             },
             {
                 'name': 'Sparkle Probability',
@@ -101,26 +105,31 @@ programs = [
             {
                 'name': 'Cooling',
                 'number': 16,
-                'default': 50
+                'default': 50,
+                'description': 'Rate at which the flame cools down. Higher values mean faster cooling, or decay'
             },
             {
                 'name': 'Sparking',
                 'number': 17,
-                'default': 100
+                'default': 100,
+                'description': 'Rate at which new flames are sparked. Higher values means more flames'
             },
             {
                'name': 'Rotation Speed',
-               'number': 18
+               'number': 18,
+               'description': 'Speed at which the entire program turns'
             },
             {
                 'name': 'Downwards',
                 'number': 19,
-                'type': 'toggle'
+                'type': 'toggle',
+                'description': 'If set, flames start at the top instead of the bottom'
             },
             {
                 'name': 'Reverse Palette',
                 'number': 20,
-                'type': 'toggle'
+                'type': 'toggle',
+                'description': 'If set, the color palette is reversed'
             },
             {
                 'name': 'Palette',
@@ -153,7 +162,8 @@ programs = [
             {
                 'name': 'Stride Vertical',
                 'number': 17,
-                'default': 10
+                'default': 10,
+                'description': 'Larger stride means faster cycling through the color wheel, i.e. more vertical repetitions of the rainbow'
             },
             {
                 'name': 'Speed Horizontal',
@@ -162,6 +172,7 @@ programs = [
             {
                 'name': 'Stride Horizontal',
                 'number': 19,
+                'description': 'Larger stride means faster cycling through the color wheel, i.e. more horizontal repetitions of the rainbow'
             }
         ]
     },
@@ -181,12 +192,13 @@ programs = [
             {
                 'name': 'Lightning Probability',
                 'number': 16,
-                'default': 2
+                'default': 2,
             },
             {
                 'name': 'Forking Probability',
                 'number': 17,
-                'default': 80
+                'default': 80,
+                'description': 'If higher, lightning bolt is more likely to fork and get to the bottom of the dome'
             }
         ]
     },
@@ -198,44 +210,53 @@ programs = [
          {
             'name': 'Speed X',
             'number': 16,
+            'description': 'Speed of the movement along the X axis of the noise field'
          },
          {
             'name': 'Scale X',
             'number': 17,
-            'default': 50
+            'default': 50,
+            'description': 'Size of the steps along the X axis of the noise field'
          },
          {
             'name': 'Speed Y',
             'number': 18,
+            'description': 'Speed of the movement along the Y axis of the noise field'
          },
          {
             'name': 'Scale Y',
             'number': 19,
-            'default': 50
+            'default': 50,
+            'description': 'Size of the steps along the Y axis of the noise field'
          },
          {
             'name': 'Speed T',
             'number': 20,
-            'default': 3
+            'default': 3,
+            'description': 'Speed of the movement along the time axis of the noise field'
          },
          {
             'name': 'Rotation Speed',
             'number': 21,
+            'description': 'Speed at which the entire program rotates'
          },
          {
              'name': 'Key Activated',
              'number': 22,
-             'type': 'toggle'
+             'type': 'toggle',
+             'description': 'If set, the program is keyboard controlled in that only the triangles corresponding to the pressed keys light up'
          },
          {
              'name': 'X/Y Swapped',
              'number': 23,
-             'type': 'toggle'
+             'type': 'toggle',
+             'description': 'X and Y axis of the noise field mapping are swapped. Hard to explain, just try it! Mandala-like patterns can be achieved with this'
          },
          {
              'name': 'No Interpolation',
              'number': 24,
-             'type': 'toggle'
+             'type': 'toggle',
+             'description': 'Turn off the interpolation, or smoothing. Gives a more `patchy` appearance'
          },
          {
              'name': 'Palette',
@@ -265,33 +286,40 @@ programs = [
           {
              'name': 'Speed',
              'number': 16,
-             'default': 8
+             'default': 8,
+             'description': 'Speed at which the blobs move around'
           },
           {
              'name': 'Size',
              'number': 17,
-             'default': 30
+             'default': 30,
+             'description': 'Size of the blobs'
           },
           {
              'name': 'Use Hues',
              'number': 18,
-             'type': 'toggle'
+             'type': 'toggle',
+             'description': 'Instead of the preset palette, use black stripes alternating with stripes of a hue as defined by the hue controls'
           },
           {
              'name': 'Hue 0',
              'number': 19,
+             'description': 'Hue of the first color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 1',
              'number': 20,
+             'description': 'Hue of the second color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 2',
              'number': 21,
+             'description': 'Hue of the third color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 3',
              'number': 22,
+             'description': 'Hue of the fourth color. Only used if `Use Hues` is set'
           }
        ]
     }

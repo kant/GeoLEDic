@@ -3,10 +3,13 @@
 #include <vector>
 #include "Serial.hpp"
 #include <iostream>
+#include "ProgramFactory.hpp"
+
+extern ProgramFactory factory;
+extern Program* program;
 
 int main()
 {
-   
    std::vector<gfx::LED> leds;
    std::vector<gfx::Triangle> triangles;
 
@@ -18,6 +21,16 @@ int main()
        {-7.8, 1.2,  10.2,  45,  -35,    6},  // slightly left
      };
 
+   class ProgramMenu: public gfx::Config::MenuPresenter
+   {
+   public:
+      virtual void drawMenu()
+      {
+         factory.drawMenu(&program);
+         if (program) program->drawMenu();
+      }
+   } program_menu;
+   
    try {
       int i = 0;
       for (const Triangle& t: dome)
@@ -37,7 +50,8 @@ int main()
                   .attenuationLinear(130.0)
                   .attenuationSquare(900.0)
                   .keyboardHandler(&Serial)
-                  .midiPorts(getMidiPorts()));
+                  .midiPorts(getMidiPorts())
+                  .topMenuPresenter(&program_menu));
       
       setupGeoLEDic();
       

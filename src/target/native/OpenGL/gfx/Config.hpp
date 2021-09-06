@@ -42,6 +42,12 @@ public:
       virtual void selectPort(PortId selected_port) = 0;
    };
 
+   class MenuPresenter
+   {
+   public:
+      virtual ~MenuPresenter(){};
+      virtual void drawMenu() = 0;
+   };
    
    Config():
       m_width(1024),
@@ -54,7 +60,8 @@ public:
       m_strafing_speed(20),
       m_views(1, View(0, 8, 5)),
       m_keyboard_handler(&m_null_handler),
-      m_midi_ports(nullptr)
+      m_midi_ports(nullptr),
+      m_top_menu_presenter()
    {
    }
    
@@ -99,6 +106,13 @@ public:
    }
    MidiPorts* midiPorts() const { return m_midi_ports; }
    
+   Config& topMenuPresenter(MenuPresenter* presenter)
+   {
+      if (presenter) m_top_menu_presenter = presenter;
+      return *this;
+   }
+   MenuPresenter* topMenuPresenter() const { return m_top_menu_presenter; }
+   
 private:
    
    class NullKeyboardHandler: public KeyboardHandler
@@ -118,6 +132,7 @@ private:
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
    MidiPorts* m_midi_ports;
+   MenuPresenter* m_top_menu_presenter;
 };
 
 }

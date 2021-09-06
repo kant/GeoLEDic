@@ -12,12 +12,15 @@ public:
    ~ProgramFactory();
    Program* changeProgram(uint8_t program);
 
+   void drawMenu(Program** program);
+   
 private:
    
    DomeWrapper m_dome;
    Strips m_strips;
 
    Program* m_current_program;
+   uint8_t  m_program_number;
 };
 
 #endif // GEOLEDIC_PROGRAM_FACTORY

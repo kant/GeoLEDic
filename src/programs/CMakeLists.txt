@@ -18,11 +18,13 @@ add_custom_command(OUTPUT ${GENERATED_FACTORY}
 
 source_group(TREE "${CMAKE_BINARY_DIR}" FILES ${GENERATED_BASE_CLASS_SOURCES})
 
+include_directories(${CMAKE_SOURCE_DIR})
 add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/SparklesAndTriangles.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/DefaultRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Diagnostic.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Fire.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/ImGui.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/MovingRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Lightning.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Noise.cpp

@@ -8,6 +8,8 @@
 #include "backends/imgui_impl_opengl3.h"
 #include <iostream>
 
+extern void drawProgram();
+
 namespace gfx {
 
 Menu::Menu(Config& config, GLFWwindow* window):
@@ -36,8 +38,13 @@ void Menu::draw()
    ImGui_ImplOpenGL3_NewFrame();
    ImGui_ImplGlfw_NewFrame();
    ImGui::NewFrame();
-   
+      
    ImGui::Begin("Settings");
+   
+   if (m_config.topMenuPresenter())
+   {
+      m_config.topMenuPresenter()->drawMenu();
+   }
    
    if (m_config.midiPorts() and ImGui::CollapsingHeader("MIDI Source"))
    {
@@ -54,7 +61,7 @@ void Menu::draw()
    }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();
-
+   
    ImGui::Render();
    int display_w, display_h;
    glfwGetFramebufferSize(m_window, &display_w, &display_h);
