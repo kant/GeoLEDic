@@ -65,6 +65,11 @@ public:
       return m_leds_per_strip;
    }
    
+   void clear()
+   {
+      std::fill_n(m_leds, m_num_strips*m_leds_per_strip, CRGB::Black);
+   }
+   
 private:
    CRGB* m_leds;
    const unsigned m_num_strips;

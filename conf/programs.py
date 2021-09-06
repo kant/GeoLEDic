@@ -254,9 +254,23 @@ programs = [
                  'Forest',
                  'Lava',
              ]
-         },
-
+         }
       ]
+    },
+    {
+       'program': 'OrganicLine',
+       'name': 'Organic Line',
+       'base': 'Notes',
+       'controls': [
+          {
+             'name': 'Speed',
+             'number': 16,
+          },
+          {
+             'name': 'Size',
+             'number': 17,
+          }
+       ]
     }
 ]
 

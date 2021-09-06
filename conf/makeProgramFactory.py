@@ -25,6 +25,8 @@ ProgramFactory::ProgramFactory(const DomeWrapper& dome, const Strips& strips):
 Program* ProgramFactory::changeProgram(uint8_t program)
 {
    delete m_current_program;
+   // clear all LEDs
+   m_strips.clear();
    switch (program)
    {
 $cases
