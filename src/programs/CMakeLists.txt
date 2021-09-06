@@ -18,7 +18,7 @@ add_custom_command(OUTPUT ${GENERATED_FACTORY}
 
 source_group(TREE "${CMAKE_BINARY_DIR}" FILES ${GENERATED_BASE_CLASS_SOURCES})
 
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/)
 add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/SparklesAndTriangles.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/DefaultRainbow.cpp
