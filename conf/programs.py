@@ -265,10 +265,33 @@ programs = [
           {
              'name': 'Speed',
              'number': 16,
+             'default': 8
           },
           {
              'name': 'Size',
              'number': 17,
+             'default': 30
+          },
+          {
+             'name': 'Use Hues',
+             'number': 18,
+             'type': 'toggle'
+          },
+          {
+             'name': 'Hue 0',
+             'number': 19,
+          },
+          {
+             'name': 'Hue 1',
+             'number': 20,
+          },
+          {
+             'name': 'Hue 2',
+             'number': 21,
+          },
+          {
+             'name': 'Hue 3',
+             'number': 22,
           }
        ]
     }

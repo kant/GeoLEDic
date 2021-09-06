@@ -8,8 +8,36 @@ OrganicLine::OrganicLine(const DomeWrapper& dome):
 {
 }   
 
+uint32_t toValue(const CRGB& c)
+{
+   return (uint32_t(c.r) << 16) + (uint32_t(c.g) << 8) + c.b;
+}
+
 void OrganicLine::run()
 {
+   CRGBPalette16 hue_palette =
+   {
+      CRGB::Black,
+      CHSV(getHue0()*2, 255, 255),
+      CRGB::Black,
+      CRGB::Black,
+
+      CHSV(getHue1()*2, 255, 255),
+      CRGB::Black,
+      CRGB::Black,
+      CHSV(getHue2()*2, 255, 255),
+
+      CRGB::Black,
+      CRGB::Black,
+      CHSV(getHue3()*2, 255, 255),
+      CRGB::Black,
+
+      CHSV(getHue0()*2, 255, 255),
+      CHSV(getHue1()*2, 255, 255),
+      CHSV(getHue2()*2, 255, 255),
+      CHSV(getHue3()*2, 255, 255),
+   };
+   
    const unsigned MIN_PHI = 178;
    const unsigned MAX_PHI = 846;
    uint8_t line_noise[MAX_PHI - MIN_PHI + 1];
@@ -31,7 +59,14 @@ void OrganicLine::run()
       for (CRGB& led: e)
       {
          unsigned h = interpolatePhi(c0, c1, led_ix, e.size()) - MIN_PHI;
-         led = ColorFromPalette(PartyStripes_p, line_noise[h], getBrightness());
+         if (isUseHues())
+         {
+            led = ColorFromPalette(hue_palette, line_noise[h], getBrightness());
+         }
+         else
+         {
+            led = ColorFromPalette(PartyStripes_p, line_noise[h], getBrightness());
+         }
          led_ix++;
       }
    }
