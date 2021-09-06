@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #endif
 #include <GLFW/glfw3.h>
+#include "imgui.h"
 
 namespace gfx {
 
@@ -286,6 +287,8 @@ void Window::doScrollCallback(GLFWwindow* window, double xoffset, double yoffset
 
 void Window::scrollCallback(float xoffset, float yoffset)
 {
+   // don't scroll if we're in the menu
+   if (ImGui::GetIO().WantCaptureMouse) return;
    m_position += getDirection() * yoffset * m_scroll_speed;
 }
 
