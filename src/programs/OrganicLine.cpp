@@ -8,11 +8,6 @@ OrganicLine::OrganicLine(const DomeWrapper& dome):
 {
 }   
 
-uint32_t toValue(const CRGB& c)
-{
-   return (uint32_t(c.r) << 16) + (uint32_t(c.g) << 8) + c.b;
-}
-
 void OrganicLine::run()
 {
    CRGBPalette16 hue_palette =
