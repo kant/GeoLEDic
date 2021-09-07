@@ -22,7 +22,7 @@ void Controls::controlChange(uint8_t cc_num, uint8_t value)
    m_control_values[cc_num] = value;
 }
 
-uint8_t Controls::getBrightness() const
+uint8_t& Controls::getBrightness() const
 {
    return brightness;
 }

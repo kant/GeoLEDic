@@ -163,6 +163,8 @@ void ${classname}::drawMenu()
 {
     const uint8_t cmin = 0;
     const uint8_t cmax = 127;
+    const uint8_t cmax_brightness = 255;
+    ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax_brightness);
 $menu
 }
 #endif
