@@ -322,6 +322,48 @@ programs = [
              'description': 'Hue of the fourth color. Only used if `Use Hues` is set'
           }
        ]
+    },
+    {
+       'program': 'Edgy',
+       'base': 'Notes',
+       'controls': [
+          {
+             'name': 'Edge Rate',
+             'description': 'Rate at which edges appear',
+             'number': 16,
+             'default': 3
+          },
+          {
+             'name': 'Decay',
+             'description': 'How fast edges fade to black',
+             'number': 17,
+             'default': 50
+          },
+          {
+             'name': 'Min Hue',
+             'number': 18,
+             'default': 0,
+             'description': 'Minimal hue value used for the randomised colors'
+          },
+          {
+             'name': 'Max Hue',
+             'number': 19,
+             'default': 127,
+             'description': 'Maximal hue value used for the randomised colors. There\'s no point in setting this below `Min Hue`'
+          },
+          {
+             'name': 'Min Saturation',
+             'number': 20,
+             'default': 0,
+             'description': 'Minimal saturation used for the randomised colors'
+          },
+          {
+             'name': 'Max Saturation',
+             'number': 21,
+             'default': 127,
+             'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
+          }
+       ]
     }
 ]
 

@@ -38,7 +38,8 @@ void Menu::draw()
    ImGui_ImplOpenGL3_NewFrame();
    ImGui_ImplGlfw_NewFrame();
    ImGui::NewFrame();
-      
+   ImGui::SetNextWindowBgAlpha(0.2f);
+
    ImGui::Begin("Settings");
    
    if (m_config.topMenuPresenter())
@@ -61,6 +62,8 @@ void Menu::draw()
    }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();
+   
+   ImGui::ShowDemoWindow();
    
    ImGui::Render();
    int display_w, display_h;

@@ -23,6 +23,7 @@ add_library(programs STATIC
             ${CMAKE_CURRENT_SOURCE_DIR}/SparklesAndTriangles.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/DefaultRainbow.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Diagnostic.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/Edgy.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/Fire.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/ImGui.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/MovingRainbow.cpp
