@@ -18,13 +18,13 @@ jobs:
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release  -DVERSION_EXTRA=-$GITHUB_RUN_NUMBER-$(git describe --always) -G Xcode
     - name: Build
       working-directory: ${{github.workspace}}/build
-      run: xcodebuild -project GeoLEDic.xcodeproj -target ALL_BUILD
+      run: xcodebuild -project GeoLEDic.xcodeproj -target ALL_BUILD CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: xcodebuild -project GeoLEDic.xcodeproj -target RUN_TESTS
     - name: Package
       working-directory: ${{github.workspace}}/build
-      run: xcodebuild -project GeoLEDic.xcodeproj -target package
+      run: xcodebuild -project GeoLEDic.xcodeproj -target package CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     - name: Archive production artifacts
       uses: actions/upload-artifact@v2
       with:
