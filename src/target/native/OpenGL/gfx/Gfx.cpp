@@ -252,8 +252,8 @@ bool Gfx::Impl::draw()
       glUniform3fv(m_uniforms.normal, 1, &normal[0]);
 
       // led color and position
-      glUniform3fv(m_uniforms.led_color, t.vertices[0].num_leds*sizeof(LedPosition), &m_led_color_data[t.vertices[0].start_led_ix].r);
-      glUniform3fv(m_uniforms.led_pos, t.vertices[0].num_leds*sizeof(LedColor), &m_led_position_data[t.vertices[0].start_led_ix].x);
+      glUniform3fv(m_uniforms.led_color, t.vertices[0].num_leds, &m_led_color_data[t.vertices[0].start_led_ix].r);
+      glUniform3fv(m_uniforms.led_pos, t.vertices[0].num_leds, &m_led_position_data[t.vertices[0].start_led_ix].x);
       glUniform1i(m_uniforms.num_leds, t.vertices[0].num_leds);
 
       // render the triangle
