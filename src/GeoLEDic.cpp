@@ -80,4 +80,9 @@ gfx::Config::MidiPorts* getMidiPorts()
 {
    return midi_source.getMidiPorts();
 }
+
+gfx::Config::MidiPorts* getMidiOutPorts()
+{
+   return midi_source.getMidiOutPorts();
+}
 #endif

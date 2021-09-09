@@ -9,6 +9,7 @@ void loopGeoLEDic();
 
 #ifdef WITH_GFX
 gfx::Config::MidiPorts* getMidiPorts();
+gfx::Config::MidiPorts* getMidiOutPorts();
 #endif
 
 #endif /* GeoLEDic_h */

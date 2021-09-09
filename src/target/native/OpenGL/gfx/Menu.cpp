@@ -47,18 +47,29 @@ void Menu::draw()
       m_config.topMenuPresenter()->drawMenu();
    }
    
-   if (m_config.midiPorts() and ImGui::CollapsingHeader("MIDI Source"))
+   ImGui::Separator();
+   
+   if (m_config.midiPorts() and ImGui::TreeNode("MIDI Source"))
    {
-      showMidiSources();
+      showMidiPorts(*m_config.midiPorts(), m_midi_sources);
+      ImGui::TreePop();
+   }
+   if (m_config.midiOutPorts() and ImGui::TreeNode("MIDI Destination"))
+   {
+      showMidiPorts(*m_config.midiOutPorts(), m_midi_destinations);
+      ImGui::TreePop();
    }
    
-   if (ImGui::CollapsingHeader("Shader"))
+   ImGui::Separator();
+   
+   if (ImGui::TreeNode("Shader"))
    {
       ImGui::SliderFloat("Cutoff Distance", &m_config.m_cutoff_distance, 0.0f, 10.0f);
       ImGui::Text("Attenuation:");
       ImGui::SliderFloat("Constant", &m_config.m_attenuation_constant, 0.0f, 10.0f);
       ImGui::SliderFloat("Linear", &m_config.m_attenuation_linear, 0.0f, 300.0f);
       ImGui::SliderFloat("Square", &m_config.m_attenuation_square, 0.0f, 1000.0f);
+      ImGui::TreePop();
    }
    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
    ImGui::End();
@@ -70,10 +81,10 @@ void Menu::draw()
    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
    
-void Menu::showMidiSources()
+void Menu::showMidiPorts(Config::MidiPorts& ports, MidiPortMap& port_map)
 {
    Config::MidiPorts::PortId initial_selected_port, selected_port = 0;
-   m_config.midiPorts()->updateAvailablePorts(m_midi_sources, selected_port);
+   ports.updateAvailablePorts(port_map, selected_port);
    initial_selected_port = selected_port;
    
    ImGui::Bullet();
@@ -82,7 +93,7 @@ void Menu::showMidiSources()
       selected_port = 0;
    }
    
-   for (auto& port: m_midi_sources)
+   for (auto& port: port_map)
    {
       ImGui::Bullet();
       if (ImGui::Selectable(port.second.c_str(), selected_port == port.first))
@@ -93,9 +104,11 @@ void Menu::showMidiSources()
    
    if (selected_port != initial_selected_port)
    {
-      m_config.midiPorts()->selectPort(selected_port);
+      ports.selectPort(selected_port);
    }
 }
+
+
 
 
 }

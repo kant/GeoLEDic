@@ -51,6 +51,7 @@ int main()
                   .attenuationSquare(900.0)
                   .keyboardHandler(&Serial)
                   .midiPorts(getMidiPorts())
+                  .midiOutPorts(getMidiOutPorts())
                   .topMenuPresenter(&program_menu));
       
       setupGeoLEDic();

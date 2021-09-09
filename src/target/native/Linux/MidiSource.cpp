@@ -188,3 +188,8 @@ gfx::Config::MidiPorts* MidiSource::getMidiPorts()
 {
    return nullptr; // not implemented
 }
+
+gfx::Config::MidiPorts* MidiSource::getMidiOutPorts()
+{
+   return nullptr; // not implemented
+}

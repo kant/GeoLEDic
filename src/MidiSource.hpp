@@ -5,6 +5,7 @@
 
 #define MIDI_CLIENT_NAME "GeoLEDic Client"
 #define MIDI_PORT_NAME "GeoLEDic In"
+#define MIDI_OUT_PORT_NAME "GeoLEDic Out"
 
 #ifdef WITH_GFX
 #include "gfx/Config.hpp"
@@ -20,6 +21,7 @@ public:
    
 #ifdef WITH_GFX
    gfx::Config::MidiPorts* getMidiPorts();
+   gfx::Config::MidiPorts* getMidiOutPorts();
 #endif
    
 private:

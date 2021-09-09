@@ -16,13 +16,15 @@ public:
    void draw();
    
 private:
-   
-   void showMidiSources();
-   
+   typedef std::map<Config::MidiPorts::PortId, std::string> MidiPortMap;
+
+   void showMidiPorts(Config::MidiPorts& ports, MidiPortMap& map);
+
    Config&      m_config;
    GLFWwindow*  m_window;
    
-   std::map<Config::MidiPorts::PortId, std::string> m_midi_sources;
+   MidiPortMap m_midi_sources;
+   MidiPortMap m_midi_destinations;
 };
 
 }
