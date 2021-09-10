@@ -52,7 +52,7 @@ public:
       m_strafing_speed(20),
       m_views(1, View(0, 8, 5)),
       m_keyboard_handler(&m_null_handler),
-      m_top_menu_presenter()
+      m_menu_presenter()
    {
    }
    
@@ -90,12 +90,12 @@ public:
    }
    KeyboardHandler& keyboardHandler() const { return *m_keyboard_handler; }
    
-   Config& topMenuPresenter(MenuPresenter* presenter)
+   Config& menu(MenuPresenter* presenter)
    {
-      if (presenter) m_top_menu_presenter = presenter;
+      if (presenter) m_menu_presenter = presenter;
       return *this;
    }
-   MenuPresenter* topMenuPresenter() const { return m_top_menu_presenter; }
+   MenuPresenter* menu() const { return m_menu_presenter; }
    
 private:
    
@@ -115,7 +115,7 @@ private:
    float m_strafing_speed;
    std::vector<View> m_views;
    KeyboardHandler* m_keyboard_handler;
-   MenuPresenter* m_top_menu_presenter;
+   MenuPresenter* m_menu_presenter;
 };
 
 }

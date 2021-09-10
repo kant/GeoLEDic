@@ -42,9 +42,9 @@ void Menu::draw()
 
    ImGui::Begin("Settings");
    
-   if (m_config.topMenuPresenter())
+   if (m_config.menu())
    {
-      m_config.topMenuPresenter()->drawMenu();
+      m_config.menu()->drawMenu();
    }
    
    ImGui::Separator();

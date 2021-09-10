@@ -40,7 +40,7 @@ int main()
                   .attenuationLinear(130.0)
                   .attenuationSquare(900.0)
                   .keyboardHandler(&Serial)
-                  .topMenuPresenter(&midi_menu));
+                  .menu(&midi_menu));
             
       do {
          loopGeoLEDic();
