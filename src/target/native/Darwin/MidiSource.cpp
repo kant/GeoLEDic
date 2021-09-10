@@ -45,7 +45,18 @@ public:
    virtual void disconnectEndpoint(MIDIEndpointRef endpoint) = 0;
    virtual bool connectEndpoint(MIDIEndpointRef endpoint) = 0;
 
-   
+   bool excludePort(const std::string& name)
+   {
+      for (std::string& exclude_name: m_port_blacklist)
+      {
+         if (name.substr(0, exclude_name.size()) == exclude_name)
+         {
+            return true;
+         }
+      }
+      return false;
+   }
+
    void refreshPorts()
    {
       pthread_mutex_lock(&m_endpoints_mutex);
@@ -85,6 +96,9 @@ public:
          {
             description << "Unknown device " << i;
          }
+
+         if (excludePort(description.str())) continue;
+
          m_endpoints[dev] = description.str();
       }
       
@@ -158,6 +172,7 @@ protected:
    pthread_mutex_t   m_endpoints_mutex;
    std::map<MIDIEndpointRef, std::string> m_endpoints;
    MIDIEndpointRef   m_selected_endpoint;
+   std::vector<std::string> m_port_blacklist;
 };
 
 class MidiInputPort: public MidiPort
@@ -166,6 +181,9 @@ public:
    MidiInputPort():
       MidiPort()
    {
+      // exclude confusing ports
+      m_port_blacklist.push_back("Teensy MIDI");
+      m_port_blacklist.push_back("Komplete Kontrol DAW");
    }
    
    virtual int getNumEndpoints()
@@ -209,6 +227,9 @@ public:
    MidiOutputPort():
       MidiPort()
    {
+      // exclude confusing ports
+      m_port_blacklist.push_back("Komplete Kontrol DAW");
+      m_port_blacklist.push_back(MIDI_PORT_NAME);
    }
    
    virtual int getNumEndpoints()
