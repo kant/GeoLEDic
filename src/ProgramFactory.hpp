@@ -10,10 +10,10 @@ class ProgramFactory
 public:
    ProgramFactory(const DomeWrapper& dome, const Strips& strips);
    ~ProgramFactory();
-   Program* changeProgram(uint8_t program);
+   void changeProgram(uint8_t program);
+   Program& program();
+   void drawMenu();
 
-   void drawMenu(Program** program);
-   
 private:
    
    DomeWrapper m_dome;

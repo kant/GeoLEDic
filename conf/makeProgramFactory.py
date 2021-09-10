@@ -25,7 +25,7 @@ ProgramFactory::ProgramFactory(const DomeWrapper& dome, const Strips& strips):
 {
 }
 
-Program* ProgramFactory::changeProgram(uint8_t program)
+void ProgramFactory::changeProgram(uint8_t program)
 {
    delete m_current_program;
    // clear all LEDs
@@ -37,10 +37,19 @@ $cases
       m_current_program = new Diagnostic(m_dome, m_strips);
    }
    m_program_number = program;
-   return m_current_program;
 }
 
-void ProgramFactory::drawMenu(Program** program)
+Program& ProgramFactory::program()
+{
+   // create default on first access
+   if (m_current_program == nullptr)
+   {
+       changeProgram(0);
+   }
+   return *m_current_program;
+}
+
+void ProgramFactory::drawMenu()
 {
 #ifdef WITH_GFX
     const char* program_names[] = {
@@ -59,7 +68,7 @@ void ProgramFactory::drawMenu(Program** program)
             const bool is_selected = (m_program_number == n);
             if (ImGui::Selectable(program_names[n], is_selected))
             {
-               if (program) *program = changeProgram(n);
+               changeProgram(n);
             }
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected)
@@ -67,6 +76,8 @@ void ProgramFactory::drawMenu(Program** program)
         }
         ImGui::EndCombo();
     }
+    
+    program().drawMenu();
 #endif
 }
 

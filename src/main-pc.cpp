@@ -2,11 +2,9 @@
 #include "gfx/Gfx.hpp"
 #include <vector>
 #include "Serial.hpp"
+#include "MidiMenu.hpp"
 #include <iostream>
-#include "ProgramFactory.hpp"
 
-extern ProgramFactory factory;
-extern Program* program;
 
 int main()
 {
@@ -21,15 +19,7 @@ int main()
        {-7.8, 1.2,  10.2,  45,  -35,    6},  // slightly left
      };
 
-   class ProgramMenu: public gfx::Config::MenuPresenter
-   {
-   public:
-      virtual void drawMenu()
-      {
-         factory.drawMenu(&program);
-         if (program) program->drawMenu();
-      }
-   } program_menu;
+   MidiMenu midi_menu(getMidiSource(), getProgramFactory());
    
    try {
       int i = 0;
@@ -50,12 +40,8 @@ int main()
                   .attenuationLinear(130.0)
                   .attenuationSquare(900.0)
                   .keyboardHandler(&Serial)
-                  .midiPorts(getMidiPorts())
-                  .midiOutPorts(getMidiOutPorts())
-                  .topMenuPresenter(&program_menu));
-      
-      setupGeoLEDic();
-      
+                  .topMenuPresenter(&midi_menu));
+            
       do {
          loopGeoLEDic();
       } while(gfx.draw());

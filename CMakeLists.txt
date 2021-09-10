@@ -18,7 +18,8 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
    add_definitions(-Wno-deprecated-register)
 endif()
 
-include_directories(src
+include_directories(.
+                    src
                     src/target/native
                     src/target/native/FastLED
                     src/target/native/OpenGL

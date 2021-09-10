@@ -3,13 +3,11 @@
 
 #include "Dome.hpp"
 #include "MidiSource.hpp"
+#include "ProgramFactory.hpp"
 
-void setupGeoLEDic();
 void loopGeoLEDic();
 
-#ifdef WITH_GFX
-gfx::Config::MidiPorts* getMidiPorts();
-gfx::Config::MidiPorts* getMidiOutPorts();
-#endif
+MidiSource& getMidiSource();
+ProgramFactory& getProgramFactory();
 
 #endif /* GeoLEDic_h */

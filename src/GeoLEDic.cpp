@@ -1,17 +1,12 @@
 #include "GeoLEDic.hpp"
-#include "ProgramFactory.hpp"
 #include "programs/Diagnostic.hpp"
 #ifdef WITH_GFX
 #include "Serial.hpp"
 #endif
 
+namespace {
 MidiSource midi_source;
 ProgramFactory factory({dome, DOME_NUM_TRIANGLES}, {leds, NUM_STRIPS, LEDS_PER_STRIP});
-Program* program;
-
-void setupGeoLEDic()
-{
-   program = factory.changeProgram(0);
 }
 
 void loopGeoLEDic()
@@ -22,16 +17,16 @@ void loopGeoLEDic()
       switch (msg->type())
       {
          case MidiMessage::NOTE_ON:
-            program->noteOn(msg->data[1], msg->data[2], msg->channel());
+            factory.program().noteOn(msg->data[1], msg->data[2], msg->channel());
             break;
          case MidiMessage::NOTE_OFF:
-            program->noteOff(msg->data[1], msg->channel());
+            factory.program().noteOff(msg->data[1], msg->channel());
             break;
          case MidiMessage::PROGRAM_CHANGE:
-            program = factory.changeProgram(msg->data[1]);
+            factory.changeProgram(msg->data[1]);
             break;
          case MidiMessage::CONTROL_CHANGE:
-            program->controlChange(msg->data[1], msg->data[2]);
+            factory.program().controlChange(msg->data[1], msg->data[2]);
             break;
          default:
             break;
@@ -45,13 +40,13 @@ void loopGeoLEDic()
       char c = Serial.read();
       if (c == 'd' or c == 'D')
       {
-         program  = factory.changeProgram(127);
-         diagnostic_mode = reinterpret_cast<Diagnostic*>(program);
+         factory.changeProgram(127);
+         diagnostic_mode = reinterpret_cast<Diagnostic*>(&factory.program());
          Serial.println("Diagnostic mode entered");
       }
       else if (c == 'x' or c == 'X')
       {
-         program = factory.changeProgram(0);
+         factory.changeProgram(0);
          Serial.println("Diagnostic mode exited");
          diagnostic_mode = nullptr;
       }
@@ -72,17 +67,15 @@ void loopGeoLEDic()
    }
 #endif
 
-   program->run();
+   factory.program().run();
 }
 
-#ifdef WITH_GFX
-gfx::Config::MidiPorts* getMidiPorts()
+MidiSource& getMidiSource()
 {
-   return midi_source.getMidiPorts();
+   return midi_source;
 }
 
-gfx::Config::MidiPorts* getMidiOutPorts()
+ProgramFactory& getProgramFactory()
 {
-   return midi_source.getMidiOutPorts();
+   return factory;
 }
-#endif

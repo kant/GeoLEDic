@@ -21,7 +21,6 @@ void setup() {
     delay(1000); // sanity delay
     pinMode(LOADMON_PIN, OUTPUT);
 
-    setupGeoLEDic();
     octo_ws.begin();
 }
 

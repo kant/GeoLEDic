@@ -31,7 +31,7 @@ int messageSize(uint8_t first_byte)
    }
 }
 
-class MidiPort: public gfx::Config::MidiPorts
+class MidiPort: public MidiSource::MidiPorts
 {
 public:
    MidiPort():
@@ -370,12 +370,12 @@ const MidiMessage* MidiSource::read()
    return m_i.read();
 }
 
-gfx::Config::MidiPorts* MidiSource::getMidiPorts()
+MidiSource::MidiPorts* MidiSource::getMidiInPorts()
 {
    return &m_i.m_input;
 }
 
-gfx::Config::MidiPorts* MidiSource::getMidiOutPorts()
+MidiSource::MidiPorts* MidiSource::getMidiOutPorts()
 {
    return &m_i.m_output;
 }

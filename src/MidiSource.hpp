@@ -20,8 +20,16 @@ public:
    const MidiMessage* read();
    
 #ifdef WITH_GFX
-   gfx::Config::MidiPorts* getMidiPorts();
-   gfx::Config::MidiPorts* getMidiOutPorts();
+   class MidiPorts {
+   public:
+      typedef int PortId;
+      virtual ~MidiPorts(){};
+      virtual void updateAvailablePorts(std::map<PortId, std::string>& port_map, PortId& selected_port) = 0;
+      virtual void selectPort(PortId selected_port) = 0;
+   };
+   
+   MidiPorts* getMidiInPorts();
+   MidiPorts* getMidiOutPorts();
 #endif
    
 private:
