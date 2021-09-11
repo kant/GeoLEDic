@@ -12,7 +12,10 @@ public:
    ~ProgramFactory();
    void changeProgram(uint8_t program);
    Program& program();
-   void drawMenu();
+
+#ifdef WITH_GFX
+   void drawMenu(MidiSource::MidiSender* sender);
+#endif
 
 private:
    

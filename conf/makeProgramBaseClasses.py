@@ -3,9 +3,11 @@ import programs
 from string import Template
 
 def getProgram(classname):
+    program_number = 0
     for prog in programs.get():
         if prog['program'] == classname:
-            return prog
+            return prog, program_number
+        program_number = program_number + 1
     raise Exception("Could not find program named %s" % classname)
 
 def getPrototypes(program, classname):
@@ -41,6 +43,7 @@ def getEnums(program):
         
 def getImplementations(program):
     implementations = []
+    snapshots = ""
     defaults = ""
     for cc in program['controls']:
         getter = "getControlValue(%d)" % cc['number']
@@ -58,20 +61,29 @@ def getImplementations(program):
             impl = impl + "    return %s;\n}" % getter
             if 'default' in cc:
                 defaults = defaults + "    setControlValue(%u, %u); // default for %s\n" % (cc['number'],cc['default'],cc['name'])
+        snapshots = snapshots + "    sender->sendControlChange(%u, m_control_values[%u]);\n" % (cc['number'], cc['number'])
         implementations.append(impl)
     # add constructor with defaults at beginning
     implementations.insert(0, "%s::%s()\n{\n%s}" % (program['program'], program['program'], defaults))
-    return implementations
+    return implementations, snapshots
+
+IMGUI_SLIDER_TEMPLATE = '''
+    if (ImGui::SliderScalar("$name", ImGuiDataType_U8, &m_control_values[$cc_num], &cmin, &cmax))
+    {
+        if (sender) sender->sendControlChange($cc_num, m_control_values[$cc_num]);
+    }
+'''
 
 IMGUI_TOGGLE_TEMPLATE = '''
     {
-       bool v = m_control_values[$cc_num] >= 64;
-       bool prev = v;
-       ImGui::Checkbox("$name", &v);
-       if (v != prev)
-       {
-          m_control_values[$cc_num] = v ? 127 : 0;
-       }
+        bool v = m_control_values[$cc_num] >= 64;
+        bool prev = v;
+        ImGui::Checkbox("$name", &v);
+        if (v != prev)
+        {
+            m_control_values[$cc_num] = v ? 127 : 0;
+           if (sender) sender->sendControlChange($cc_num, m_control_values[$cc_num]);
+        }
     }
 '''
 
@@ -101,6 +113,7 @@ IMGUI_ENUM_TEMPLATE = '''
                 {
                     index = n;
                     m_control_values[$cc_num] = values[index];
+                    if (sender) sender->sendControlChange($cc_num, m_control_values[$cc_num]);
                 }
                 // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
                 if (is_selected)
@@ -126,7 +139,9 @@ def getMenu(program):
                enums='"' + '",\n            "'.join(cc['enums']) + '"',
                values=', '.join(str(x) for x in cc['values']))
         else:
-            menu = menu + '    ImGui::SliderScalar("%s", ImGuiDataType_U8, &m_control_values[%d], &cmin, &cmax);\n' % (name, cc['number'])
+            menu = menu + Template(IMGUI_SLIDER_TEMPLATE).substitute(
+               name=cc['name'],
+               cc_num=cc['number'])
         help = "CC %d" % cc['number']
         if 'description' in cc:
             help = help + " - " + cc['description']
@@ -159,14 +174,25 @@ namespace generated {
 $implementations
 
 #ifdef WITH_GFX
-void ${classname}::drawMenu()
+void ${classname}::drawMenu(MidiSource::MidiSender* sender)
 {
     const uint8_t cmin = 0;
     const uint8_t cmax = 127;
     const uint8_t cmax_brightness = 255;
-    ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax_brightness);
+    if (ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax_brightness))
+    {
+        if (sender) sender->sendControlChange(7, getBrightness()/2);
+    }
 $menu
 }
+
+void ${classname}::sendSnapshot(MidiSource::MidiSender* sender)
+{
+    if (sender == nullptr) return;
+    sender->sendProgramChange($program_number);
+$control_snapshot
+}
+
 #endif
 
 }
@@ -190,7 +216,8 @@ public:
 
     $prototypes
 #ifdef WITH_GFX
-    virtual void drawMenu();
+    virtual void drawMenu(MidiSource::MidiSender* sender);
+    virtual void sendSnapshot(MidiSource::MidiSender* sender);
 #endif
 };
 
@@ -198,10 +225,10 @@ public:
 #endif
 '''
 
-program = getProgram(classname)
+program, program_number = getProgram(classname)
 prototypes = getPrototypes(program, classname)
 enums = getEnums(program)
-impls = getImplementations(program)
+impls, control_snapshots = getImplementations(program)
 menu  = getMenu(program)
 base = program['base'] if 'base' in program else 'Controls'
 
@@ -209,7 +236,9 @@ with open(basename, 'w') as file:
     file.write(Template(CPP_TEMPLATE).substitute(
         classname=classname,
         menu=menu,
-        implementations="\n".join(impls)))
+        implementations="\n".join(impls),
+        program_number=program_number,
+        control_snapshot=control_snapshots))
 
 with open(header, 'w') as file:
     file.write(Template(HPP_TEMPLATE).substitute(

@@ -221,11 +221,12 @@ public:
 };
 
 
-class MidiOutputPort: public MidiPort
+class MidiOutputPort: public MidiPort, public MidiSource::MidiSender
 {
 public:
    MidiOutputPort():
-      MidiPort()
+      MidiPort(),
+      m_enabled(true)
    {
       // exclude confusing ports
       m_port_blacklist.push_back("Komplete Kontrol DAW");
@@ -264,11 +265,45 @@ public:
       }
    }
    
+   virtual void enable(bool ena)
+   {
+      m_enabled = ena;
+   }
+
+   virtual bool enabled() const
+   {
+      return m_enabled;
+   }
+
+   virtual void sendControlChange(uint8_t cc_num, uint8_t val)
+   {
+      uint8_t buf[64];
+      MIDIPacketList* packet_list = reinterpret_cast<MIDIPacketList*>(buf);
+      MIDIPacket     *pkt = MIDIPacketListInit(packet_list);
+      uint8_t message[] = {MidiMessage::CONTROL_CHANGE << 4, cc_num, val};
+      MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, sizeof(message), message);
+      
+      send(packet_list);
+   }
+
+   virtual void sendProgramChange(uint8_t program)
+   {
+      uint8_t buf[64];
+      MIDIPacketList* packet_list = reinterpret_cast<MIDIPacketList*>(buf);
+      MIDIPacket     *pkt = MIDIPacketListInit(packet_list);
+      uint8_t message[] = {MidiMessage::PROGRAM_CHANGE << 4, program};
+      MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, sizeof(message), message);
+      
+      send(packet_list);
+   }
+
    void send(const MIDIPacketList* packet_list)
    {
-      if (m_selected_endpoint == 0) return;
+      if (not m_enabled || m_selected_endpoint == 0) return;
       MIDISend(m_port, m_selected_endpoint, packet_list);
    }
+
+   bool m_enabled;
 };
 
 }
@@ -307,7 +342,7 @@ public:
    
       // forward directly to whoever's connected
       m_output.send(packets);
-      
+
       // push messages into a queue to hand them over to the working thread which
       // will consume them via read()
       pthread_mutex_lock(&m_mutex);
@@ -397,6 +432,11 @@ MidiSource::MidiPorts* MidiSource::getMidiInPorts()
 }
 
 MidiSource::MidiPorts* MidiSource::getMidiOutPorts()
+{
+   return &m_i.m_output;
+}
+
+MidiSource::MidiSender*  MidiSource::getSender()
 {
    return &m_i.m_output;
 }

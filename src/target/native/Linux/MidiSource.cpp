@@ -189,7 +189,17 @@ MidiSource::MidiPorts* MidiSource::getMidiPorts()
    return nullptr; // not implemented
 }
 
-MidiSource::::MidiPorts* MidiSource::getMidiOutPorts()
+MidiSource::MidiPorts* MidiSource::getMidiOutPorts()
 {
    return nullptr; // not implemented
+}
+
+MidiSource::MidiSender*  MidiSource::getSender()
+{
+   return nullptr; // not implemented
+}
+
+void MidiSource::enableMidiThrough(bool enabled)
+{
+   (void)enabled; // not implemented
 }

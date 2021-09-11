@@ -8,7 +8,8 @@
 #define MIDI_OUT_PORT_NAME "GeoLEDic Out"
 
 #ifdef WITH_GFX
-#include "gfx/Config.hpp"
+#include <string>
+#include <map>
 #endif
 
 class MidiSource
@@ -27,9 +28,22 @@ public:
       virtual void updateAvailablePorts(std::map<PortId, std::string>& port_map, PortId& selected_port) = 0;
       virtual void selectPort(PortId selected_port) = 0;
    };
-   
+
+   class MidiSender
+   {
+   public:
+      virtual ~MidiSender(){};
+      virtual bool enabled() const = 0;
+      virtual void enable(bool ena) = 0;
+      virtual void sendControlChange(uint8_t cc_num, uint8_t val) = 0;
+      virtual void sendProgramChange(uint8_t program) = 0;
+   };
+
    MidiPorts* getMidiInPorts();
    MidiPorts* getMidiOutPorts();
+   MidiSender* getSender();
+
+   void enableMidiThrough(bool enabled);
 #endif
    
 private:

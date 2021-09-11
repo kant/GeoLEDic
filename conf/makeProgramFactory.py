@@ -49,9 +49,9 @@ Program& ProgramFactory::program()
    return *m_current_program;
 }
 
-void ProgramFactory::drawMenu()
-{
 #ifdef WITH_GFX
+void ProgramFactory::drawMenu(MidiSource::MidiSender* sender)
+{
     const char* program_names[] = {
         $names
     };
@@ -69,6 +69,7 @@ void ProgramFactory::drawMenu()
             if (ImGui::Selectable(program_names[n], is_selected))
             {
                changeProgram(n);
+               if (sender) sender->sendProgramChange(n);
             }
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected)
@@ -77,9 +78,9 @@ void ProgramFactory::drawMenu()
         ImGui::EndCombo();
     }
     
-    program().drawMenu();
-#endif
+    program().drawMenu(sender);
 }
+#endif
 
 ProgramFactory::~ProgramFactory()
 {

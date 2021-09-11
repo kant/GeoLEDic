@@ -9,7 +9,7 @@ MidiMenu::MidiMenu(MidiSource& midi_source, ProgramFactory& program_factory):
 
 void MidiMenu::drawMenu()
 {
-   m_factory.drawMenu();
+   m_factory.drawMenu(m_midi_source.getSender());
 
    ImGui::Separator();
    
@@ -22,6 +22,20 @@ void MidiMenu::drawMenu()
    {
       showMidiPorts(*m_midi_source.getMidiOutPorts(), m_midi_destinations);
       ImGui::TreePop();
+   }
+
+   if (m_midi_source.getSender())
+   {
+      MidiSource::MidiSender& sender(*m_midi_source.getSender());
+      if (sender.enabled() && ImGui::Button("Pause MIDI Output"))
+      {
+         sender.enable(false);
+      }
+      else if (not sender.enabled() && ImGui::Button("Resume MIDI Output"))
+      {
+         sender.enable(true);
+         m_factory.program().sendSnapshot(m_midi_source.getSender());
+      }
    }
 }
 
