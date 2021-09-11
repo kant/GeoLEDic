@@ -184,7 +184,7 @@ const MidiMessage* MidiSource::read()
    return m_i.read();
 }
 
-MidiSource::MidiPorts* MidiSource::getMidiPorts()
+MidiSource::MidiPorts* MidiSource::getMidiInPorts()
 {
    return nullptr; // not implemented
 }
