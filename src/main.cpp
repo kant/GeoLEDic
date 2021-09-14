@@ -10,7 +10,41 @@ static const unsigned FRAME_INTERVAL_MS = 1000 / FRAME_RATE;
 static const int LOADMON_PIN = 34;
 
 DMAMEM int dma_mem[LEDS_PER_STRIP * 3 * (NUM_STRIPS + 3)/4];
-static const uint8_t pinlist[NUM_STRIPS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+
+static const uint8_t pinlist[NUM_STRIPS] = {
+/*  S0 */  0, 
+/*  S1 */  4, 
+/*  S2 */  6,
+/*  S3 */  7, 
+/*  S4 */  8, 
+/*  S5 */  9, 
+/*  S6 */ 10,
+/*  S7 */ 12,
+/*  S8 */ 14, 
+/*  S9 */  1, 
+/* S10 */  5, 
+/* S11 */ 11,
+/* S12 */ 15, 
+/* S13 */  2, 
+/* S14 */  3, 
+/* S15 */ 21,
+/* S16 */ 17, 
+/* S17 */ 18, 
+/* S18 */ 19, 
+/* S19 */ 32, 
+/* S20 */ 16, 
+/* S21 */ 29, 
+/* S22 */ 25, 
+/* S23 */ 22, 
+/* S24 */ 20, 
+/* S25 */ 30, 
+/* S26 */ 26, 
+/* S27 */ 27, 
+/* S28 */ 28, 
+/* S29 */ 23, 
+/* S30 */ 24, 
+/* S31 */ 31
+};
 
 OctoWS2811 octo_ws(LEDS_PER_STRIP, dma_mem, leds, WS2811_GRB | WS2813_800kHz, NUM_STRIPS, pinlist);
 
