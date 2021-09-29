@@ -50,6 +50,8 @@ def getImplementations(program):
         impl = cc['prototype'] + "\n{\n"
         if cc['type'] == 'toggle':
             impl = impl + "    return %s > 63;\n}" % getter
+            if 'default' in cc and cc['default']:
+                defaults = defaults + "    setControlValue(%u, %u); // default for %s\n" % (cc['number'], 127 ,cc['name'])
         elif cc['type'] == 'enum':
             impl = impl + "    uint8_t v = %s;\n   " % getter
             for i in range(len(cc['enums']) - 1, 0, -1):
@@ -146,6 +148,8 @@ def getMenu(program):
         if 'description' in cc:
             help = help + " - " + cc['description']
         menu = menu + '    ImGui::SameLine(); HelpMarker("%s");\n' % help
+    if menu == "":
+        menu = "(void)cmax; // avoid compiler complaint about unused variable"
     return menu
 
 command = sys.argv[2] if len(sys.argv) > 2 else ''
