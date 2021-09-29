@@ -364,6 +364,68 @@ programs = [
              'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
           }
        ]
+    },
+    {
+       'program': 'WarpDriveMandala',
+       'name': 'Warp Drive Mandala',
+       'base': 'Notes',
+       'controls': [
+          {
+             'name': 'Spawn Rate',
+             'description': 'Rate at which rings appear',
+             'number': 16,
+             'default': 30
+          },
+          {
+              'name': 'Speed',
+              'description': 'Speed at which rings move',
+              'number': 17,
+              'default': 0
+          },
+          {
+              'name': 'Thickness',
+              'description': 'Thickness of rings',
+              'number': 22,
+              'default': 0
+          },
+          {
+              'name': 'Upwards',
+              'description': 'Move upwards instead of downwards',
+              'type': 'toggle',
+              'number': 23
+          },
+          {
+              'name': 'Skip Horizontals',
+              'description': 'Skip horizontal edges for a less flickering animation',
+              'type': 'toggle',
+              'default': True,
+              'number': 24
+          },
+          {
+             'name': 'Min Hue',
+             'number': 18,
+             'default': 0,
+             'description': 'Minimal hue value used for the randomised colors'
+          },
+          {
+             'name': 'Max Hue',
+             'number': 19,
+             'default': 127,
+             'description': 'Maximal hue value used for the randomised colors. There\'s no point in setting this below `Min Hue`'
+          },
+          {
+             'name': 'Min Saturation',
+             'number': 20,
+             'default': 0,
+             'description': 'Minimal saturation used for the randomised colors'
+          },
+          {
+             'name': 'Max Saturation',
+             'number': 21,
+             'default': 127,
+             'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
+          }
+       ]
     }
 ]
 
