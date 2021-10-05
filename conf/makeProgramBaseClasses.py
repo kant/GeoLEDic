@@ -70,9 +70,13 @@ def getImplementations(program):
     return implementations, snapshots
 
 IMGUI_SLIDER_TEMPLATE = '''
-    if (ImGui::SliderScalar("$name", ImGuiDataType_U8, &m_control_values[$cc_num], &cmin, &cmax))
     {
-        if (sender) sender->sendControlChange($cc_num, m_control_values[$cc_num]);
+        const uint8_t cmin = $min;
+        const uint8_t cmax = $max;
+        if (ImGui::SliderScalar("$name", ImGuiDataType_U8, &m_control_values[$cc_num], &cmin, &cmax))
+        {
+            if (sender) sender->sendControlChange($cc_num, m_control_values[$cc_num]);
+        }
     }
 '''
 
@@ -143,13 +147,13 @@ def getMenu(program):
         else:
             menu = menu + Template(IMGUI_SLIDER_TEMPLATE).substitute(
                name=cc['name'],
-               cc_num=cc['number'])
+               cc_num=cc['number'],
+               min=cc['min'],
+               max=cc['max'])
         help = "CC %d" % cc['number']
         if 'description' in cc:
             help = help + " - " + cc['description']
         menu = menu + '    ImGui::SameLine(); HelpMarker("%s");\n' % help
-    if menu == "":
-        menu = "(void)cmax; // avoid compiler complaint about unused variable"
     return menu
 
 command = sys.argv[2] if len(sys.argv) > 2 else ''
@@ -180,12 +184,13 @@ $implementations
 #ifdef WITH_GFX
 void ${classname}::drawMenu(MidiSource::MidiSender* sender)
 {
-    const uint8_t cmin = 0;
-    const uint8_t cmax = 127;
-    const uint8_t cmax_brightness = 255;
-    if (ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax_brightness))
     {
-        if (sender) sender->sendControlChange(7, getBrightness()/2);
+        const uint8_t cmin = 0;
+        const uint8_t cmax = 255;
+        if (ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax))
+        {
+            if (sender) sender->sendControlChange(7, getBrightness()/2);
+        }
     }
 $menu
 }

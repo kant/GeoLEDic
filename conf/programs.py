@@ -380,13 +380,15 @@ programs = [
               'name': 'Speed',
               'description': 'Speed at which rings move',
               'number': 17,
-              'default': 0
+              'default': 0,
+              'max': 30
           },
           {
               'name': 'Thickness',
               'description': 'Thickness of rings',
               'number': 22,
-              'default': 0
+              'default': 0,
+              'max': 30
           },
           {
               'name': 'Upwards',
@@ -445,6 +447,8 @@ def get():
             programs[i]['controls'] = []
         else:
             for cc in programs[i]['controls']:
+                cc['min'] = max(0, cc['min'] if 'min' in cc else 0)
+                cc['max'] = min(127, cc['max'] if 'max' in cc else 127)
                 if not 'type' in cc:
                     cc['type'] = 'continuous'
                 if cc['type'] == 'enum':

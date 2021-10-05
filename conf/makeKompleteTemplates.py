@@ -60,8 +60,8 @@ def writeKnob(indent, knob):
     print indent, '"MIDIType": "3",'
     print indent, '"MIDIId": "%d",' % (knob['number'] if 'number' in knob else 14)
     print indent, '"Channel": "0",'
-    print indent, '"Min": "0",'
-    print indent, '"Max": "127",'
+    print indent, '"Min": "%d",' % knob['min']
+    print indent, '"Max": "%d",' % knob['max']
     print indent, '"Inc": "1",'
     print indent, '"Mode": "0"'
 
@@ -72,7 +72,7 @@ def writeKnobs(indent, knobs):
             writeKnob(indent + INDENT_STEP, knobs[i])
         else:
             # write disabled knob
-            writeKnob(indent + INDENT_STEP, {})
+            writeKnob(indent + INDENT_STEP, {'max':127, 'min':0})
         if i < 7:    
             print indent, '},'
         else:    
