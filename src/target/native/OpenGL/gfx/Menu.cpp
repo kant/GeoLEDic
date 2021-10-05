@@ -40,7 +40,7 @@ void Menu::draw()
    ImGui::NewFrame();
    ImGui::SetNextWindowBgAlpha(0.2f);
 
-   ImGui::Begin("Settings");
+   ImGui::Begin("Settings", NULL, ImGuiWindowFlags_AlwaysAutoResize);
    
    if (m_config.menu())
    {
