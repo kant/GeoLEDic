@@ -298,29 +298,35 @@ programs = [
              'description': 'Size of the blobs'
           },
           {
-             'name': 'Use Hues',
+             'name': 'Line Width',
              'number': 18,
+             'default': 0,
+             'description': 'Width of the line'
+          },
+          {
+             'name': 'Use Hues',
+             'number': 19,
              'type': 'toggle',
              'description': 'Instead of the preset palette, use black stripes alternating with stripes of a hue as defined by the hue controls'
           },
           {
              'name': 'Hue 0',
-             'number': 19,
+             'number': 20,
              'description': 'Hue of the first color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 1',
-             'number': 20,
+             'number': 21,
              'description': 'Hue of the second color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 2',
-             'number': 21,
+             'number': 22,
              'description': 'Hue of the third color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 3',
-             'number': 22,
+             'number': 23,
              'description': 'Hue of the fourth color. Only used if `Use Hues` is set'
           }
        ]

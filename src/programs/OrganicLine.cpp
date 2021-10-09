@@ -33,6 +33,8 @@ void OrganicLine::runProgram()
       CHSV(getHue3()*2, 255, 255),
    };
    
+   // MIN and MAX PHI define the extent of the thin line between the first two
+   //  rows of triangles
    const unsigned MIN_PHI = 178;
    const unsigned MAX_PHI = 846;
    uint8_t line_noise[MAX_PHI - MIN_PHI + 1];
@@ -41,28 +43,85 @@ void OrganicLine::runProgram()
       line_noise[i] = 128 + inoise16_raw((i * (140 - getSize())) << 4, m_time)/100;
    }
    
-   // only the first two lines, and only even triangles
-   for (unsigned t_ix = 0; t_ix <= 50; t_ix += 2)
+   unsigned line_width = 2 * getLineWidth();
+
+   for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
-      // on first row, the first edge is the horizontal one, on the second row it's the last edge
-      const Edge& e(t.edge(t_ix <= 24 ? 0 : 2));
-      const Vertex& c0(t.corner(t_ix <= 24 ? 0 : 2));
-      const Vertex& c1(t.corner(t_ix <= 24 ? 1 : 0));
 
-      int led_ix = 0;
-      for (CRGB& led: e)
+      if (line_width == 0)
       {
-         unsigned h = interpolatePhi(c0, c1, led_ix, e.size()) - MIN_PHI;
-         if (isUseHues())
+         // only the first two lines, and only even triangles
+         if (t_ix > 50 or t_ix & 1)
          {
-            led = ColorFromPalette(hue_palette, line_noise[h], getBrightness());
-         }
-         else
+            std::fill(t.begin(), t.end(), CRGB::Black);
+            continue;
+         } 
+      }
+
+      for (unsigned k = 0; k < 3; k++)
+      {
+         const Edge& e(t.edge(k));
+         const Vertex& c0(t.corner(k));
+         const Vertex& c1(t.corner((k + 1) % 3));
+
+         if (line_width == 0)
          {
-            led = ColorFromPalette(PartyStripes_p, line_noise[h], getBrightness());
+            // on first row, the first edge is the horizontal one, on the second row it's the last edge
+            if ((t_ix <= 24 and k != 0) or
+                (t_ix >  24 and k != 2))
+            {
+               std::fill(e.begin(), e.end(), CRGB::Black);
+               continue;
+            }
          }
-         led_ix++;
+
+         int led_ix = 0;
+         for (CRGB& led: e)
+         {
+            unsigned brightness = getBrightness();
+            if (line_width > 0)
+            {
+               const unsigned THETA_BASE_LINE = 46;
+               unsigned v = abs(long(interpolateTheta(c0, c1, led_ix, e.size())) - THETA_BASE_LINE);
+               if (v > line_width)
+               {
+                  led = CRGB::Black;
+                  led_ix++;
+                  continue;
+               }
+               
+               const unsigned half_line_width = line_width / 2;
+               if (v > half_line_width)
+               {
+                  brightness = (brightness * (line_width - v)) / (half_line_width + 1);
+               }
+            }
+
+            unsigned h = interpolatePhi(c0, c1, led_ix, e.size());
+            if (h < MIN_PHI)
+            {
+               h = MIN_PHI - h;
+            }
+            else
+            {
+               h = h - MIN_PHI;
+               if (h >= sizeof(line_noise))
+               {
+                  h = sizeof(line_noise) - (h - sizeof(line_noise)) - 1;
+               }
+            }
+
+            if (isUseHues())
+            {
+               led = ColorFromPalette(hue_palette, line_noise[h], brightness);
+            }
+            else
+            {
+               led = ColorFromPalette(PartyStripes_p, line_noise[h], brightness);
+            }
+            led_ix++;
+         }
       }
    }
    
