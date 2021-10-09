@@ -50,7 +50,6 @@ public:
    }
    
    virtual void controlChange(uint8_t, uint8_t){};
-   virtual void run(){};
 };
 
 
@@ -67,26 +66,26 @@ TEST_F(TestDecayingShapesFromNotes, twoOverlappingBlobsReleasedInOrder)
    noteOn(NOTE_C2, NOTE_VELOCITY_1, SHAPE_BLOB);
    noteOn(NOTE_C2 + 1, NOTE_VELOCITY_2, SHAPE_BLOB);
 
-   updateDecayingShapes();
+   run();
    expectNotesSet({{NOTE_VELOCITY_1, {0, 1, 26, 27}},  // triangles 2 and 28 are covered by blob 1
                    {NOTE_VELOCITY_2, {2, 3, 4, 28, 29, 30}}
                   });
 
    // update doesn't change things
-   updateDecayingShapes();
+   run();
    expectNotesSet({{NOTE_VELOCITY_1, {0, 1, 26, 27}},  // triangles 2 and 28 are covered by blob 1
                    {NOTE_VELOCITY_2, {2, 3, 4, 28, 29, 30}}
                   });
 
    
    noteOff(NOTE_C2 + 1, SHAPE_BLOB);
-   updateDecayingShapes();
+   run();
    expectNotesSet({{NOTE_VELOCITY_1, {0, 1, 2, 26, 27, 28}},  // triangles 2 and 28 are no longer covered by blob 1
                    {NOTE_VELOCITY_2 - DECAY_RATE, {3, 4, 29, 30}} // remainder of blob 1 is fading out
                   });
 
    noteOff(NOTE_C2, SHAPE_BLOB);
-   updateDecayingShapes();
+   run();
    expectNotesSet({{NOTE_VELOCITY_1 - DECAY_RATE, {0, 1, 2, 26, 27, 28}} 
                   });
 }
