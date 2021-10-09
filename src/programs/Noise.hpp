@@ -9,7 +9,7 @@ class Noise: public generated::Noise
 public:
    Noise(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
    
 private:
    enum {

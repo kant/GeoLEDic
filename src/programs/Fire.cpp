@@ -83,7 +83,7 @@ void Fire::calcFire()
    }
 }
 
-void Fire::run()
+void Fire::runProgram()
 {
    calcFire();
    auto* pal = palette(getPalette());

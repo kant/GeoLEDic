@@ -7,7 +7,7 @@ Lightning::Lightning(const DomeWrapper& dome):
    memset(m_lit_map, 0, sizeof(m_lit_map));
 }
 
-void Lightning::run()
+void Lightning::runProgram()
 {
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {

@@ -18,7 +18,7 @@ void DefaultRainbow::noteOff(uint8_t note, uint8_t channel)
    (void)channel;
 }
 
-void DefaultRainbow::run()
+void DefaultRainbow::runProgram()
 {
    int sparkle_spacing = getSparkleProbability() ?  100 * (128 - getSparkleProbability()) : 0;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)

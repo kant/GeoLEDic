@@ -18,7 +18,8 @@ public:
    ShapesFromNotes();
    virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
    virtual void noteOff(uint8_t note, uint8_t channel);
-   
+   virtual void run(){}
+
    uint8_t getTriangleValue(uint8_t note) const;
    
 private:

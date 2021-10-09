@@ -181,6 +181,12 @@ namespace generated {
 
 $implementations
 
+void ${classname}::run()
+{
+    ${base}::run();
+    runProgram();
+}
+
 #ifdef WITH_GFX
 void ${classname}::drawMenu(MidiSource::MidiSender* sender)
 {
@@ -220,10 +226,13 @@ class $classname: public $base
 public:
     $classname();
     virtual ~$classname(){}
+    virtual void runProgram() = 0;
 
     $enums
 
     $prototypes
+
+    virtual void run();
 #ifdef WITH_GFX
     virtual void drawMenu(MidiSource::MidiSender* sender);
     virtual void sendSnapshot(MidiSource::MidiSender* sender);
@@ -244,6 +253,7 @@ base = program['base'] if 'base' in program else 'Controls'
 with open(basename, 'w') as file:
     file.write(Template(CPP_TEMPLATE).substitute(
         classname=classname,
+        base=base,
         menu=menu,
         implementations="\n".join(impls),
         program_number=program_number,

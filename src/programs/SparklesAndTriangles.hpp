@@ -9,7 +9,7 @@ class SparklesAndTriangles: public generated::SparklesAndTriangles
 public:
    SparklesAndTriangles(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
 
 private:
    const DomeWrapper& m_dome;

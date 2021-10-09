@@ -6,7 +6,7 @@ DecayingShapesFromNotes::DecayingShapesFromNotes():
    std::fill_n(m_decaying_triangles, DOME_NUM_TRIANGLES, 0);
 }
 
-void DecayingShapesFromNotes::updateDecayingShapes()
+void DecayingShapesFromNotes::run()
 {
    for (uint8_t k = 0; k < DOME_NUM_TRIANGLES; k++)
    {

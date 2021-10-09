@@ -9,7 +9,7 @@ class WarpDriveMandala: public generated::WarpDriveMandala
 public:
    WarpDriveMandala(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;

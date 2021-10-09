@@ -9,7 +9,7 @@ class OrganicLine: public generated::OrganicLine
 public:
    OrganicLine(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;

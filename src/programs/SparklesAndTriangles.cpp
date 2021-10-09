@@ -5,7 +5,7 @@ SparklesAndTriangles::SparklesAndTriangles(const DomeWrapper& dome):
    m_iteration(0)
 {}
 
-void SparklesAndTriangles::run()
+void SparklesAndTriangles::runProgram()
 {
    int sparkle_spacing = getSparkleProbability() ? 100 * (128 - getSparkleProbability()) : 0;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)

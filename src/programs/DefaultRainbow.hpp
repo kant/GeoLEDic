@@ -11,7 +11,7 @@ public:
    
    virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t /*channel*/);
    virtual void noteOff(uint8_t note, uint8_t /*channel*/);
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;

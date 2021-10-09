@@ -9,7 +9,7 @@ WarpDriveMandala::WarpDriveMandala(const DomeWrapper& dome):
    std::fill_n(m_rings, sizeof(m_rings)/sizeof(*m_rings), CRGB::Black);
 }   
 
-void WarpDriveMandala::run()
+void WarpDriveMandala::runProgram()
 {
    uint8_t min_hue = getMinHue()<<1;
    uint8_t max_hue = std::max(min_hue, uint8_t(getMaxHue()*2));

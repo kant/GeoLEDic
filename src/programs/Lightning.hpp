@@ -9,7 +9,7 @@ class Lightning: public generated::Lightning
 public:
    Lightning(const DomeWrapper& dome);
 
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;

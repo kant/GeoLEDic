@@ -12,6 +12,8 @@ public:
    virtual void noteOff(uint8_t note, uint8_t channel);
    
    uint8_t note(uint8_t note) const;
+
+   virtual void run(){}
    
 protected:
    uint8_t m_notes[NOTE_HIGHEST+1];

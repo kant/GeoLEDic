@@ -9,7 +9,7 @@ class MovingRainbow: public generated::MovingRainbow
 public:
    MovingRainbow(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;

@@ -8,7 +8,7 @@ OrganicLine::OrganicLine(const DomeWrapper& dome):
 {
 }   
 
-void OrganicLine::run()
+void OrganicLine::runProgram()
 {
    CRGBPalette16 hue_palette =
    {

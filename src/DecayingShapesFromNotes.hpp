@@ -8,8 +8,7 @@ class DecayingShapesFromNotes: public ShapesFromNotes
 public:
    DecayingShapesFromNotes();
 
-   // call at the beginning of the run() function of the program to decay velocity values
-   void updateDecayingShapes();
+   virtual void run();
 
    void setDecayRate(uint8_t rate);
 

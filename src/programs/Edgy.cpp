@@ -7,7 +7,7 @@ Edgy::Edgy(const DomeWrapper& dome):
 {
 }   
 
-void Edgy::run()
+void Edgy::runProgram()
 {
    uint8_t min_hue = getMinHue()<<1;
    uint8_t max_hue = std::max(min_hue, uint8_t(getMaxHue()*2));

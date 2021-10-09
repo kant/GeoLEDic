@@ -69,9 +69,8 @@ void Noise::calcNoise()
    }
 }
 
-void Noise::run()
+void Noise::runProgram()
 {
-   updateDecayingShapes();
    calcNoise();
    auto* pal = palette(getPalette());
 

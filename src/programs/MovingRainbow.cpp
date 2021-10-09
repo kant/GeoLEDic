@@ -6,7 +6,7 @@ MovingRainbow::MovingRainbow(const DomeWrapper& dome):
    m_iteration_v(0)
 {}
 
-void MovingRainbow::run()
+void MovingRainbow::runProgram()
 {
    for (Triangle& t: m_dome)
    {

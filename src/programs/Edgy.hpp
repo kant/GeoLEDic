@@ -9,7 +9,7 @@ class Edgy: public generated::Edgy
 public:
    Edgy(const DomeWrapper& dome);
    
-   virtual void run();
+   virtual void runProgram();
    
 private:
    const DomeWrapper& m_dome;
