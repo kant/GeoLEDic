@@ -31,6 +31,7 @@ add_subdirectory(src/programs)
 # The core sources are the ones built for unit tests as well
 set(GEOLEDIC_CORE_SOURCES src/Controls.cpp
                           src/CRGB_iterator.cpp
+                          src/DecayingShapesFromNotes.cpp
                           src/Edge.cpp
                           src/Notes.cpp
                           src/ShapesFromNotes.cpp

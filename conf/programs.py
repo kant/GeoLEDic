@@ -204,7 +204,7 @@ programs = [
     },
     {
       'program':'Noise',
-      'base': 'ShapesFromNotes',
+      'base': 'DecayingShapesFromNotes',
       'keyzones': keyzones['ShapesFromNotes'],
       'controls': [
          {

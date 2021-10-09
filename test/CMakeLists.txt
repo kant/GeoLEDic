@@ -4,7 +4,8 @@ target_link_libraries(test_edge geoledic-core
                                 GTest::gtest_main)
 gtest_discover_tests(test_edge)
 
-add_executable(test_notes Notes/test_notes.cpp)
+add_executable(test_notes Notes/test_notes.cpp
+                          Notes/test_decaying_notes.cpp)
 target_link_libraries(test_notes geoledic-core
                                 GTest::gtest
                                 GTest::gtest_main)

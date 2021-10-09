@@ -71,6 +71,7 @@ void Noise::calcNoise()
 
 void Noise::run()
 {
+   updateDecayingShapes();
    calcNoise();
    auto* pal = palette(getPalette());
 
@@ -109,7 +110,13 @@ void Noise::run()
                index = interpolate(m_noise, h, v);
             }
             
-            led = ColorFromPalette(*pal, index, getBrightness());
+            unsigned brightness = getBrightness();
+            if (isKeyActivated())
+            {
+               brightness = (brightness * getTriangleValue(t_ix)) >> 7;
+            }
+
+            led = ColorFromPalette(*pal, index, brightness);
             
             led_ix++;
          }
