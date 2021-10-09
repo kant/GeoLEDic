@@ -1,3 +1,5 @@
+from string import Template
+
 keyzones = {
    'ShapesFromNotes': [
       {
@@ -452,7 +454,17 @@ def get():
                 if not 'type' in cc:
                     cc['type'] = 'continuous'
                 if cc['type'] == 'enum':
-                    # spread enum values on range 0..127 to make it easier to use them with a knob
+                    # spread enum values to make it easier to select them with a rotary knob
+                    if 'step' not in cc:
+                        cc['step'] = 10
                     n = len(cc['enums'])
-                    cc['values'] = range(0, n*int(127/n), int(127/n))
+                    if (n * cc['step'] > 127):
+                        raise Exception(
+                            Template("step size of $step too large for enum with $num values as $step x $num = $prod which is bigger than 127").substitute(
+                                step=cc['step'],
+                                num=n,
+                                prod=n*cc['step']
+                            )
+                        )
+                    cc['values'] = range(0, n*cc['step'], cc['step'])
     return programs
