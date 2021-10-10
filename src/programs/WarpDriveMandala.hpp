@@ -13,6 +13,7 @@ public:
    
 private:
    void shiftAndFillRings();
+   bool findKey(uint8_t& hue, uint8_t& saturation);
 
    const DomeWrapper& m_dome;
    CRGB m_rings[Vertex::NUM_THETA_STEPS];

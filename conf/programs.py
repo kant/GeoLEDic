@@ -377,6 +377,15 @@ programs = [
        'program': 'WarpDriveMandala',
        'name': 'Warp Drive Mandala',
        'base': 'Notes',
+        'keyzones' : [
+            {
+                'name': 'Rings',
+                'from': 36,
+                'to': 59,
+                'channel': 0,
+                'transpose': 0
+            },
+        ],
        'controls': [
           {
              'name': 'Spawn Rate',

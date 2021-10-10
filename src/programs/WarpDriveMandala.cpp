@@ -9,6 +9,23 @@ WarpDriveMandala::WarpDriveMandala(const DomeWrapper& dome):
    std::fill_n(m_rings, sizeof(m_rings)/sizeof(*m_rings), CRGB::Black);
 }   
 
+bool WarpDriveMandala::findKey(uint8_t& hue, uint8_t& saturation)
+{
+   const unsigned NUM_NOTES = 24;
+   for (unsigned n = NOTE_C2; n < NOTE_C2 + NUM_NOTES; n++)
+   {
+      uint8_t velocity = note(n);
+      if (velocity)
+      {
+         saturation = 255 - velocity * 2;
+         hue = 255*(n - NOTE_C2)/NUM_NOTES;
+         return true;
+      }
+   }
+   return false;
+}
+
+
 void WarpDriveMandala::shiftAndFillRings()
 {
    uint8_t min_hue = getMinHue()<<1;
@@ -30,7 +47,17 @@ void WarpDriveMandala::shiftAndFillRings()
                advance_width,
                CRGB::Black);
 
-   if (random8() < getSpawnRate())
+   uint8_t hue, sat;
+   if (findKey(hue, sat))
+   {
+      std::fill_n(fill_from, 
+                  fill_width,
+                  CHSV(hue,
+                       sat,
+                       getBrightness()));
+
+   }
+   else if (random8() < getSpawnRate())
    {
       std::fill_n(fill_from, 
                   fill_width,
