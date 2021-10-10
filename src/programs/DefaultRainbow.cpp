@@ -5,19 +5,6 @@ DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
    m_iteration(0)
 {}
 
-void DefaultRainbow::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
-{
-   (void)note;
-   (void)velocity;
-   (void)channel;
-}
-
-void DefaultRainbow::noteOff(uint8_t note, uint8_t channel)
-{
-   (void)note;
-   (void)channel;
-}
-
 void DefaultRainbow::runProgram()
 {
    int sparkle_spacing = getSparkleProbability() ?  100 * (128 - getSparkleProbability()) : 0;
@@ -28,6 +15,12 @@ void DefaultRainbow::runProgram()
       hsv.hue = t_ix + m_iteration;
       hsv.val = getBrightness();
       hsv.sat = 240;
+
+      if (isKeyActivated())
+      {
+         hsv.val = (unsigned(hsv.val) * getTriangleValue(t_ix)) >> 7;
+      }
+
       int next_sparkle = sparkle_spacing ? random16(sparkle_spacing) : -1;
       for (CRGB& led: t)
       {

@@ -9,8 +9,6 @@ class DefaultRainbow: public generated::DefaultRainbow
 public:
    DefaultRainbow(const DomeWrapper& dome);
    
-   virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t /*channel*/);
-   virtual void noteOff(uint8_t note, uint8_t /*channel*/);
    virtual void runProgram();
    
 private:

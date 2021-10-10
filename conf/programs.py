@@ -44,7 +44,8 @@ programs = [
     {
         'program':'DefaultRainbow',
         'name':'Default Rainbow',
-        'base': 'Notes',
+        'base': 'DecayingShapesFromNotes',
+        'keyzones': keyzones['ShapesFromNotes'],
         'controls': [
             {
                 'name': 'Speed',
@@ -61,6 +62,12 @@ programs = [
                 'name': 'Sparkle Probability',
                 'number': 19,
                 'default': 50
+            },
+            {
+                'name': 'Key Activated',
+                'number': 20,
+                'type': 'toggle',
+                'description': 'If set, the program is keyboard controlled in that only the triangles/shapes corresponding to the pressed keys light up'
             }
         ]
     },
