@@ -388,7 +388,7 @@ programs = [
               'name': 'Speed',
               'description': 'Speed at which rings move',
               'number': 17,
-              'default': 0,
+              'default': 1,
               'max': 30
           },
           {

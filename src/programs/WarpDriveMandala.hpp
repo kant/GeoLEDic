@@ -12,6 +12,8 @@ public:
    virtual void runProgram();
    
 private:
+   void shiftAndFillRings();
+
    const DomeWrapper& m_dome;
    CRGB m_rings[Vertex::NUM_THETA_STEPS];
 };
