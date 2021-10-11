@@ -133,27 +133,26 @@ IMGUI_ENUM_TEMPLATE = '''
 def getMenu(program):
     menu = ""
     for cc in program['controls']:
-        name = cc['name']
+        name = "CC%d: %s" % (cc['number'], cc['name'])
         if cc['type'] == 'toggle':
             menu = menu + Template(IMGUI_TOGGLE_TEMPLATE).substitute(
-               name=cc['name'],
+               name=name,
                cc_num=cc['number'])
         elif cc['type'] == 'enum':
             menu = menu + Template(IMGUI_ENUM_TEMPLATE).substitute(
-               name=cc['name'],
+               name=name,
                cc_num=cc['number'],
                enums='"' + '",\n            "'.join(cc['enums']) + '"',
                values=', '.join(str(x) for x in cc['values']))
         else:
             menu = menu + Template(IMGUI_SLIDER_TEMPLATE).substitute(
-               name=cc['name'],
+               name=name,
                cc_num=cc['number'],
                min=cc['min'],
                max=cc['max'])
-        help = "CC %d" % cc['number']
+        
         if 'description' in cc:
-            help = help + " - " + cc['description']
-        menu = menu + '    ImGui::SameLine(); HelpMarker("%s");\n' % help
+            menu = menu + '    ImGui::SameLine(); HelpMarker("%s");\n' % cc['description']
     return menu
 
 command = sys.argv[2] if len(sys.argv) > 2 else ''
@@ -193,10 +192,11 @@ void ${classname}::drawMenu(MidiSource::MidiSender* sender)
     {
         const uint8_t cmin = 0;
         const uint8_t cmax = 255;
-        if (ImGui::SliderScalar("Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax))
+        if (ImGui::SliderScalar("CC7: Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax))
         {
             if (sender) sender->sendControlChange(7, getBrightness()/2);
         }
+        ImGui::SameLine(); HelpMarker("The brightness is preserved on program change, unlike the other controllers");
     }
 $menu
 }
