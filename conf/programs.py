@@ -31,8 +31,43 @@ keyzones = {
           'transpose': 24
       },
       {
-          'name': 'blobs',
+          'name': 'Blobs, Row 0',
           'from': 60,
+          'to': 71,
+          'channel': 2,
+          'transpose': -24
+      },
+      {
+          'name': 'Blobs, Row 1',
+          'from': 72,
+          'to': 84,
+          'channel': 2,
+          'transpose': -24
+      },
+      {
+          'name': 'Blobs, Row 2',
+          'from': 85,
+          'to': 95,
+          'channel': 2,
+          'transpose': -24
+      },
+      {
+          'name': 'Blobs, Row 3',
+          'from': 96,
+          'to': 105,
+          'channel': 2,
+          'transpose': -24
+      },
+      {
+          'name': 'Blobs, Row 5',
+          'from': 106,
+          'to': 110,
+          'channel': 2,
+          'transpose': -24
+      },
+      {
+          'name': 'Blobs, Row 6',
+          'from': 111,
           'to': 111,
           'channel': 2,
           'transpose': -24
