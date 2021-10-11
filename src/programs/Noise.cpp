@@ -121,9 +121,9 @@ void Noise::runProgram()
          }
       }
    }
-   m_x += unsigned(getSpeedX()) << 8;
-   m_y += unsigned(getSpeedY()) << 8;
-   m_t += unsigned(getSpeedT()) << 8;
+   m_x += unsigned(getSpeedX()) << 6;
+   m_y += unsigned(getSpeedY()) << 6;
+   m_t += unsigned(getSpeedT()) << 6;
    m_h_offset += float(getRotationSpeed())/100.f;
    if (m_h_offset >= NUM_H) m_h_offset = 0;
 }

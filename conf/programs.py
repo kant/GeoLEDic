@@ -266,7 +266,7 @@ programs = [
          {
             'name': 'Speed T',
             'number': 20,
-            'default': 3,
+            'default': 12,
             'description': 'Speed of the movement along the time axis of the noise field'
          },
          {
