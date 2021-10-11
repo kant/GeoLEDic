@@ -262,5 +262,25 @@ TEST_F(TestShapesFromNotes, fuzz)
    }
 }
 
+TEST_F(TestShapesFromNotes, anyTrianglesSet)
+{
+   const uint8_t NOTE_VELOCITY_1 = 100;
+   const uint8_t NOTE_VELOCITY_2 = 50;
+
+   EXPECT_FALSE(isAnyTriangleSet());
+
+   noteOn(NOTE_C2, NOTE_VELOCITY_1, SHAPE_BLOB);
+   noteOn(NOTE_C2 + 1, NOTE_VELOCITY_2, SHAPE_BLOB);
+
+   EXPECT_TRUE(isAnyTriangleSet());
+
+   noteOff(NOTE_C2 + 1, SHAPE_BLOB);
+
+   EXPECT_TRUE(isAnyTriangleSet());
+
+   noteOff(NOTE_C2, SHAPE_BLOB);
+
+   EXPECT_FALSE(isAnyTriangleSet());
+}
 
 }

@@ -90,6 +90,33 @@ TEST_F(TestDecayingShapesFromNotes, twoOverlappingBlobsReleasedInOrder)
                   });
 }
 
+TEST_F(TestDecayingShapesFromNotes, anyTrianglesSet)
+{
+   const uint8_t NOTE_VELOCITY_1 = 100;
+   const uint8_t NOTE_VELOCITY_2 = 50;
+   const uint8_t DECAY_RATE = 40;
+   setDecayRate(DECAY_RATE);
+
+   EXPECT_FALSE(isAnyTriangleSet());
+
+   noteOn(NOTE_C2, NOTE_VELOCITY_1, SHAPE_BLOB);
+   noteOn(NOTE_C2 + 1, NOTE_VELOCITY_2, SHAPE_BLOB);
+
+   run();
+   EXPECT_TRUE(isAnyTriangleSet());
+
+   noteOff(NOTE_C2 + 1, SHAPE_BLOB);
+   noteOff(NOTE_C2, SHAPE_BLOB);
+
+   run();
+   run();
+
+   EXPECT_TRUE(isAnyTriangleSet());
+
+   run();
+
+   EXPECT_FALSE(isAnyTriangleSet());
+}
 
 
 }

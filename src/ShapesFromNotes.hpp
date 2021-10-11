@@ -21,6 +21,7 @@ public:
    virtual void run(){}
 
    uint8_t getTriangleValue(uint8_t note) const;
+   bool isAnyTriangleSet() const;
    
 private:
    void setBlob(uint8_t note, uint8_t velocity);

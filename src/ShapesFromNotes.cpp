@@ -131,6 +131,11 @@ const uint8_t blobs[NUM_BLOBS][NUM_ELEMENTS_PER_BLOB] =
    {118, 119, 120, 121, 122, TERMINATOR} // only 5 in a pentagon
 };
 
+bool nonzero(uint8_t v)
+{
+   return v != 0;
+}
+
 }
 
 ShapesFromNotes::ShapesFromNotes()
@@ -142,6 +147,11 @@ uint8_t ShapesFromNotes::getTriangleValue(uint8_t note) const
 {
    if (note >= DOME_NUM_TRIANGLES) return 0;
    return m_triangles[note];
+}
+
+bool ShapesFromNotes::isAnyTriangleSet() const
+{
+   return std::any_of(m_triangles, m_triangles + DOME_NUM_TRIANGLES, nonzero);
 }
 
 void ShapesFromNotes::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
