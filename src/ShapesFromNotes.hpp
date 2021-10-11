@@ -9,12 +9,6 @@
 class ShapesFromNotes: public Controls
 {
 public:
-   enum Shape {
-      SHAPE_TRIANGLE = 0,
-      SHAPE_PENTAGON = 1,
-      SHAPE_BLOB = 2
-   };
-   
    ShapesFromNotes();
    virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
    virtual void noteOff(uint8_t note, uint8_t channel);
@@ -22,8 +16,14 @@ public:
 
    uint8_t getTriangleValue(uint8_t note) const;
    bool isAnyTriangleSet() const;
-   
+
 private:
+   enum Shape {
+      SHAPE_TRIANGLE = 0,
+      SHAPE_PENTAGON = 1,
+      SHAPE_BLOB = 2
+   };
+
    void setBlob(uint8_t note, uint8_t velocity);
    void setPentagon(uint8_t note, uint8_t velocity);
 

@@ -73,7 +73,7 @@ void Fire::calcFire()
       // ensure note stay in the same place even if rotation is on
       uint8_t hnote = NUM_H + h - m_h_offset;
       if (hnote >= NUM_H) hnote -= NUM_H;
-      uint8_t n = hnote + NOTE_C2;
+      uint8_t n = hnote + NOTE_C1;
       if (note(n))
       {
          uint8_t heat = note(n)*2;

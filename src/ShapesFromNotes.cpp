@@ -156,18 +156,20 @@ bool ShapesFromNotes::isAnyTriangleSet() const
 
 void ShapesFromNotes::noteOn(uint8_t note, uint8_t velocity, uint8_t channel)
 {
-   switch (channel)
+   if (channel == 0)
    {
-      case 0:
-      default:
-         associateShapeWithTriangle(SHAPE_TRIANGLE, note, note, velocity);
-         break;
-      case 1:
+      if (note < NOTE_C3)
+      {
          setPentagon(note, velocity);
-         break;
-      case 2:
+      }
+      else
+      {
          setBlob(note, velocity);
-         break;
+      }
+   }
+   else
+   {
+      associateShapeWithTriangle(SHAPE_TRIANGLE, note, note, velocity);
    }
 }
 
@@ -206,8 +208,8 @@ void ShapesFromNotes::dissociateShapeFromTriangle(Shape shape_type, uint8_t shap
 
 void ShapesFromNotes::setBlob(uint8_t note, uint8_t velocity)
 {
-   if (note < NOTE_C2) return;
-   note -= NOTE_C2;
+   if (note < NOTE_C3) return;
+   note -= NOTE_C3;
    
    if (note >= NUM_BLOBS) return;
       
@@ -224,27 +226,27 @@ void ShapesFromNotes::setPentagon(uint8_t note, uint8_t velocity)
    const uint8_t* pentagon = nullptr;
    uint8_t pentagon_index = 0;
    uint8_t num_triangles_per_shape = 0;
-   if (note >= NOTE_C2 && note < NOTE_C2 + NUM_SHAPES_PENTAGON0)
+   if (note >= NOTE_Cneg1 && note < NOTE_Cneg1 + NUM_SHAPES_PENTAGON0)
    {
-      pentagon_index = note - NOTE_C2;
+      pentagon_index = note - NOTE_Cneg1;
       pentagon = pentagon0[0];
       num_triangles_per_shape = NUM_TRIANGLES_PER_SHAPE_PENTAGON0;
    }
-   else if (note >= NOTE_C3 && note < NOTE_C3 + NUM_SHAPES_PENTAGON1)
+   else if (note >= NOTE_C0 && note < NOTE_C0 + NUM_SHAPES_PENTAGON1)
    {
-      pentagon_index = note -NOTE_C3;
+      pentagon_index = note -NOTE_C0;
       pentagon = pentagon1[0];
       num_triangles_per_shape = NUM_TRIANGLES_PER_SHAPE_PENTAGON1;
    }
-   else if (note >= NOTE_C4 && note < NOTE_C4 + NUM_SHAPES_PENTAGON2)
+   else if (note >= NOTE_C1 && note < NOTE_C1 + NUM_SHAPES_PENTAGON2)
    {
-      pentagon_index = note - NOTE_C4;
+      pentagon_index = note - NOTE_C1;
       pentagon = pentagon2[0];
       num_triangles_per_shape = NUM_TRIANGLES_PER_SHAPE_PENTAGON2;
    }
-   else if (note >= NOTE_C5 && note < NOTE_C5 + NUM_SHAPES_PENTAGON3)
+   else if (note >= NOTE_C2 && note < NOTE_C2 + NUM_SHAPES_PENTAGON3)
    {
-      pentagon_index = note - NOTE_C5;
+      pentagon_index = note - NOTE_C2;
       pentagon = pentagon3[0];
       num_triangles_per_shape = NUM_TRIANGLES_PER_SHAPE_PENTAGON3;
    }

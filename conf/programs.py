@@ -6,71 +6,61 @@ keyzones = {
           'name': 'Pentagon 0',
           'from': 12,
           'to': 17,
-          'channel': 1,
-          'transpose': 24
+          'color': 'red'
       },
       {
           'name': 'Pentagon 1',
           'from': 24,
           'to': 33,
-          'channel': 1,
-          'transpose': 24
+          'color': 'red'
       },
       {
           'name': 'Pentagon 2',
           'from': 36,
           'to': 42,
-          'channel': 1,
-          'transpose': 24
+          'color': 'red'
       },
       {
           'name': 'Pentagon 3',
           'from': 48,
           'to': 57,
-          'channel': 1,
-          'transpose': 24
+          'color': 'red'
       },
       {
           'name': 'Blobs, Row 0',
           'from': 60,
           'to': 71,
-          'channel': 2,
-          'transpose': -24
+          'color': 'blue'
       },
       {
           'name': 'Blobs, Row 1',
           'from': 72,
           'to': 84,
-          'channel': 2,
-          'transpose': -24
+          'color': 'purple'
       },
       {
           'name': 'Blobs, Row 2',
           'from': 85,
           'to': 95,
-          'channel': 2,
-          'transpose': -24
+          'color': 'blue'
       },
       {
           'name': 'Blobs, Row 3',
           'from': 96,
           'to': 105,
-          'channel': 2,
-          'transpose': -24
+          'color': 'purple'
       },
       {
           'name': 'Blobs, Row 5',
           'from': 106,
           'to': 110,
-          'channel': 2,
-          'transpose': -24
+          'color': 'blue'
       },
       {
           'name': 'Blobs, Row 6',
           'from': 111,
           'to': 111,
-          'channel': 2,
-          'transpose': -24
+          'color': 'purple'
       }
    ],
 }
@@ -140,7 +130,7 @@ programs = [
             {
                 'name': 'Sparks',
                 'from': 36,
-                'to': 85,
+                'to': 84,
                 'channel': 0,
                 'transpose': 0
             },

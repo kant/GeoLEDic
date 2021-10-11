@@ -5,9 +5,8 @@ namespace {
 const unsigned NUM_TRIANGLES = 123;
 
 enum {
-   CHANNEL_SINGLE_NOTES = 0,
-   CHANNEL_PENTAGONS = 1,
-   CHANNEL_BLOBS = 2
+   CHANNEL_SHAPES = 0,
+   CHANNEL_SINGLE_NOTES = 1,
 };
 
 class TestDecayingShapesFromNotes: public testing::Test, public DecayingShapesFromNotes
@@ -63,8 +62,8 @@ TEST_F(TestDecayingShapesFromNotes, twoOverlappingBlobsReleasedInOrder)
 
    setDecayRate(DECAY_RATE);
 
-   noteOn(NOTE_C2, NOTE_VELOCITY_1, SHAPE_BLOB);
-   noteOn(NOTE_C2 + 1, NOTE_VELOCITY_2, SHAPE_BLOB);
+   noteOn(NOTE_C3, NOTE_VELOCITY_1, CHANNEL_SHAPES);
+   noteOn(NOTE_C3 + 1, NOTE_VELOCITY_2, CHANNEL_SHAPES);
 
    run();
    expectNotesSet({{NOTE_VELOCITY_1, {0, 1, 26, 27}},  // triangles 2 and 28 are covered by blob 1
@@ -78,13 +77,13 @@ TEST_F(TestDecayingShapesFromNotes, twoOverlappingBlobsReleasedInOrder)
                   });
 
    
-   noteOff(NOTE_C2 + 1, SHAPE_BLOB);
+   noteOff(NOTE_C3 + 1, CHANNEL_SHAPES);
    run();
    expectNotesSet({{NOTE_VELOCITY_1, {0, 1, 2, 26, 27, 28}},  // triangles 2 and 28 are no longer covered by blob 1
                    {NOTE_VELOCITY_2 - DECAY_RATE, {3, 4, 29, 30}} // remainder of blob 1 is fading out
                   });
 
-   noteOff(NOTE_C2, SHAPE_BLOB);
+   noteOff(NOTE_C3, CHANNEL_SHAPES);
    run();
    expectNotesSet({{NOTE_VELOCITY_1 - DECAY_RATE, {0, 1, 2, 26, 27, 28}} 
                   });
@@ -99,14 +98,14 @@ TEST_F(TestDecayingShapesFromNotes, anyTrianglesSet)
 
    EXPECT_FALSE(isAnyTriangleSet());
 
-   noteOn(NOTE_C2, NOTE_VELOCITY_1, SHAPE_BLOB);
-   noteOn(NOTE_C2 + 1, NOTE_VELOCITY_2, SHAPE_BLOB);
+   noteOn(NOTE_C3, NOTE_VELOCITY_1, CHANNEL_SHAPES);
+   noteOn(NOTE_C3 + 1, NOTE_VELOCITY_2, CHANNEL_SHAPES);
 
    run();
    EXPECT_TRUE(isAnyTriangleSet());
 
-   noteOff(NOTE_C2 + 1, SHAPE_BLOB);
-   noteOff(NOTE_C2, SHAPE_BLOB);
+   noteOff(NOTE_C3 + 1, CHANNEL_SHAPES);
+   noteOff(NOTE_C3, CHANNEL_SHAPES);
 
    run();
    run();

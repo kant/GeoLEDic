@@ -15,31 +15,35 @@ BEHAVIOUR = {
     "trigger": 1
 }
 
-last_channel = -1
-alternate_color = False
-def writeKeyZone(indent, keyzone):
-    global last_channel
-    global alternate_color
-    channel = (keyzone['channel'] if 'channel' in keyzone else 0)
-    # colors are arranged in a rainbow, but we want higher contrast
-    # between adjacent colors
-    color = (channel * 5) % 16 + 1
+COLORS = {
+    "red": 1,
+    "orange": 2,
+    "light orange": 3,
+    "warm yellow": 4,
+    "yellow": 5,
+    "lime": 6,
+    "green": 7,
+    "mint": 8,
+    "turquoise": 9,
+    "cyan": 10,
+    "blue": 11,
+    "plum": 12,
+    "violet": 13,
+    "purple": 14,
+    "magenta": 15,
+    "fuchsia": 16
+}
 
-    off = keyzone['off'] if 'off' in keyzone else 'false'
-    if off == "false":
-        if last_channel == channel:
-            alternate_color = not alternate_color
-            if alternate_color:
-                color = color + 2 if color < 16 else 1
-        last_channel = channel
-    else:
-        last_channel = -1
-        alternate_color = False
+def writeKeyZone(indent, keyzone):
+    channel = (keyzone['channel'] if 'channel' in keyzone else 0)
+
+    colorname = keyzone['color'] if 'color' in keyzone else 'red'
+    color = COLORS[colorname] if colorname in COLORS else 1
 
     print indent, '"UpperKey": "%d",' % (keyzone['to'] if 'to' in keyzone else 127)
     print indent, '"Transpose": "%d",' % (keyzone['transpose'] if 'transpose' in keyzone else 0)
     print indent, '"Channel": "%d",' % channel
-    print indent, '"Off": "%s",' % off
+    print indent, '"Off": "%s",' % (keyzone['off'] if 'off' in keyzone else 'false')
     print indent, '"Color": "%d"' % color
 
 

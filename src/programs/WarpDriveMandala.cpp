@@ -12,13 +12,13 @@ WarpDriveMandala::WarpDriveMandala(const DomeWrapper& dome):
 bool WarpDriveMandala::findKey(uint8_t& hue, uint8_t& saturation)
 {
    const unsigned NUM_NOTES = 24;
-   for (unsigned n = NOTE_C2; n < NOTE_C2 + NUM_NOTES; n++)
+   for (unsigned n = NOTE_C1; n < NOTE_C1 + NUM_NOTES; n++)
    {
       uint8_t velocity = note(n);
       if (velocity)
       {
          saturation = 255 - velocity * 2;
-         hue = 255*(n - NOTE_C2)/NUM_NOTES;
+         hue = 255*(n - NOTE_C1)/NUM_NOTES;
          return true;
       }
    }

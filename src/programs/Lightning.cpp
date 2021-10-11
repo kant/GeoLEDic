@@ -27,7 +27,7 @@ void Lightning::runProgram()
          if (t_ix >= 118 && k < 2)
          {
             uint8_t bolt_num = (t_ix - 118) * 2 + k;
-            if (r < getLightningProbability() or m_notes[bolt_num + NOTE_C3   ])
+            if (r < getLightningProbability() or m_notes[bolt_num + NOTE_C2])
             {
                static const CRGB flash_colors[] = {CRGB::LightCyan, CRGB::LightBlue, CRGB::GhostWhite, CRGB::LightSeaGreen};
                std::fill_n(e.begin(), e.size(), flash_colors[r & 3]);
