@@ -385,40 +385,40 @@ programs = [
              'default': 3
           },
           {
+             'name': 'Keyboard Edge Rate',
+             'description': 'Rate at which edges appear for keyboard-triggered shapes',
+             'number': 17,
+             'default': 100
+          },
+          {
              'name': 'Decay',
              'description': 'How fast edges fade to black',
-             'number': 17,
+             'number': 18,
              'default': 50
           },
           {
              'name': 'Min Hue',
-             'number': 18,
+             'number': 19,
              'default': 0,
              'description': 'Minimal hue value used for the randomised colors'
           },
           {
              'name': 'Max Hue',
-             'number': 19,
+             'number': 20,
              'default': 127,
              'description': 'Maximal hue value used for the randomised colors. There\'s no point in setting this below `Min Hue`'
           },
           {
              'name': 'Min Saturation',
-             'number': 20,
+             'number': 21,
              'default': 0,
              'description': 'Minimal saturation used for the randomised colors'
           },
           {
              'name': 'Max Saturation',
-             'number': 21,
+             'number': 22,
              'default': 127,
              'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
-          },
-          {
-             'name': 'Key Activated',
-             'number': 22,
-             'type': 'toggle',
-             'description': 'If set, the program is keyboard controlled in that only the triangles/shapes corresponding to the pressed keys light up'
           }
        ]
     },
