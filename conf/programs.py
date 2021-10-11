@@ -340,7 +340,8 @@ programs = [
     },
     {
        'program': 'Edgy',
-       'base': 'Notes',
+       'base': 'ShapesFromNotes',
+       'keyzones': keyzones['ShapesFromNotes'],
        'controls': [
           {
              'name': 'Edge Rate',
@@ -377,6 +378,12 @@ programs = [
              'number': 21,
              'default': 127,
              'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
+          },
+          {
+             'name': 'Key Activated',
+             'number': 22,
+             'type': 'toggle',
+             'description': 'If set, the program is keyboard controlled in that only the triangles/shapes corresponding to the pressed keys light up'
           }
        ]
     },
