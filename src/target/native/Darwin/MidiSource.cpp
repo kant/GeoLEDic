@@ -224,6 +224,11 @@ public:
 class MidiOutputPort: public MidiPort, public MidiSource::MidiSender
 {
 public:
+   enum DestinationType{
+      TO_PORT_AND_VIRTUAL, 
+      TO_PORT_ONLY // use e.g. to prevent stuff received on virtual in to be sent to virtual out
+   };
+
    MidiOutputPort():
       MidiPort(),
       m_enabled(true)
@@ -263,6 +268,12 @@ public:
          std::cerr << "MIDIInputPortCreate() error:" << result;
          return;
       }
+
+      result = MIDISourceCreate(client, CFSTR(MIDI_OUT_PORT_NAME), &m_virtual_midi_out);
+      if (result != noErr) {
+         std::cerr << "MIDISourceCreate() error:" << result;
+         return;
+      }
    }
    
    virtual void enable(bool ena)
@@ -283,7 +294,7 @@ public:
       uint8_t message[] = {MidiMessage::CONTROL_CHANGE << 4, cc_num, val};
       MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, sizeof(message), message);
       
-      send(packet_list);
+      send(packet_list, TO_PORT_AND_VIRTUAL);
    }
 
    virtual void sendProgramChange(uint8_t program)
@@ -294,16 +305,25 @@ public:
       uint8_t message[] = {MidiMessage::PROGRAM_CHANGE << 4, program};
       MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, sizeof(message), message);
       
-      send(packet_list);
+      send(packet_list, TO_PORT_AND_VIRTUAL);
    }
-
-   void send(const MIDIPacketList* packet_list)
+   void send(const MIDIPacketList* packet_list, DestinationType dest_type)
    {
-      if (not m_enabled || m_selected_endpoint == 0) return;
-      MIDISend(m_port, m_selected_endpoint, packet_list);
+      if (not m_enabled) return;
+
+      if (m_selected_endpoint)
+      {
+         MIDISend(m_port, m_selected_endpoint, packet_list);
+      }
+
+      if (dest_type == TO_PORT_AND_VIRTUAL)
+      {
+         MIDIReceived(m_virtual_midi_out, packet_list);
+      }
    }
 
    bool m_enabled;
+   MIDIEndpointRef m_virtual_midi_out;
 };
 
 }
@@ -323,7 +343,7 @@ public:
          std::cerr << "MIDIClientCreate() error:" << result;
          return;
       }
-      result = MIDIDestinationCreate(m_midi_client, CFSTR(MIDI_PORT_NAME), &Impl::processMidi, this, &m_midi_out );
+      result = MIDIDestinationCreate(m_midi_client, CFSTR(MIDI_PORT_NAME), &Impl::processMidi, this, &m_midi_in);
       if (result != noErr) {
          std::cerr << "MIDIDestinationCreate() error:" << result;
          return;
@@ -340,8 +360,8 @@ public:
    {
       const MIDIPacket *packet = static_cast<const MIDIPacket *>(packets->packet);
    
-      // forward directly to whoever's connected
-      m_output.send(packets);
+      // forward directly to whoever's connected, but don't echo to virtual output
+      m_output.send(packets, MidiOutputPort::TO_PORT_ONLY);
 
       // push messages into a queue to hand them over to the working thread which
       // will consume them via read()
@@ -402,7 +422,8 @@ public:
    }
    
    MIDIClientRef   m_midi_client;
-   MIDIEndpointRef m_midi_out;
+   MIDIEndpointRef m_midi_in;
+
    MidiInputPort   m_input;
    MidiOutputPort  m_output;
 

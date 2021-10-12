@@ -107,7 +107,8 @@ for program in programs.get():
     cases += Template(CASE_TEMPLATE).substitute(
         num=program_number, 
         program=program['program'])
-    names.append("%3d - %s" % (program_number, program['name']))
+    # program number in the UI is usually 1-based
+    names.append("%3d - %s" % ((program_number+1), program['name']))
     program_number += 1
 
 with open(filename, 'w') as file:

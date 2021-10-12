@@ -1,5 +1,5 @@
 #include "MidiMenu.hpp"
-#include "imgui/imgui.h"
+#include "ImGui.hpp"
 
 MidiMenu::MidiMenu(MidiSource& midi_source, ProgramFactory& program_factory):
    m_midi_source(midi_source),
@@ -35,6 +35,18 @@ void MidiMenu::drawMenu()
       {
          sender.enable(true);
          m_factory.program().sendSnapshot(m_midi_source.getSender());
+      }
+      ImGui::SameLine(); HelpMarker("Pause the MIDI output to play with controls and change programs without sending "
+                                    "to the output port. When you resume, a snapshot of the current program number "
+                                    "and controller values is sent immediately");
+
+      if (sender.enabled())
+      {
+         if (ImGui::Button("Send Snapshot"))
+         {
+            m_factory.program().sendSnapshot(m_midi_source.getSender());
+         }
+         ImGui::SameLine(); HelpMarker("Send the current program number and all controller values");
       }
    }
 }
