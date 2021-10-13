@@ -413,6 +413,87 @@ programs = [
        ]
     },
     {
+       'program': 'BetterEdgy',
+       'name': 'Better Edgy',
+       'base': 'ShapesFromNotes',
+       'keyzones': keyzones['ShapesFromNotes'],
+       'controls': [
+          {
+             'name': 'Edge Rate',
+             'description': 'Rate at which edges appear',
+             'number': 16,
+             'default': 3
+          },
+          {
+             'name': 'Keyboard Edge Rate',
+             'description': 'Rate at which edges appear for keyboard-triggered shapes',
+             'number': 17,
+             'default': 100
+          },
+          {
+             'name': 'Decay',
+             'description': 'How fast edges fade to black',
+             'number': 18,
+             'default': 50
+          },
+          {
+             'name': 'Hue',
+             'number': 19,
+             'default': 64,
+             'description': 'Center hue value used for the randomised colors'
+          },
+          {
+             'name': 'Hue Range',
+             'number': 20,
+             'default': 127,
+             'description': 'Amount by which the hue deviates randomly'
+          },
+          {
+             'name': 'Saturation',
+             'number': 21,
+             'default': 64,
+             'description': 'Center saturation used for the randomised colors'
+          },
+          {
+             'name': 'Saturation Range',
+             'number': 22,
+             'default': 127,
+             'description': 'Amount by which the saturation deviates randomly'
+          },
+          {
+             'name': 'Use Keys Color',
+             'number': 30,
+             'type': 'toggle',
+             'default': True,
+             'description': 'Use separate hue and saturation settings for keybpard-triggered shapes (below)'
+          },
+          {
+             'name': 'Keys Hue',
+             'number': 23,
+             'default': 110,
+             'description': 'Center hue value used for the randomised colors for keyboard-triggered shapes'
+          },
+          {
+             'name': 'Keys Hue Range',
+             'number': 24,
+             'default': 10,
+             'description': 'Amount by which the hue deviates randomly for keyboard-triggered shapes'
+          },
+          {
+             'name': 'Keys Saturation',
+             'number': 25,
+             'default': 100,
+             'description': 'Center saturation used for the randomised colors for keyboard-triggered shapes'
+          },
+          {
+             'name': 'Keys Saturation Range',
+             'number': 26,
+             'default': 20,
+             'description': 'Amount by which the saturation deviates randomly for keyboard-triggered shapes'
+          }
+       ]
+    },
+    {
        'program': 'WarpDriveMandala',
        'name': 'Warp Drive Mandala',
        'base': 'Notes',
