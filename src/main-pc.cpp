@@ -14,8 +14,8 @@ int main()
    std::vector<gfx::Config::View> views =
      {
        //  x     y     z   FOV  horz vert
-       {   0,   3,    14,  45,    0,    0},  // front
        {   0, -14,    -2,  45,    0,   90},  // up
+       {   0,   3,    14,  45,    0,    0},  // front
        {-7.8, 1.2,  10.2,  45,  -35,    6},  // slightly left
      };
 
