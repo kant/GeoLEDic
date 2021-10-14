@@ -71,19 +71,15 @@ void Noise::calcNoise()
 
 void Noise::runProgram()
 {
+   setDecayRate(getKeysDecay());
    calcNoise();
    auto* pal = palette(getPalette());
+   auto* keyboard_pal = palette(Palette(getKeyboardPalette()));
 
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
-      // if the keyboard is used to light up triangles, only show the
-      //  ones actually set by the keyboard
-      if (isKeyActivated() and getTriangleValue(t_ix) == 0)
-      {
-         std::fill_n(t.begin(), t.size(), CRGB::Black);
-         continue;
-      }
+      uint8_t velocity = getTriangleValue(t_ix);
       
       for (unsigned k = 0; k < 3; k++)
       {
@@ -109,13 +105,31 @@ void Noise::runProgram()
                index = interpolate(m_noise, h, v);
             }
             
-            unsigned brightness = getBrightness();
-            if (isKeyActivated())
+            if (velocity > 0)
             {
-               brightness = (brightness * getTriangleValue(t_ix)) >> 7;
-            }
+               if (isKeysInvertColor())
+               {
+                  CHSV inverted = rgb2hsv_approximate(ColorFromPalette(*pal, index, velocity*2));
+                  inverted.hue += 128;
+                  led = inverted;
+               }
+               else
+               {
+                  led = ColorFromPalette(*keyboard_pal, index, velocity*2);
+               }
 
-            led = ColorFromPalette(*pal, index, brightness);
+               if (velocity < 255/3)
+               {
+                  led = blend(ColorFromPalette(*pal, index, getBrightness()), 
+                              led, 
+                              velocity*3);
+               }
+
+            }
+            else
+            {
+               led = ColorFromPalette(*pal, index, getBrightness());
+            }
             
             led_ix++;
          }

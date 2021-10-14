@@ -275,10 +275,10 @@ programs = [
             'description': 'Speed at which the entire program rotates'
          },
          {
-             'name': 'Key Activated',
+             'name': 'Keys Invert Color',
              'number': 22,
              'type': 'toggle',
-             'description': 'If set, the program is keyboard controlled in that only the triangles corresponding to the pressed keys light up'
+             'description': 'If set, the shapes lit using the keyboard invert the background palette color by rotating it 180 degrees around the color wheel. If not set, the shapes use the separate keyboard palette color'
          },
          {
              'name': 'X/Y Swapped',
@@ -293,10 +293,37 @@ programs = [
              'description': 'Turn off the interpolation, or smoothing. Gives a more `patchy` appearance'
          },
          {
+             'name': 'Keys Decay',
+             'number': 27,
+             'default': 3,
+             'description': 'Rate at which keyboard triggered shapes decay'
+         },
+         {
              'name': 'Palette',
              'short_name': 'Pal',
+             'description': 'Color palette used for the background',
              'type': 'enum',
              'number': 25,
+             'enums': [
+                 'Party',
+                 'PartyStripes',
+                 'Rainbow',
+                 'RainbowStripes',
+                 'Ocean',
+                 'OceanStripes',
+                 'Fire',
+                 'Cloud',
+                 'Forest',
+                 'Lava',
+             ]
+         },
+         {
+             'name': 'Keyboard Palette',
+             'short_name': 'KPal',
+             'description': 'Color palette used for the keyboard triggered shapes (unless \'Keys Invert Color\' is enabled)',
+             'type': 'enum',
+             'number': 26,
+             'default': 'Ocean',
              'enums': [
                  'Party',
                  'PartyStripes',
