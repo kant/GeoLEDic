@@ -504,7 +504,7 @@ programs = [
              'name': 'Keys Hue Range',
              'number': 24,
              'default': 10,
-             'description': 'Amount by which the hue deviates randomly for keyboard-triggered shapes'
+             'description': 'Range within which the hue deviates randomly for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Saturation',
@@ -516,7 +516,7 @@ programs = [
              'name': 'Keys Saturation Range',
              'number': 26,
              'default': 20,
-             'description': 'Amount by which the saturation deviates randomly for keyboard-triggered shapes'
+             'description': 'Range within which the saturation deviates randomly for keyboard-triggered shapes'
           }
        ]
     },
@@ -568,29 +568,29 @@ programs = [
               'number': 24
           },
           {
-             'name': 'Min Hue',
-             'number': 18,
-             'default': 0,
-             'description': 'Minimal hue value used for the randomised colors'
+             'name': 'Hue',
+             'number': 25,
+             'default': 64,
+             'description': 'Center hue value used for the randomised colors'
           },
           {
-             'name': 'Max Hue',
-             'number': 19,
+             'name': 'Hue Range',
+             'number': 26,
              'default': 127,
-             'description': 'Maximal hue value used for the randomised colors. There\'s no point in setting this below `Min Hue`'
+             'description': 'Amount by which the hue deviates randomly'
           },
           {
-             'name': 'Min Saturation',
-             'number': 20,
-             'default': 0,
-             'description': 'Minimal saturation used for the randomised colors'
+             'name': 'Saturation',
+             'number': 27,
+             'default': 64,
+             'description': 'Center saturation used for the randomised colors'
           },
           {
-             'name': 'Max Saturation',
-             'number': 21,
+             'name': 'Saturation Range',
+             'number': 28,
              'default': 127,
-             'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
-          }
+             'description': 'Amount by which the saturation deviates randomly'
+          },
        ]
     }
 ]

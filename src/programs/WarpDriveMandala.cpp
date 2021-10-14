@@ -28,10 +28,12 @@ bool WarpDriveMandala::findKey(uint8_t& hue, uint8_t& saturation)
 
 void WarpDriveMandala::shiftAndFillRings()
 {
-   uint8_t min_hue = getMinHue()<<1;
-   uint8_t max_hue = std::max(min_hue, uint8_t(getMaxHue()*2));
-   uint8_t min_sat = getMinSaturation()*2;
-   uint8_t max_sat = std::max(min_sat, uint8_t(getMaxSaturation()*2));
+   const uint8_t center_hue = getHue()*2;
+   const uint8_t range_hue  = getHueRange();
+   const uint8_t center_sat = getSaturation()*2;
+   const uint8_t range_sat  = getSaturationRange();
+   const uint8_t min_sat = center_sat < range_sat ? 0 : center_sat - range_sat;
+   const uint8_t max_sat = (255 - center_sat < range_sat) ? 255 : center_sat + range_sat;
    
    uint8_t advance_width = getSpeed();
    uint8_t fill_width = getThickness() + 1;
@@ -59,9 +61,12 @@ void WarpDriveMandala::shiftAndFillRings()
    }
    else if (random8() < getSpawnRate())
    {
+      // hue is circular, so it wraps around...
+      uint8_t hue = random8(0, 2*range_hue) + center_hue - range_hue;
+      
       std::fill_n(fill_from, 
                   fill_width,
-                  CHSV(random8(min_hue, max_hue),
+                  CHSV(hue,
                        random8(min_sat, max_sat),
                        getBrightness()));
    }
