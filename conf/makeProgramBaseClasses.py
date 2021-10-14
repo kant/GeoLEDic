@@ -59,6 +59,9 @@ def getImplementations(program):
                 impl = impl + "        return %s_%s;\n    }\n    else" % (cc['enum_type'], cc['enums'][i])
             impl = impl + "\n    {\n"
             impl = impl + "        return %s_%s;\n    }\n}" % (cc['enum_type'], cc['enums'][0])
+            if 'default' in cc and cc['default']:
+                defaults = defaults + "    setControlValue(%u, %d); // default for %s\n" % (cc['number'], cc['values'][cc['enums'].index(cc['default'])] ,cc['name'])
+
         else:
             impl = impl + "    return %s;\n}" % getter
             if 'default' in cc:
