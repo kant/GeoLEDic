@@ -142,10 +142,13 @@ def getMenu(program):
                name=name,
                cc_num=cc['number'])
         elif cc['type'] == 'enum':
+            enum_strings = []
+            for k in range(0, len(cc['enums'])):
+                enum_strings.append("%s (%u)" % (cc['enums'][k], cc['values'][k]))
             menu = menu + Template(IMGUI_ENUM_TEMPLATE).substitute(
                name=name,
                cc_num=cc['number'],
-               enums='"' + '",\n            "'.join(cc['enums']) + '"',
+               enums='"' + '",\n            "'.join(enum_strings) + '"',
                values=', '.join(str(x) for x in cc['values']))
         else:
             menu = menu + Template(IMGUI_SLIDER_TEMPLATE).substitute(
