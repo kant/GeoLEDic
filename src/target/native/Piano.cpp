@@ -34,7 +34,7 @@ unsigned getKeyX(int key, int width)
 
 const char* noteName(int key)
 {
-    static char name[6];
+    static char name[16];
     char letters[] = "CCDDEFFGGAAB";
     snprintf(name, sizeof(name), "%c%s%d",letters[key%12], is_black(key) ? "#":"", key/12 - 2);
     return name;
