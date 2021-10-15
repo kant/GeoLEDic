@@ -7,6 +7,7 @@
 namespace {
 MidiSource midi_source;
 ProgramFactory factory({dome, DOME_NUM_TRIANGLES}, {leds, NUM_STRIPS, LEDS_PER_STRIP});
+MidiNoteObserver* note_observer = nullptr;
 }
 
 void loopGeoLEDic()
@@ -18,9 +19,17 @@ void loopGeoLEDic()
       {
          case MidiMessage::NOTE_ON:
             factory.program().noteOn(msg->data[1], msg->data[2], msg->channel());
+            if (note_observer)
+            {
+               note_observer->noteOn(msg->data[1], msg->data[2], msg->channel());
+            }
             break;
          case MidiMessage::NOTE_OFF:
             factory.program().noteOff(msg->data[1], msg->channel());
+            if (note_observer)
+            {
+               note_observer->noteOff(msg->data[1], msg->channel());
+            }
             break;
          case MidiMessage::PROGRAM_CHANGE:
             factory.changeProgram(msg->data[1]);
@@ -78,4 +87,9 @@ MidiSource& getMidiSource()
 ProgramFactory& getProgramFactory()
 {
    return factory;
+}
+
+void registerNoteObserver(MidiNoteObserver* observer)
+{
+   note_observer = observer;
 }

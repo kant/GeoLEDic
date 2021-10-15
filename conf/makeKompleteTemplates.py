@@ -16,33 +16,31 @@ BEHAVIOUR = {
 }
 
 COLORS = {
-    "red": 1,
-    "orange": 2,
-    "light orange": 3,
-    "warm yellow": 4,
-    "yellow": 5,
-    "lime": 6,
-    "green": 7,
-    "mint": 8,
-    "turquoise": 9,
-    "cyan": 10,
-    "blue": 11,
-    "plum": 12,
-    "violet": 13,
-    "purple": 14,
-    "magenta": 15,
-    "fuchsia": 16
+    "Red": 1,
+    "Orange": 2,
+    "LightOrange": 3,
+    "WarmYellow": 4,
+    "Yellow": 5,
+    "Lime": 6,
+    "Green": 7,
+    "Mint": 8,
+    "Turquoise": 9,
+    "Cyan": 10,
+    "Blue": 11,
+    "Plum": 12,
+    "Violet": 13,
+    "Purple": 14,
+    "Magenta": 15,
+    "Fuchsia": 16
 }
 
 def writeKeyZone(indent, keyzone):
-    channel = (keyzone['channel'] if 'channel' in keyzone else 0)
-
     colorname = keyzone['color'] if 'color' in keyzone else 'red'
     color = COLORS[colorname] if colorname in COLORS else 1
 
     print indent, '"UpperKey": "%d",' % (keyzone['to'] if 'to' in keyzone else 127)
     print indent, '"Transpose": "%d",' % (keyzone['transpose'] if 'transpose' in keyzone else 0)
-    print indent, '"Channel": "%d",' % channel
+    print indent, '"Channel": "0",'
     print indent, '"Off": "%s",' % (keyzone['off'] if 'off' in keyzone else 'false')
     print indent, '"Color": "%d"' % color
 
@@ -150,8 +148,10 @@ def writeTemplate(indent, template, template_index):
     pageindent = indent + INDENT_STEP
     knobindent = pageindent + INDENT_STEP
     
+    # We're only supporting channel 0 at the moment because I haven't found out yet 
+    # how to switch between key zone mappings without also switching the template
     print indent, '"keyzones": {'
-    writeKeyZones(zoneindent, template['keyzones'])
+    writeKeyZones(zoneindent, template['keyzones'][0])
     print indent, '},'
 
     buttons = []

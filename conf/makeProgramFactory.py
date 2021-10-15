@@ -50,7 +50,7 @@ Program& ProgramFactory::program()
 }
 
 #ifdef WITH_GFX
-void ProgramFactory::drawMenu(MidiSource::MidiSender* sender)
+void ProgramFactory::drawMenu(MidiSource::MidiSender* sender, Piano* piano)
 {
     const char* program_names[] = {
         $names
@@ -78,7 +78,7 @@ void ProgramFactory::drawMenu(MidiSource::MidiSender* sender)
         ImGui::EndCombo();
     }
     
-    program().drawMenu(sender);
+    program().drawMenu(sender, piano);
 }
 #endif
 

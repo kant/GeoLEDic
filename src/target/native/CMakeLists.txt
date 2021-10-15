@@ -9,6 +9,7 @@ add_subdirectory(${CMAKE_SYSTEM_NAME})
 set(TARGET_SOURCES ${TARGET_SOURCES}
                    ${CMAKE_CURRENT_SOURCE_DIR}/ImGui.cpp
                    ${CMAKE_CURRENT_SOURCE_DIR}/MidiMenu.cpp
+                   ${CMAKE_CURRENT_SOURCE_DIR}/Piano.cpp
                    ${CMAKE_CURRENT_SOURCE_DIR}/Serial.cpp
                    PARENT_SCOPE)
 

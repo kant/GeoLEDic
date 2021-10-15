@@ -1,5 +1,6 @@
 import sys
 import programs
+from colors import colors
 from string import Template
 
 def getProgram(classname):
@@ -133,6 +134,20 @@ IMGUI_ENUM_TEMPLATE = '''
     }
 '''
 
+def getKeyZones(program):
+    if not 'keyzones' in program:
+        return ''
+
+    channels = []
+    for chan in program['keyzones']:
+        zones = []
+        for z in chan:
+            col = z['color'] if 'color' in z else 'Red'
+            zones.append("KeyZone(%d, %d, 0x%06x, \"%s\")" % (z['from'], z['to'], colors[col], z['name']))
+        
+        channels.append("{\n   " + ",\n   ".join(zones) + "\n}")
+    return ",\n".join(channels)
+
 def getMenu(program):
     menu = ""
     for cc in program['controls']:
@@ -180,7 +195,16 @@ CPP_TEMPLATE = '''
 #include "${classname}.hpp"
 #ifdef WITH_GFX
 #include "ImGui.hpp"
+#include "Piano.hpp"
+
+namespace {
+std::vector<std::vector<KeyZone> > key_zones = {
+$keyzones
+};
+}
+
 #endif
+
 
 namespace generated {
 
@@ -193,7 +217,7 @@ void ${classname}::run()
 }
 
 #ifdef WITH_GFX
-void ${classname}::drawMenu(MidiSource::MidiSender* sender)
+void ${classname}::drawMenu(MidiSource::MidiSender* sender, Piano* piano)
 {
     {
         const uint8_t cmin = 0;
@@ -205,6 +229,10 @@ void ${classname}::drawMenu(MidiSource::MidiSender* sender)
         ImGui::SameLine(); HelpMarker("The brightness is preserved on program change, unlike the other controllers");
     }
 $menu
+    if (piano)
+    {
+        piano->draw(this, key_zones);
+    }
 }
 
 void ${classname}::sendSnapshot(MidiSource::MidiSender* sender)
@@ -240,7 +268,7 @@ public:
 
     virtual void run();
 #ifdef WITH_GFX
-    virtual void drawMenu(MidiSource::MidiSender* sender);
+    virtual void drawMenu(MidiSource::MidiSender* sender, Piano* piano);
     virtual void sendSnapshot(MidiSource::MidiSender* sender);
 #endif
 };
@@ -261,6 +289,7 @@ with open(basename, 'w') as file:
         classname=classname,
         base=base,
         menu=menu,
+        keyzones=getKeyZones(program),
         implementations="\n".join(impls),
         program_number=program_number,
         control_snapshot=control_snapshots))

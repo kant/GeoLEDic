@@ -12,6 +12,14 @@
 #include <map>
 #endif
 
+class MidiNoteObserver
+{
+public:
+   virtual ~MidiNoteObserver(){}
+   virtual void noteOn(uint8_t note, uint8_t velocity, uint8_t channel) = 0;
+   virtual void noteOff(uint8_t note, uint8_t channel) = 0;
+};
+
 class MidiSource
 {
 public:

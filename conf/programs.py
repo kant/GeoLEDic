@@ -1,67 +1,78 @@
 from string import Template
 
 keyzones = {
-   'ShapesFromNotes': [
-      {
-          'name': 'Pentagon 0',
-          'from': 12,
-          'to': 17,
-          'color': 'red'
-      },
-      {
-          'name': 'Pentagon 1',
-          'from': 24,
-          'to': 33,
-          'color': 'red'
-      },
-      {
-          'name': 'Pentagon 2',
-          'from': 36,
-          'to': 42,
-          'color': 'red'
-      },
-      {
-          'name': 'Pentagon 3',
-          'from': 48,
-          'to': 57,
-          'color': 'red'
-      },
-      {
-          'name': 'Blobs, Row 0',
-          'from': 60,
-          'to': 71,
-          'color': 'blue'
-      },
-      {
-          'name': 'Blobs, Row 1',
-          'from': 72,
-          'to': 84,
-          'color': 'purple'
-      },
-      {
-          'name': 'Blobs, Row 2',
-          'from': 85,
-          'to': 95,
-          'color': 'blue'
-      },
-      {
-          'name': 'Blobs, Row 3',
-          'from': 96,
-          'to': 105,
-          'color': 'purple'
-      },
-      {
-          'name': 'Blobs, Row 5',
-          'from': 106,
-          'to': 110,
-          'color': 'blue'
-      },
-      {
-          'name': 'Blobs, Row 6',
-          'from': 111,
-          'to': 111,
-          'color': 'purple'
-      }
+   'ShapesFromNotes': 
+   [
+      [ # channel 0
+        {
+            'name': 'Pentagon 0',
+            'from': 12,
+            'to': 17,
+            'color': 'Red'
+        },
+        {
+            'name': 'Pentagon 1',
+            'from': 24,
+            'to': 33,
+            'color': 'Red'
+        },
+        {
+            'name': 'Pentagon 2',
+            'from': 36,
+            'to': 42,
+            'color': 'Red'
+        },
+        {
+            'name': 'Pentagon 3',
+            'from': 48,
+            'to': 57,
+            'color': 'Red'
+        },
+        {
+            'name': 'Blobs, Row 0',
+            'from': 60,
+            'to': 71,
+            'color': 'Blue'
+        },
+        {
+            'name': 'Blobs, Row 1',
+            'from': 72,
+            'to': 84,
+            'color': 'Purple'
+        },
+        {
+            'name': 'Blobs, Row 2',
+            'from': 85,
+            'to': 95,
+            'color': 'Blue'
+        },
+        {
+            'name': 'Blobs, Row 3',
+            'from': 96,
+            'to': 105,
+            'color': 'Purple'
+        },
+        {
+            'name': 'Blobs, Row 5',
+            'from': 106,
+            'to': 110,
+            'color': 'Blue'
+        },
+        {
+            'name': 'Blobs, Row 6',
+            'from': 111,
+            'to': 111,
+            'color': 'Purple'
+        }
+      ],
+      [ # channel 1
+        {
+            'name': 'Triangles',
+            'from': 0,
+            'to': 123,
+            'color': 'Orange'
+        }
+      ]
    ],
 }
 
@@ -89,10 +100,10 @@ programs = [
                 'default': 50
             },
             {
-                'name': 'Key Activated',
+                'name': 'Keys Only',
                 'number': 20,
                 'type': 'toggle',
-                'description': 'If set, the program is keyboard controlled in that only the triangles/shapes corresponding to the pressed keys light up'
+                'description': 'If set, only the triangles/shapes corresponding to the pressed keys are turned on. If unset, all triangles are turned on, but the ones corresponding to the pressed keys sparkle hard.'
             }
         ]
     },
@@ -127,13 +138,15 @@ programs = [
         'program':'Fire',
         'base': 'Notes',
         'keyzones' : [
-            {
-                'name': 'Sparks',
-                'from': 36,
-                'to': 84,
-                'channel': 0,
-                'transpose': 0
-            },
+            [ # channel 0
+                {
+                    'name': 'Sparks',
+                    'from': 36,
+                    'to': 84,
+                    'channel': 0,
+                    'transpose': 0
+                },
+            ]
         ],
         'controls': [
             {
@@ -214,13 +227,15 @@ programs = [
         'program':'Lightning',
         'base': 'Notes',
         'keyzones' : [
-            {
-                'name': 'Lightning Bolts',
-                'from': 48,
-                'to': 57,
-                'channel': 0,
-                'transpose': 0
-            },
+            [ # channel 0
+                {
+                    'name': 'Lightning Bolts',
+                    'from': 48,
+                    'to': 57,
+                    'channel': 0,
+                    'transpose': 0
+                }
+            ]
         ],
         'controls': [
             {
@@ -525,13 +540,15 @@ programs = [
        'name': 'Warp Drive Mandala',
        'base': 'Notes',
         'keyzones' : [
-            {
-                'name': 'Rings',
-                'from': 36,
-                'to': 59,
-                'channel': 0,
-                'transpose': 0
-            },
+            [ # channel 0
+                {
+                    'name': 'Rings',
+                    'from': 36,
+                    'to': 59,
+                    'channel': 0,
+                    'transpose': 0
+                }
+            ]
         ],
        'controls': [
           {
@@ -605,7 +622,7 @@ def get():
             programs[i]['name'] = programs[i]['program']
 
         if not 'keyzones' in programs[i]:
-            programs[i]['keyzones'] = []
+            programs[i]['keyzones'] = [[]]
 
         if not 'controls' in programs[i]:
             programs[i]['controls'] = []

@@ -20,6 +20,7 @@ int main()
      };
 
    MidiMenu midi_menu(getMidiSource(), getProgramFactory());
+   registerNoteObserver(&midi_menu);
    
    try {
       int i = 0;

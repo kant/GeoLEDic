@@ -5,6 +5,8 @@
 #include "Strips.hpp"
 #include "Program.hpp"
 
+class Piano;
+
 class ProgramFactory
 {
 public:
@@ -14,7 +16,7 @@ public:
    Program& program();
 
 #ifdef WITH_GFX
-   void drawMenu(MidiSource::MidiSender* sender);
+   void drawMenu(MidiSource::MidiSender* sender, Piano* piano);
 #endif
 
 private:

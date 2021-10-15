@@ -10,4 +10,6 @@ void loopGeoLEDic();
 MidiSource& getMidiSource();
 ProgramFactory& getProgramFactory();
 
+void registerNoteObserver(MidiNoteObserver* observer);
+
 #endif /* GeoLEDic_h */

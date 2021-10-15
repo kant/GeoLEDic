@@ -7,18 +7,26 @@ DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
 
 void DefaultRainbow::runProgram()
 {
-   int sparkle_spacing = getSparkleProbability() ?  100 * (128 - getSparkleProbability()) : 0;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
+      int sparkle_spacing = getSparkleProbability() ?  100 * (128 - getSparkleProbability()) : 0;
+
       CHSV hsv;
       hsv.hue = t_ix + m_iteration;
-      hsv.val = getBrightness();
       hsv.sat = 240;
 
-      if (isKeyActivated())
+      if (isKeysOnly())
       {
-         hsv.val = (unsigned(hsv.val) * getTriangleValue(t_ix)) >> 7;
+         hsv.val = getTriangleValue(t_ix) * 2;
+      }
+      else
+      {
+         hsv.val = getBrightness();
+         if (getTriangleValue(t_ix))
+         {
+            sparkle_spacing = (150 - getTriangleValue(t_ix));
+         }
       }
 
       int next_sparkle = sparkle_spacing ? random16(sparkle_spacing) : -1;
