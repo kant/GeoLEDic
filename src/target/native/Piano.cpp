@@ -34,9 +34,9 @@ unsigned getKeyX(int key, int width)
 
 const char* noteName(int key)
 {
-    static char name[10];
+    static char name[6];
     char letters[] = "CCDDEFFGGAAB";
-    sprintf(name,"%c%s%d",letters[key%12], is_black(key) ? "#":"", key/12 - 2);
+    snprintf(name, sizeof(name), "%c%s%d",letters[key%12], is_black(key) ? "#":"", key/12 - 2);
     return name;
 }
 
@@ -189,7 +189,7 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
         }
         else
         {
-            ImGui::Text("");
+            ImGui::Text(" ");
         }
 
         if (channel + 1 < num_channels)
