@@ -1,0 +1,32 @@
+name: macOS CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-10.14
+
+    steps:
+    - name: Checkout repository and submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Homebrew dependencies
+      run: brew install cmake glfw glm googletest
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Release  -DVERSION_EXTRA=-$GITHUB_RUN_NUMBER-$(git describe --always) -G Xcode
+    - name: Build
+      working-directory: ${{github.workspace}}/build
+      run: xcodebuild -project GeoLEDic.xcodeproj -target ALL_BUILD CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: xcodebuild -project GeoLEDic.xcodeproj -target RUN_TESTS
+    - name: Package
+      working-directory: ${{github.workspace}}/build
+      run: xcodebuild -project GeoLEDic.xcodeproj -target package CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: macOS DMG
+        path: ${{github.workspace}}/build/*.dmg
