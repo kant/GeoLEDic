@@ -43,7 +43,7 @@ void OrganicLine::runProgram()
       line_noise[i] = 128 + inoise16_raw((i * (140 - getSize())) << 4, m_time)/100;
    }
    
-   unsigned line_width = 2 * getLineWidth();
+   int line_width = 2 * getLineWidth();
 
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
@@ -83,7 +83,9 @@ void OrganicLine::runProgram()
             if (line_width > 0)
             {
                const unsigned THETA_BASE_LINE = 46;
-               unsigned v = abs(long(interpolateTheta(c0, c1, led_ix, e.size())) - THETA_BASE_LINE);
+               int v = int(interpolateTheta(c0, c1, led_ix, e.size()) - THETA_BASE_LINE);
+               if (v < 0) v = -v;
+               
                if (v > line_width)
                {
                   led = CRGB::Black;
@@ -91,7 +93,7 @@ void OrganicLine::runProgram()
                   continue;
                }
                
-               const unsigned half_line_width = line_width / 2;
+               const int half_line_width = line_width / 2;
                if (v > half_line_width)
                {
                   brightness = (brightness * (line_width - v)) / (half_line_width + 1);
