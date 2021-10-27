@@ -51,7 +51,8 @@ KeyZone::KeyZone(uint8_t from, uint8_t to, uint32_t color, const char* name):
 Piano::Piano():
     m_show(false),
     m_last_clicked_key(-1),
-    m_last_clicked_channel(-1)
+    m_last_clicked_channel(-1),
+    m_velocity(127)
 {
 
 }
@@ -69,6 +70,12 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
     ImGui::SetNextWindowBgAlpha(0.2f);
     ImGui::Begin("Keyboard", &m_show, ImGuiWindowFlags_NoResize);
 
+    int initial_y = ImGui::GetCursorPosY();
+
+    const uint8_t cmin = 0;
+    const uint8_t cmax = 127;
+    ImGui::SliderScalar("Velocity", ImGuiDataType_U8, &m_velocity, &cmin, &cmax);
+
     unsigned num_channels = std::max(1u, unsigned(key_zones.size()));
     const int white_height = 60;
     const int black_height = 40;
@@ -79,8 +86,6 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
 
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     const ImVec2 m = ImGui::GetIO().MousePos;
-
-    int initial_y = ImGui::GetCursorPosY();
 
     if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && m_last_clicked_key != -1)
     {
@@ -217,10 +222,10 @@ void Piano::sendNoteIfClicked(int key, unsigned channel, Program* program, MidiS
                 sender->sendNote(m_last_clicked_key, 0, m_last_clicked_channel);
             }
         }
-        program->noteOn(key, 127, channel);
+        program->noteOn(key, m_velocity, channel);
         if (sender)
         {
-            sender->sendNote(key, 127, channel);
+            sender->sendNote(key, m_velocity, channel);
         }
         m_last_clicked_key = key;
         m_last_clicked_channel = channel;

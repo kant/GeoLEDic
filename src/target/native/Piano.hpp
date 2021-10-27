@@ -32,6 +32,7 @@ private:
     int m_last_clicked_key;
     int m_last_clicked_channel;
     std::map<uint8_t, std::map<uint8_t, uint8_t> > m_channel_key_map;
+    uint8_t m_velocity;
 };
 
 #endif /* Piano_h */
