@@ -44,6 +44,7 @@ public:
       virtual bool enabled() const = 0;
       virtual void enable(bool ena) = 0;
       virtual void sendControlChange(uint8_t cc_num, uint8_t val) = 0;
+      virtual void sendNote(uint8_t note, uint8_t velocity, uint8_t channel) = 0;
       virtual void sendProgramChange(uint8_t program) = 0;
    };
 

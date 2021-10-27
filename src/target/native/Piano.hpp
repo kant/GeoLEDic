@@ -2,6 +2,7 @@
 #define Piano_h
 
 #include "imgui/imgui.h"
+#include "MidiSource.hpp"
 #include <vector>
 #include <map>
 
@@ -20,12 +21,12 @@ struct KeyZone
 class Piano {
 public:
     Piano();
-    void draw(Program* program, const std::vector<std::vector<KeyZone> >& key_zones);
+    void draw(Program* program, const std::vector<std::vector<KeyZone> >& key_zones, MidiSource::MidiSender* sender);
     void noteOn(uint8_t note, uint8_t velocity, uint8_t channel);
     void noteOff(uint8_t note, uint8_t channel);
 
 private:
-    void sendNoteIfClicked(int key, unsigned channel, Program* program);
+    void sendNoteIfClicked(int key, unsigned channel, Program* program, MidiSource::MidiSender* sender);
 
     bool m_show;
     int m_last_clicked_key;

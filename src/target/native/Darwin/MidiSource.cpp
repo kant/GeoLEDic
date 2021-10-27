@@ -10,6 +10,29 @@
 #include <sstream>
 #include <pthread.h>
 
+std::ostream& operator<<(std::ostream& os, MidiMessage& mm)
+{
+   switch (mm.type())
+   {
+      case MidiMessage::NOTE_OFF: os << "NOTE_OFF "; break;
+      case MidiMessage::NOTE_ON: os << "NOTE_ON "; break;
+      case MidiMessage::AFTERTOUCH: os << "AFTERTOUCH "; break;
+      case MidiMessage::CONTROL_CHANGE: os << "CONTROL_CHANGE "; break;
+      case MidiMessage::PROGRAM_CHANGE: os << "PROGRAM_CHANGE "; break;
+      case MidiMessage::CHANNEL_PRESSURE: os << "CHANNEL_PRESSURE "; break;
+      case MidiMessage::PITCH_WHEEL: os << "PITCH_WHEEL "; break;
+      default: os << "unknown "; break;
+   }
+   os << "ch" << mm.channel() << " ";
+   unsigned k = 1;
+   while (k < mm.length)
+   {
+      os << +mm.data[k++] << " ";
+   }
+   return os;
+}
+
+
 namespace {
 
 int messageSize(uint8_t first_byte)
@@ -297,6 +320,18 @@ public:
       send(packet_list, TO_PORT_AND_VIRTUAL);
    }
 
+   virtual void sendNote(uint8_t note, uint8_t velocity, uint8_t channel)
+   {
+      uint8_t buf[64];
+      MIDIPacketList* packet_list = reinterpret_cast<MIDIPacketList*>(buf);
+      MIDIPacket     *pkt = MIDIPacketListInit(packet_list);
+      uint8_t status = ((velocity ? MidiMessage::NOTE_ON : MidiMessage::NOTE_OFF) << 4) | (channel & 0xF);
+      uint8_t message[] = {status, note, velocity};
+      MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, sizeof(message), message);
+      
+      send(packet_list, TO_PORT_AND_VIRTUAL);
+   }
+
    virtual void sendProgramChange(uint8_t program)
    {
       uint8_t buf[64];
@@ -418,6 +453,7 @@ public:
       m_last_returned_message = m_packets.front();
       m_packets.pop();
       pthread_mutex_unlock(&m_mutex);
+      std::cout << m_last_returned_message << std::endl;
       return &m_last_returned_message;
    }
    

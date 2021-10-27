@@ -196,6 +196,7 @@ CPP_TEMPLATE = '''
 #ifdef WITH_GFX
 #include "ImGui.hpp"
 #include "Piano.hpp"
+#include <unistd.h>
 
 namespace {
 std::vector<std::vector<KeyZone> > key_zones = {
@@ -231,7 +232,7 @@ void ${classname}::drawMenu(MidiSource::MidiSender* sender, Piano* piano)
 $menu
     if (piano)
     {
-        piano->draw(this, key_zones);
+        piano->draw(this, key_zones, sender);
     }
 }
 

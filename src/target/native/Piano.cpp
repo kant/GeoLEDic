@@ -56,7 +56,7 @@ Piano::Piano():
 
 }
 
-void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key_zones)
+void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key_zones, MidiSource::MidiSender* sender)
 {
     ImGui::Separator();
     ImGui::Checkbox("Show Keyboard", &m_show);
@@ -85,6 +85,10 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
     if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && m_last_clicked_key != -1)
     {
         program->noteOff(m_last_clicked_key, m_last_clicked_channel);
+        if (sender)
+        {
+            sender->sendNote(m_last_clicked_key, 0, m_last_clicked_channel);
+        }
         m_last_clicked_key = -1;
         m_last_clicked_channel = -1;
     }
@@ -105,7 +109,7 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
             {
                 col = Green;
                 hovered_key = key;
-                sendNoteIfClicked(key, channel, program);
+                sendNoteIfClicked(key, channel, program, sender);
             }
             else if (m_channel_key_map[channel][key])
             {
@@ -133,7 +137,7 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
             {
                 col = Green;
                 hovered_key = key;
-                sendNoteIfClicked(key, channel, program);
+                sendNoteIfClicked(key, channel, program, sender);
             }
             else if (m_channel_key_map[channel][key])
             {
@@ -201,15 +205,23 @@ void Piano::draw(Program* program, const std::vector<std::vector<KeyZone> >& key
     ImGui::End();
 }
 
-void Piano::sendNoteIfClicked(int key, unsigned channel, Program* program)
+void Piano::sendNoteIfClicked(int key, unsigned channel, Program* program, MidiSource::MidiSender* sender)
 {
     if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
     {
         if (m_last_clicked_key != -1)
         {
             program->noteOff(m_last_clicked_key, m_last_clicked_channel);
+            if (sender)
+            {
+                sender->sendNote(m_last_clicked_key, 0, m_last_clicked_channel);
+            }
         }
         program->noteOn(key, 127, channel);
+        if (sender)
+        {
+            sender->sendNote(key, 127, channel);
+        }
         m_last_clicked_key = key;
         m_last_clicked_channel = channel;
     }
