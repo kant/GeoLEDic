@@ -198,8 +198,3 @@ MidiSource::MidiSender*  MidiSource::getSender()
 {
    return nullptr; // not implemented
 }
-
-void MidiSource::enableMidiThrough(bool enabled)
-{
-   (void)enabled; // not implemented
-}

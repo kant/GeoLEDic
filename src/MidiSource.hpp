@@ -51,8 +51,6 @@ public:
    MidiPorts* getMidiInPorts();
    MidiPorts* getMidiOutPorts();
    MidiSender* getSender();
-
-   void enableMidiThrough(bool enabled);
 #endif
    
 private:
