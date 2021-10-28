@@ -72,7 +72,7 @@ public:
    {
       for (std::string& exclude_name: m_port_blacklist)
       {
-         if (name.substr(0, exclude_name.size()) == exclude_name)
+         if (name.find(exclude_name) != std::string::npos)
          {
             return true;
          }
@@ -207,6 +207,7 @@ public:
       // exclude confusing ports
       m_port_blacklist.push_back("Teensy MIDI");
       m_port_blacklist.push_back("Komplete Kontrol DAW");
+      m_port_blacklist.push_back("DAW Out");
    }
    
    virtual int getNumEndpoints()
@@ -258,6 +259,7 @@ public:
    {
       // exclude confusing ports
       m_port_blacklist.push_back("Komplete Kontrol DAW");
+      m_port_blacklist.push_back("DAW In");
       m_port_blacklist.push_back(MIDI_PORT_NAME);
    }
    
