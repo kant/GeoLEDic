@@ -198,3 +198,8 @@ MidiSource::MidiSender*  MidiSource::getSender()
 {
    return nullptr; // not implemented
 }
+
+MidiSource::MidiPorts*  MidiSource::getMidiControllers()
+{
+   return nullptr; // not implemented
+}

@@ -23,6 +23,11 @@ void MidiMenu::drawMenu()
       showMidiPorts(*m_midi_source.getMidiOutPorts(), m_midi_destinations);
       ImGui::TreePop();
    }
+   if (m_midi_source.getMidiControllers() and ImGui::TreeNode("Controllers"))
+   {
+      showMidiPorts(*m_midi_source.getMidiControllers(), m_midi_controllers);
+      ImGui::TreePop();
+   }
 
    if (m_midi_source.getSender())
    {

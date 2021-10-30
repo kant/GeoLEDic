@@ -25,6 +25,7 @@ private:
    
    MidiPortMap m_midi_sources;
    MidiPortMap m_midi_destinations;
+   MidiPortMap m_midi_controllers;
 
    Piano m_piano;
 };

@@ -10,6 +10,9 @@
 #ifdef WITH_GFX
 #include <string>
 #include <map>
+
+class MidiControllerList;
+
 #endif
 
 class MidiNoteObserver
@@ -51,6 +54,7 @@ public:
    MidiPorts* getMidiInPorts();
    MidiPorts* getMidiOutPorts();
    MidiSender* getSender();
+   MidiPorts* getMidiControllers();
 #endif
    
 private:

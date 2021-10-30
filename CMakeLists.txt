@@ -7,7 +7,6 @@ set(VERSION_EXTRA "" CACHE STRING "Extra version information, e.g. commit hash")
 set(FASTLED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/FastLED" CACHE PATH "Path to FastLED installation")
 
 add_subdirectory(conf)
-add_subdirectory(src/target/native)
 
 add_definitions(-std=c++11
                 -DWITH_GFX=1
@@ -26,6 +25,7 @@ include_directories(.
                     ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(SYSTEM "${FASTLED_DIR}/src")
 
+add_subdirectory(src/target/native)
 add_subdirectory(src/programs)
 
 # The core sources are the ones built for unit tests as well
@@ -33,6 +33,7 @@ set(GEOLEDIC_CORE_SOURCES src/Controls.cpp
                           src/CRGB_iterator.cpp
                           src/DecayingShapesFromNotes.cpp
                           src/Edge.cpp
+                          src/MidiMessage.cpp
                           src/Notes.cpp
                           src/ShapesFromNotes.cpp
                           src/Triangle.cpp

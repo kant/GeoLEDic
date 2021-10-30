@@ -1,4 +1,5 @@
 #include "MidiSource.hpp"
+#include "MidiControllerList.hpp"
 #include "gfx/Config.hpp"
 #include <CoreMIDI/CoreMIDI.h>
 #include <iostream>
@@ -10,49 +11,7 @@
 #include <sstream>
 #include <pthread.h>
 
-std::ostream& operator<<(std::ostream& os, MidiMessage& mm)
-{
-   switch (mm.type())
-   {
-      case MidiMessage::NOTE_OFF: os << "NOTE_OFF "; break;
-      case MidiMessage::NOTE_ON: os << "NOTE_ON "; break;
-      case MidiMessage::AFTERTOUCH: os << "AFTERTOUCH "; break;
-      case MidiMessage::CONTROL_CHANGE: os << "CONTROL_CHANGE "; break;
-      case MidiMessage::PROGRAM_CHANGE: os << "PROGRAM_CHANGE "; break;
-      case MidiMessage::CHANNEL_PRESSURE: os << "CHANNEL_PRESSURE "; break;
-      case MidiMessage::PITCH_WHEEL: os << "PITCH_WHEEL "; break;
-      default: os << "unknown "; break;
-   }
-   os << "ch" << mm.channel() << " ";
-   unsigned k = 1;
-   while (k < mm.length)
-   {
-      os << +mm.data[k++] << " ";
-   }
-   return os;
-}
-
-
 namespace {
-
-int messageSize(uint8_t first_byte)
-{
-   switch (first_byte >> 4)
-   {
-      case MidiMessage::NOTE_OFF:
-      case MidiMessage::NOTE_ON:
-      case MidiMessage::AFTERTOUCH:
-      case MidiMessage::CONTROL_CHANGE:
-      case MidiMessage::PITCH_WHEEL:
-         return 3;
-      case MidiMessage::PROGRAM_CHANGE:
-      case MidiMessage::CHANNEL_PRESSURE:
-         return 2;
-      default:
-         // discard remainder, SYSEX etc not handled
-         return -1;
-   }
-}
 
 class MidiPort: public MidiSource::MidiPorts
 {
@@ -253,9 +212,10 @@ public:
       TO_PORT_ONLY // use e.g. to prevent stuff received on virtual in to be sent to virtual out
    };
 
-   MidiOutputPort():
+   MidiOutputPort(MidiControllerList* ctrl):
       MidiPort(),
-      m_enabled(true)
+      m_enabled(true),
+      m_midi_controller_list(ctrl)
    {
       // exclude confusing ports
       m_port_blacklist.push_back("Komplete Kontrol DAW");
@@ -290,7 +250,7 @@ public:
    {
       OSStatus result =  MIDIOutputPortCreate(client, CFSTR(MIDI_OUT_PORT_NAME), &m_port);
       if (result != noErr) {
-         std::cerr << "MIDIInputPortCreate() error:" << result;
+         std::cerr << "MIDIOutputPortCreate() error:" << result;
          return;
       }
 
@@ -344,8 +304,11 @@ public:
       
       send(packet_list, TO_PORT_AND_VIRTUAL);
    }
+
    void send(const MIDIPacketList* packet_list, DestinationType dest_type)
    {
+      if (m_midi_controller_list) m_midi_controller_list->updateController(packet_list);
+
       if (not m_enabled) return;
 
       if (m_selected_endpoint)
@@ -361,16 +324,19 @@ public:
 
    bool m_enabled;
    MIDIEndpointRef m_virtual_midi_out;
+   MidiControllerList* m_midi_controller_list;
 };
 
 }
 
-class MidiSource::Impl
+class MidiSource::Impl: private MidiMessageSink
 {
 public:
    
    Impl():
-      m_input()
+      m_controllers(*this),
+      m_input(),
+      m_output(&m_controllers)
    {
       pthread_mutex_init(&m_mutex, NULL);
 
@@ -391,6 +357,9 @@ public:
 
       m_output.createPort(m_midi_client);
       m_output.refreshPorts();
+      
+      m_controllers.createPorts(m_midi_client);
+      m_controllers.refreshPorts();
    }
    
    void processMidiPackets(const MIDIPacketList *packets)
@@ -402,14 +371,13 @@ public:
 
       // push messages into a queue to hand them over to the working thread which
       // will consume them via read()
-      pthread_mutex_lock(&m_mutex);
       for (unsigned int i = 0; i < packets->numPackets; ++i)
       {
          int remaining_length = packet->length;
          const uint8_t* p = packet->data;
          while (remaining_length > 0)
          {
-            int length = messageSize(*p);
+            int length = MidiMessage::lengthForStatusByte(*p);
             
             if (length < 0) break; // skip remainder of message
             if (length > remaining_length) break; 
@@ -419,13 +387,24 @@ public:
             std::copy_n(p, length, msg.data);
             p += length;
             remaining_length -= length;
+            pthread_mutex_lock(&m_mutex);
             m_packets.push(msg);
+            pthread_mutex_unlock(&m_mutex);
          }
          packet = MIDIPacketNext(packet);
       }
-      pthread_mutex_unlock(&m_mutex);
    }
    
+   virtual void sink(const MidiMessage& msg)
+   {
+      uint8_t buf[64];
+      MIDIPacketList* packet_list = reinterpret_cast<MIDIPacketList*>(buf);
+      MIDIPacket     *pkt = MIDIPacketListInit(packet_list);
+      MIDIPacketListAdd(packet_list, sizeof(buf), pkt, 0, msg.length, msg.data);
+      processMidiPackets(packet_list);
+   }
+
+
    static void processMidi(const MIDIPacketList *packets,
                            void *ref_con, void *data)
    {
@@ -439,6 +418,7 @@ public:
       {
          m_input.refreshPorts();
          m_output.refreshPorts();
+         m_controllers.refreshPorts();
       }
    }
    
@@ -449,21 +429,25 @@ public:
    
    const MidiMessage* read()
    {
-      if (m_packets.empty()) return nullptr;
+      if (m_packets.empty())
+      {
+         m_controllers.refreshUi();
+         return nullptr;
+      }
       
       pthread_mutex_lock(&m_mutex);
       m_last_returned_message = m_packets.front();
       m_packets.pop();
       pthread_mutex_unlock(&m_mutex);
-      std::cout << m_last_returned_message << std::endl;
       return &m_last_returned_message;
    }
    
    MIDIClientRef   m_midi_client;
    MIDIEndpointRef m_midi_in;
 
-   MidiInputPort   m_input;
-   MidiOutputPort  m_output;
+   MidiControllerList m_controllers;
+   MidiInputPort      m_input;
+   MidiOutputPort     m_output;
 
    std::queue<MidiMessage> m_packets;
    pthread_mutex_t   m_mutex;
@@ -498,4 +482,9 @@ MidiSource::MidiPorts* MidiSource::getMidiOutPorts()
 MidiSource::MidiSender*  MidiSource::getSender()
 {
    return &m_i.m_output;
+}
+
+MidiSource::MidiPorts* MidiSource::getMidiControllers()
+{
+   return &m_i.m_controllers;
 }
