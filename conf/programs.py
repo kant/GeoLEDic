@@ -1,5 +1,14 @@
 from string import Template
 
+def fader_cc(num):
+    return 16 + num
+
+def button_cc(num):
+    return 32 + num
+
+def enum_cc(num):
+    return 48 + num
+
 keyzones = {
    'ShapesFromNotes': 
    [
@@ -85,23 +94,23 @@ programs = [
         'controls': [
             {
                 'name': 'Speed',
-                'number': 16,
+                'number': fader_cc(0),
                 'default': 1
             },
             {
                 'name': 'Stride',
-                'number': 17,
+                'number': fader_cc(1),
                 'default': 1,
                 'description': 'Larger stride means faster cycling through the color wheel, i.e. more repetitions of the rainbow'
             },
             {
                 'name': 'Sparkle Probability',
-                'number': 19,
+                'number': fader_cc(2),
                 'default': 50
             },
             {
                 'name': 'Keys Only',
-                'number': 20,
+                'number': button_cc(0),
                 'type': 'toggle',
                 'description': 'If set, only the triangles/shapes corresponding to the pressed keys are turned on. If unset, all triangles are turned on, but the ones corresponding to the pressed keys sparkle hard.'
             }
@@ -115,22 +124,22 @@ programs = [
         'controls': [
             {
                 'name': 'Red Worm',
-                'number': 16,
+                'number': fader_cc(0),
                 'description': 'Brightness of the red worm chasing around the triangles'
             },
             {
                 'name': 'Green Worm',
-                'number': 17,
+                'number': fader_cc(1),
                 'description': 'Brightness of the green worm chasing around the triangles'
             },
             {
                 'name': 'Blue Worm',
-                'number': 18,
+                'number': fader_cc(2),
                 'description': 'Brightness of the blue worm chasing around the triangles'
             },
             {
                 'name': 'Sparkle Probability',
-                'number': 19,
+                'number': fader_cc(3),
             }
         ]
     },
@@ -151,30 +160,30 @@ programs = [
         'controls': [
             {
                 'name': 'Cooling',
-                'number': 16,
+                'number': fader_cc(0),
                 'default': 50,
                 'description': 'Rate at which the flame cools down. Higher values mean faster cooling, or decay'
             },
             {
                 'name': 'Sparking',
-                'number': 17,
+                'number': fader_cc(1),
                 'default': 100,
                 'description': 'Rate at which new flames are sparked. Higher values means more flames'
             },
             {
                'name': 'Rotation Speed',
-               'number': 18,
+               'number': fader_cc(2),
                'description': 'Speed at which the entire program turns'
             },
             {
                 'name': 'Downwards',
-                'number': 19,
+                'number': button_cc(0),
                 'type': 'toggle',
                 'description': 'If set, flames start at the top instead of the bottom'
             },
             {
                 'name': 'Reverse Palette',
-                'number': 20,
+                'number': button_cc(1),
                 'type': 'toggle',
                 'description': 'If set, the color palette is reversed'
             },
@@ -182,7 +191,7 @@ programs = [
                 'name': 'Palette',
                 'short_name': 'Pal',
                 'type': 'enum',
-                'number': 21,
+                'number': enum_cc(0),
                 'enums': [
                     'Fire',
                     'Ocean',
@@ -203,22 +212,22 @@ programs = [
         'controls': [
             {
                 'name': 'Speed Vertical',
-                'number': 16,
+                'number': fader_cc(0),
                 'default': 2
             },
             {
                 'name': 'Stride Vertical',
-                'number': 17,
+                'number': fader_cc(1),
                 'default': 10,
                 'description': 'Larger stride means faster cycling through the color wheel, i.e. more vertical repetitions of the rainbow'
             },
             {
                 'name': 'Speed Horizontal',
-                'number': 18,
+                'number': fader_cc(2),
             },
             {
                 'name': 'Stride Horizontal',
-                'number': 19,
+                'number': fader_cc(3),
                 'description': 'Larger stride means faster cycling through the color wheel, i.e. more horizontal repetitions of the rainbow'
             }
         ]
@@ -258,58 +267,40 @@ programs = [
       'controls': [
          {
             'name': 'Speed X',
-            'number': 16,
+            'number': fader_cc(0),
             'description': 'Speed of the movement along the X axis of the noise field'
          },
          {
             'name': 'Scale X',
-            'number': 17,
+            'number': fader_cc(1),
             'default': 50,
             'description': 'Size of the steps along the X axis of the noise field'
          },
          {
             'name': 'Speed Y',
-            'number': 18,
+            'number': fader_cc(2),
             'description': 'Speed of the movement along the Y axis of the noise field'
          },
          {
             'name': 'Scale Y',
-            'number': 19,
+            'number': fader_cc(3),
             'default': 50,
             'description': 'Size of the steps along the Y axis of the noise field'
          },
          {
             'name': 'Speed T',
-            'number': 20,
+            'number': fader_cc(4),
             'default': 12,
             'description': 'Speed of the movement along the time axis of the noise field'
          },
          {
             'name': 'Rotation Speed',
-            'number': 21,
+            'number': fader_cc(5),
             'description': 'Speed at which the entire program rotates'
          },
          {
-             'name': 'Keys Invert Color',
-             'number': 22,
-             'type': 'toggle',
-             'description': 'If set, the shapes lit using the keyboard invert the background palette color by rotating it 180 degrees around the color wheel. If not set, the shapes use the separate keyboard palette color'
-         },
-         {
-             'name': 'X/Y Swapped',
-             'number': 23,
-             'type': 'toggle',
-             'description': 'X and Y axis of the noise field mapping are swapped. Hard to explain, just try it! Mandala-like patterns can be achieved with this'
-         },
-         {
-             'name': 'No Interpolation',
-             'number': 24,
-             'type': 'toggle',
-             'description': 'Turn off the interpolation, or smoothing. Gives a more `patchy` appearance'
-         },
-         {
              'name': 'Keys Decay',
-             'number': 27,
+             'number': fader_cc(6),
              'default': 3,
              'description': 'Rate at which keyboard triggered shapes decay'
          },
@@ -318,7 +309,7 @@ programs = [
              'short_name': 'Pal',
              'description': 'Color palette used for the background',
              'type': 'enum',
-             'number': 25,
+             'number': enum_cc(0),
              'enums': [
                  'Party',
                  'PartyStripes',
@@ -337,7 +328,7 @@ programs = [
              'short_name': 'KPal',
              'description': 'Color palette used for the keyboard triggered shapes (unless \'Keys Invert Color\' is enabled)',
              'type': 'enum',
-             'number': 26,
+             'number': enum_cc(1),
              'default': 'Ocean',
              'enums': [
                  'Party',
@@ -351,7 +342,26 @@ programs = [
                  'Forest',
                  'Lava',
              ]
-         }
+         },
+        {
+             'name': 'Keys Invert Color',
+             'number': button_cc(0),
+             'type': 'toggle',
+             'description': 'If set, the shapes lit using the keyboard invert the background palette color by rotating it 180 degrees around the color wheel. If not set, the shapes use the separate keyboard palette color'
+         },
+         {
+             'name': 'X/Y Swapped',
+             'number': button_cc(1),
+             'type': 'toggle',
+             'description': 'X and Y axis of the noise field mapping are swapped. Hard to explain, just try it! Mandala-like patterns can be achieved with this'
+         },
+         {
+             'name': 'No Interpolation',
+             'number': button_cc(2),
+             'type': 'toggle',
+             'description': 'Turn off the interpolation, or smoothing. Gives a more `patchy` appearance'
+         },
+
       ]
     },
     {
@@ -361,48 +371,49 @@ programs = [
        'controls': [
           {
              'name': 'Speed',
-             'number': 16,
+             'number': fader_cc(0),
              'default': 8,
              'description': 'Speed at which the blobs move around'
           },
           {
              'name': 'Size',
-             'number': 17,
+             'number': fader_cc(1),
              'default': 30,
              'description': 'Size of the blobs'
           },
           {
              'name': 'Line Width',
-             'number': 18,
+             'number': fader_cc(2),
              'default': 0,
              'description': 'Width of the line'
           },
           {
-             'name': 'Use Hues',
-             'number': 19,
-             'type': 'toggle',
-             'description': 'Instead of the preset palette, use black stripes alternating with stripes of a hue as defined by the hue controls'
-          },
-          {
              'name': 'Hue 0',
-             'number': 20,
+             'number': fader_cc(3),
              'description': 'Hue of the first color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 1',
-             'number': 21,
+             'number': fader_cc(4),
              'description': 'Hue of the second color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 2',
-             'number': 22,
+             'number': fader_cc(5),
              'description': 'Hue of the third color. Only used if `Use Hues` is set'
           },
           {
              'name': 'Hue 3',
-             'number': 23,
+             'number': fader_cc(6),
              'description': 'Hue of the fourth color. Only used if `Use Hues` is set'
           }
+,          {
+             'name': 'Use Hues',
+             'number': button_cc(0),
+             'type': 'toggle',
+             'description': 'Instead of the preset palette, use black stripes alternating with stripes of a hue as defined by the hue controls'
+          },
+
        ]
     },
     {
@@ -413,42 +424,42 @@ programs = [
           {
              'name': 'Edge Rate',
              'description': 'Rate at which edges appear',
-             'number': 16,
+             'number': fader_cc(0),
              'default': 3
           },
           {
              'name': 'Keyboard Edge Rate',
              'description': 'Rate at which edges appear for keyboard-triggered shapes',
-             'number': 17,
+             'number': fader_cc(1),
              'default': 100
           },
           {
              'name': 'Decay',
              'description': 'How fast edges fade to black',
-             'number': 18,
+             'number': fader_cc(2),
              'default': 50
           },
           {
              'name': 'Min Hue',
-             'number': 19,
+             'number': fader_cc(3),
              'default': 0,
              'description': 'Minimal hue value used for the randomised colors'
           },
           {
              'name': 'Max Hue',
-             'number': 20,
+             'number': fader_cc(4),
              'default': 127,
              'description': 'Maximal hue value used for the randomised colors. There\'s no point in setting this below `Min Hue`'
           },
           {
              'name': 'Min Saturation',
-             'number': 21,
+             'number': fader_cc(5),
              'default': 0,
              'description': 'Minimal saturation used for the randomised colors'
           },
           {
              'name': 'Max Saturation',
-             'number': 22,
+             'number': fader_cc(6),
              'default': 127,
              'description': 'Maximal saturation used for the randomised colors. There\'s no point in setting this below `Min Saturation`'
           }
@@ -463,73 +474,73 @@ programs = [
           {
              'name': 'Edge Rate',
              'description': 'Rate at which edges appear',
-             'number': 16,
+             'number': fader_cc(0),
              'default': 3
           },
           {
              'name': 'Keyboard Edge Rate',
              'description': 'Rate at which edges appear for keyboard-triggered shapes',
-             'number': 17,
+             'number': fader_cc(1),
              'default': 100
           },
           {
              'name': 'Decay',
              'description': 'How fast edges fade to black',
-             'number': 18,
+             'number': fader_cc(2),
              'default': 50
           },
           {
              'name': 'Hue',
-             'number': 19,
+             'number': fader_cc(3),
              'default': 64,
              'description': 'Center hue value used for the randomised colors'
           },
           {
              'name': 'Hue Range',
-             'number': 20,
+             'number': fader_cc(4),
              'default': 127,
              'description': 'Amount by which the hue deviates randomly'
           },
           {
              'name': 'Saturation',
-             'number': 21,
+             'number': fader_cc(5),
              'default': 64,
              'description': 'Center saturation used for the randomised colors'
           },
           {
              'name': 'Saturation Range',
-             'number': 22,
+             'number': fader_cc(6),
              'default': 127,
              'description': 'Amount by which the saturation deviates randomly'
           },
           {
              'name': 'Use Keys Color',
-             'number': 30,
+             'number': fader_cc(7),
              'type': 'toggle',
              'default': True,
              'description': 'Use separate hue and saturation settings for keybpard-triggered shapes (below)'
           },
           {
              'name': 'Keys Hue',
-             'number': 23,
+             'number': fader_cc(8),
              'default': 110,
              'description': 'Center hue value used for the randomised colors for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Hue Range',
-             'number': 24,
+             'number': fader_cc(9),
              'default': 10,
              'description': 'Range within which the hue deviates randomly for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Saturation',
-             'number': 25,
+             'number': fader_cc(10),
              'default': 100,
              'description': 'Center saturation used for the randomised colors for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Saturation Range',
-             'number': 26,
+             'number': fader_cc(11),
              'default': 20,
              'description': 'Range within which the saturation deviates randomly for keyboard-triggered shapes'
           }
@@ -554,59 +565,59 @@ programs = [
           {
              'name': 'Spawn Rate',
              'description': 'Rate at which rings appear',
-             'number': 16,
+             'number': fader_cc(0),
              'default': 30
           },
           {
               'name': 'Speed',
               'description': 'Speed at which rings move',
-              'number': 17,
+              'number': fader_cc(1),
               'default': 1,
               'max': 30
           },
           {
               'name': 'Thickness',
               'description': 'Thickness of rings',
-              'number': 22,
+              'number': fader_cc(2),
               'default': 0,
               'max': 30
+          },
+          {
+             'name': 'Hue',
+             'number': 25,
+             'default': fader_cc(3),
+             'description': 'Center hue value used for the randomised colors'
+          },
+          {
+             'name': 'Hue Range',
+             'number': fader_cc(4),
+             'default': 127,
+             'description': 'Amount by which the hue deviates randomly'
+          },
+          {
+             'name': 'Saturation',
+             'number': fader_cc(5),
+             'default': 64,
+             'description': 'Center saturation used for the randomised colors'
+          },
+          {
+             'name': 'Saturation Range',
+             'number': fader_cc(6),
+             'default': 127,
+             'description': 'Amount by which the saturation deviates randomly'
           },
           {
               'name': 'Upwards',
               'description': 'Move upwards instead of downwards',
               'type': 'toggle',
-              'number': 23
+              'number': button_cc(0)
           },
           {
               'name': 'Skip Horizontals',
               'description': 'Skip horizontal edges for a less flickering animation',
               'type': 'toggle',
               'default': True,
-              'number': 24
-          },
-          {
-             'name': 'Hue',
-             'number': 25,
-             'default': 64,
-             'description': 'Center hue value used for the randomised colors'
-          },
-          {
-             'name': 'Hue Range',
-             'number': 26,
-             'default': 127,
-             'description': 'Amount by which the hue deviates randomly'
-          },
-          {
-             'name': 'Saturation',
-             'number': 27,
-             'default': 64,
-             'description': 'Center saturation used for the randomised colors'
-          },
-          {
-             'name': 'Saturation Range',
-             'number': 28,
-             'default': 127,
-             'description': 'Amount by which the saturation deviates randomly'
+              'number': button_cc(1)
           },
        ]
     }
