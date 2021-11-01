@@ -19,6 +19,17 @@ void Controls::controlChange(uint8_t cc_num, uint8_t value)
 
 uint8_t Controls::getBrightness() const
 {
+#ifdef WITH_GFX
+   if (m_brightness_raw == 0)
+   {
+      return 0;
+   }
+   if (m_brightness_raw < 64)
+   {
+      // brighten dark settings up on screen by flattening the slope on the lower half of the curve
+      return 64 + m_brightness_raw;
+   }
+#endif
    return m_brightness_raw * 2; // brightness is 0..255 (well, 254, realistically)
 }
 
