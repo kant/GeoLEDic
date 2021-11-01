@@ -122,6 +122,6 @@ void Fire::runProgram()
          }
       }
    }
-   m_h_offset += float(getRotationSpeed())/100.f;
+   m_h_offset += float(getRotationSpeed())/50.f;
    if (m_h_offset >= NUM_H) m_h_offset = 0;
 }
