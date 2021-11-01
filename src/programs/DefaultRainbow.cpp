@@ -7,15 +7,17 @@ DefaultRainbow::DefaultRainbow(const DomeWrapper& dome):
 
 void DefaultRainbow::runProgram()
 {
+   const uint8_t HUE_SCALE = 2;
+   CHSV hsv;
+   hsv.sat = 240;
    for (unsigned t_ix = 0; t_ix < m_dome.size(); t_ix++)
    {
       Triangle& t(m_dome[t_ix]);
       int sparkle_spacing = getSparkleProbability() ?  100 * (128 - getSparkleProbability()) : 0;
 
-      CHSV hsv;
-      hsv.hue = t_ix + m_iteration;
-      hsv.sat = 240;
-
+      // use a scaled hue so we get a finer resolution in speed and stride
+      uint16_t scaled_hue = (t_ix<<HUE_SCALE) + m_iteration;
+      
       if (isKeysOnly())
       {
          hsv.val = getTriangleValue(t_ix) * 2;
@@ -43,9 +45,10 @@ void DefaultRainbow::runProgram()
          }
          else
          {
+            hsv.hue = scaled_hue >> HUE_SCALE;
             led = hsv;
          }
-         hsv.hue += getStride();
+         scaled_hue += getStride();
          next_sparkle--;
       }
    }

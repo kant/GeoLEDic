@@ -95,12 +95,12 @@ programs = [
             {
                 'name': 'Speed',
                 'number': fader_cc(0),
-                'default': 1
+                'default': 4
             },
             {
                 'name': 'Stride',
                 'number': fader_cc(1),
-                'default': 1,
+                'default': 4,
                 'description': 'Larger stride means faster cycling through the color wheel, i.e. more repetitions of the rainbow'
             },
             {
