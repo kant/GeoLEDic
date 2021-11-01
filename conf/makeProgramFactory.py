@@ -69,7 +69,7 @@ void ProgramFactory::drawMenu(MidiSource::MidiSender* sender, Piano* piano)
             if (ImGui::Selectable(program_names[n], is_selected))
             {
                changeProgram(n);
-               if (sender) sender->sendProgramChange(n);
+               if (sender) m_current_program->sendSnapshot(sender);
             }
             // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
             if (is_selected)
