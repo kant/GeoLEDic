@@ -514,36 +514,37 @@ programs = [
              'description': 'Amount by which the saturation deviates randomly'
           },
           {
-             'name': 'Use Keys Color',
-             'number': fader_cc(7),
-             'type': 'toggle',
-             'default': True,
-             'description': 'Use separate hue and saturation settings for keybpard-triggered shapes (below)'
-          },
-          {
              'name': 'Keys Hue',
-             'number': fader_cc(8),
+             'number': fader_cc(7),
              'default': 110,
              'description': 'Center hue value used for the randomised colors for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Hue Range',
-             'number': fader_cc(9),
+             'number': fader_cc(8),
              'default': 10,
              'description': 'Range within which the hue deviates randomly for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Saturation',
-             'number': fader_cc(10),
+             'number': fader_cc(9),
              'default': 100,
              'description': 'Center saturation used for the randomised colors for keyboard-triggered shapes'
           },
           {
              'name': 'Keys Saturation Range',
-             'number': fader_cc(11),
+             'number': fader_cc(10),
              'default': 20,
              'description': 'Range within which the saturation deviates randomly for keyboard-triggered shapes'
-          }
+          },
+          {
+             'name': 'Use Keys Color',
+             'number': button_cc(0),
+             'type': 'toggle',
+             'default': True,
+             'description': 'Use separate hue and saturation settings for keybpard-triggered shapes (below)'
+          },
+
        ]
     },
     {

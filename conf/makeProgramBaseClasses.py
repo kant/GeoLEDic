@@ -222,10 +222,10 @@ void ${classname}::drawMenu(MidiSource::MidiSender* sender, Piano* piano)
 {
     {
         const uint8_t cmin = 0;
-        const uint8_t cmax = 255;
-        if (ImGui::SliderScalar("CC7: Brightness", ImGuiDataType_U8, &getBrightness(), &cmin, &cmax))
+        const uint8_t cmax = 127;
+        if (ImGui::SliderScalar("CC7: Brightness", ImGuiDataType_U8, &m_brightness_raw, &cmin, &cmax))
         {
-            if (sender) sender->sendControlChange(7, getBrightness()/2);
+            if (sender) sender->sendControlChange(7, m_brightness_raw);
         }
         ImGui::SameLine(); HelpMarker("The brightness is preserved on program change, unlike the other controllers");
     }
@@ -240,6 +240,7 @@ void ${classname}::sendSnapshot(MidiSource::MidiSender* sender)
 {
     if (sender == nullptr) return;
     sender->sendProgramChange($program_number);
+    sender->sendControlChange(7, m_brightness_raw);
 $control_snapshot
 }
 

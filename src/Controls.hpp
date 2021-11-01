@@ -11,12 +11,13 @@ public:
    virtual void controlChange(uint8_t cc_num, uint8_t value);
 
 protected:
-   uint8_t& getBrightness() const;
+   uint8_t getBrightness() const;
 
    uint8_t getControlValue(uint8_t cc_num) const;
    void setControlValue(uint8_t cc_num, uint8_t value);
 
    uint8_t m_control_values[128];
+   static uint8_t m_brightness_raw;
 };
 
 #endif // GEOLEDIC_PROGRAM_HPP
