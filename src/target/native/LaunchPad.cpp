@@ -57,15 +57,29 @@ union LaunchPad::SysexMsg
     AllLeds all_leds;
 }  __attribute__((packed));
 
+LaunchPad::PadColor::PadColor():
+    m_dirty(true),
+    m_color(CRGB::Black)
+{
+}
+
+void LaunchPad::PadColor::operator=(const CRGB& color)
+{
+    if (m_color != color)
+    {
+        m_dirty = true;
+        m_color = color;
+    }
+}
+
 LaunchPad::LaunchPad(MidiMessageSink& to_launchpad, MidiMessageSink& to_geoledic):
     m_to_launchpad(to_launchpad),
     m_to_geoledic(to_geoledic),
     m_sysex_message(*new SysexMsg()),
+    m_pad_colors(),
     m_last_col_val(),
     m_fine_fader_resolution(false)
 {
-    std::fill_n(m_leds[0], NUM_ROWS*NUM_COLS, CRGB::Black);
-
     // enter programmer mode
     m_sysex_message.raw.data[HEADER_LENGTH] = 0xE;
     m_sysex_message.raw.data[HEADER_LENGTH+1] = 1;
@@ -93,10 +107,15 @@ void LaunchPad::sendColors()
     {
         for (unsigned col = 0; col < NUM_COLS; col++)
         {
-            CRGB& l(m_leds[col][row]);
+            PadColor& pad(m_pad_colors[col][row]);
+            if (not pad.m_dirty) continue;
+            const CRGB& l(pad.m_color);
             m_sysex_message.all_leds.led[i++] = ColorSpec(row, col, l.r/2, l.g/2, l.b/2);
+            pad.m_dirty = false;
         }
     }
+    if (i==0) return;
+
     m_sysex_message.all_leds.led[i].spec_type = SYSEX_END;
     m_sysex_message.all_leds.length = HEADER_LENGTH + 2 + i * sizeof(ColorSpec);
     m_sysex_message.all_leds.command = 0x03;
@@ -119,15 +138,15 @@ void LaunchPad::updateFromMidi(const MidiMessage& msg)
         {
             if (value/18 > k)
             {
-                m_leds[index][k] = ColorFromPalette(RainbowColors_p, index*24, 255);
+                m_pad_colors[index][k] = ColorFromPalette(RainbowColors_p, index*24, 255);
             }
             else if (value/18 == k)
             {
-                m_leds[index][k] = ColorFromPalette(RainbowColors_p, index*24, (value % 18)*14 + 17);
+                m_pad_colors[index][k] = ColorFromPalette(RainbowColors_p, index*24, (value % 18)*14 + 17);
             }
             else
             {
-                m_leds[index][k] = CRGB::Black;
+                m_pad_colors[index][k] = CRGB::Black;
             }
         }
     }
