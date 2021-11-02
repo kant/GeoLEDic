@@ -31,7 +31,7 @@ void BetterEdgy::runProgram()
       {
          const Edge& e(t.edge(e_ix));
          
-         if (random8() < edge_rate)
+         if (random16(512) < edge_rate)
          {
             // hue is circular, so it wraps around...
             uint8_t hue = random8(0, 2*range_hue) + center_hue - range_hue;
