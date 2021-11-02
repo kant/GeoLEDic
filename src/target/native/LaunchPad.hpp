@@ -16,6 +16,11 @@ public:
     void updateFromCtrl(const MidiMessage& msg);
     void refreshUi();
 private:
+    enum Mode {
+        LIVE,
+        PROGRAMMER
+    };
+    void enterMode(Mode mode);
     void sendColors();
 
     MidiMessageSink& m_to_launchpad;
@@ -28,7 +33,6 @@ private:
         NUM_ROWS = 9,
         NUM_COLS = 9
     };
-
     struct PadColor
     {
     public:

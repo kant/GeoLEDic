@@ -4,57 +4,32 @@
 
 namespace {
 const uint8_t HEADER_LENGTH = 6;
+const unsigned MAX_SYSEX_DATA_LENGTH = 256;
 const uint8_t SYSEX_HEADER[HEADER_LENGTH] = {0xF0, 0x00, 0x20, 0x29, 0x02, 0x0D};
 const uint8_t SYSEX_END = 0xF7;
 
-struct ColorSpec
+enum SysexCommand 
 {
-    ColorSpec(){}
-    ColorSpec(uint8_t row, uint8_t col, uint8_t r, uint8_t g, uint8_t b):
-        spec_type(3/* RGB */),
-        index((row + 1) * 10 + col + 1),
-        r(r),
-        g(g),
-        b(b)
-    {}
-    uint8_t spec_type;
-    uint8_t index;
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
-} __attribute__((packed));
-
-struct AllLeds 
-{
-    AllLeds():
-        end(SYSEX_END)
-    {
-        std::copy_n(SYSEX_HEADER, HEADER_LENGTH, header);
-    }
-    uint16_t length;
-    uint8_t header[HEADER_LENGTH];
-    uint8_t command;
-    ColorSpec led[81];
-    uint8_t end;
-} __attribute__((packed));
+    PROGRAMMER_MODE = 0x0E,
+    SET_COLORS = 0x03,
+};
 
 }
 
-
 union LaunchPad::SysexMsg
 {
-    SysexMsg():
-        all_leds()
+    SysexMsg()
     {
-
+        std::copy_n(SYSEX_HEADER, HEADER_LENGTH, raw.header);
     }
-   
+
     MidiMessage msg;
     struct {
         uint16_t length;
-        uint8_t data[32];
+        uint8_t header[HEADER_LENGTH];
+        uint8_t command;
+        uint8_t data[MAX_SYSEX_DATA_LENGTH];
     } raw;
-    AllLeds all_leds;
 }  __attribute__((packed));
 
 LaunchPad::PadColor::PadColor():
@@ -80,46 +55,55 @@ LaunchPad::LaunchPad(MidiMessageSink& to_launchpad, MidiMessageSink& to_geoledic
     m_last_col_val(),
     m_fine_fader_resolution(false)
 {
-    // enter programmer mode
-    m_sysex_message.raw.data[HEADER_LENGTH] = 0xE;
-    m_sysex_message.raw.data[HEADER_LENGTH+1] = 1;
-    m_sysex_message.raw.data[HEADER_LENGTH+2] = SYSEX_END;
-    m_sysex_message.raw.length = HEADER_LENGTH+3;
-    m_to_launchpad.sink(m_sysex_message.msg);
-
+    enterMode(PROGRAMMER);
 }
 
 LaunchPad::~LaunchPad()
 {
-    // leave programmer mode
-    m_sysex_message.raw.data[HEADER_LENGTH] = 0xE;
-    m_sysex_message.raw.data[HEADER_LENGTH+1] = 0;
-    m_sysex_message.raw.data[HEADER_LENGTH+2] = SYSEX_END;
+    enterMode(LIVE);
+    delete &m_sysex_message;
+}
+
+void LaunchPad::enterMode(Mode mode)
+{
+    m_sysex_message.raw.command = 0xE;
+    m_sysex_message.raw.data[0] = mode == PROGRAMMER ? 1 : 0;
+    m_sysex_message.raw.data[1] = SYSEX_END;
     m_sysex_message.raw.length = HEADER_LENGTH+3;    
     m_to_launchpad.sink(m_sysex_message.msg);
-    delete &m_sysex_message;
 }
 
 void LaunchPad::sendColors()
 {
-    uint8_t i = 0;
+    m_sysex_message.raw.command = SET_COLORS;
+    uint8_t* p = m_sysex_message.raw.data;
     for (unsigned row = 0; row < NUM_ROWS; row++)
     {
         for (unsigned col = 0; col < NUM_COLS; col++)
         {
+            if (p - m_sysex_message.raw.data + 6 > MAX_SYSEX_DATA_LENGTH)
+            {
+                // the 5 bytes for the color item plus the end marker won't fit,
+                // send the remainder in the next message
+                break;
+            }
+
             PadColor& pad(m_pad_colors[col][row]);
             if (not pad.m_dirty) continue;
-            const CRGB& l(pad.m_color);
-            m_sysex_message.all_leds.led[i++] = ColorSpec(row, col, l.r/2, l.g/2, l.b/2);
+
+            *p++ = 0x3; // use RGB
+            *p++ = (row + 1) * 10 + col + 1;
+            *p++ = pad.m_color.r/2;
+            *p++ = pad.m_color.g/2;
+            *p++ = pad.m_color.b/2;
+
             pad.m_dirty = false;
         }
     }
-    if (i==0) return;
+    if (p == m_sysex_message.raw.data) return; // no messages added
 
-    m_sysex_message.all_leds.led[i].spec_type = SYSEX_END;
-    m_sysex_message.all_leds.length = HEADER_LENGTH + 2 + i * sizeof(ColorSpec);
-    m_sysex_message.all_leds.command = 0x03;
-    m_sysex_message.all_leds.end = SYSEX_END;
+    *p++ = SYSEX_END;
+    m_sysex_message.raw.length = p - m_sysex_message.raw.header;
     m_to_launchpad.sink(m_sysex_message.msg);
 }
 
