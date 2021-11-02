@@ -80,6 +80,11 @@ void MidiMenu::showMidiPorts(MidiSource::MidiPorts& ports, MidiPortMap& port_map
    if (selected_port != initial_selected_port)
    {
       ports.selectPort(selected_port);
+      if (selected_port != 0)
+      {
+         // send snapshot to update controller state upon connection
+         m_factory.program().sendSnapshot(m_midi_source.getSender());
+      }
    }
 }
 
