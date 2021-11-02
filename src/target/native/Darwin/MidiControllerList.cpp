@@ -222,7 +222,7 @@ void MidiControllerList::sink(const MidiMessage& msg)
 {
    if (m_out_endpoint == 0) return;
 
-   // std::cout << "OUT: " << msg << std::endl;
+    std::cout << "OUT: " << msg << std::endl;
 
    uint8_t buf[512];
    MIDIPacketList* packet_list = reinterpret_cast<MIDIPacketList*>(buf);

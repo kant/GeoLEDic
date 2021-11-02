@@ -12,6 +12,7 @@ enum SysexCommand
 {
     PROGRAMMER_MODE = 0x0E,
     SET_COLORS = 0x03,
+    SET_TEXT = 0x07
 };
 
 }
@@ -56,6 +57,7 @@ LaunchPad::LaunchPad(MidiMessageSink& to_launchpad, MidiMessageSink& to_geoledic
     m_fine_fader_resolution(false)
 {
     enterMode(PROGRAMMER);
+    sendText("Yeehaw!");
 }
 
 LaunchPad::~LaunchPad()
@@ -66,10 +68,25 @@ LaunchPad::~LaunchPad()
 
 void LaunchPad::enterMode(Mode mode)
 {
-    m_sysex_message.raw.command = 0xE;
+    m_sysex_message.raw.command = PROGRAMMER_MODE;
     m_sysex_message.raw.data[0] = mode == PROGRAMMER ? 1 : 0;
     m_sysex_message.raw.data[1] = SYSEX_END;
     m_sysex_message.raw.length = HEADER_LENGTH+3;    
+    m_to_launchpad.sink(m_sysex_message.msg);
+}
+
+void LaunchPad::sendText(const char* text, const CRGB& color)
+{
+    m_sysex_message.raw.command = SET_TEXT;
+    m_sysex_message.raw.data[0] = 0; // don't loop
+    m_sysex_message.raw.data[1] = 20; // speed
+    m_sysex_message.raw.data[2] = 1; // use RGB
+    m_sysex_message.raw.data[3] = color.r/2;
+    m_sysex_message.raw.data[4] = color.g/2;
+    m_sysex_message.raw.data[5] = color.b/2;
+    uint8_t* p = reinterpret_cast<uint8_t*>(stpcpy(reinterpret_cast<char*>(m_sysex_message.raw.data+6), text));
+    *p++ = SYSEX_END;
+    m_sysex_message.raw.length = p - m_sysex_message.raw.header;
     m_to_launchpad.sink(m_sysex_message.msg);
 }
 

@@ -21,6 +21,7 @@ private:
         PROGRAMMER
     };
     void enterMode(Mode mode);
+    void sendText(const char* text, const CRGB& color = CRGB::Red);
     void sendColors();
 
     MidiMessageSink& m_to_launchpad;
