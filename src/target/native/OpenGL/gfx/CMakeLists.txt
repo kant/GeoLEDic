@@ -2,8 +2,6 @@ find_package(OpenGL REQUIRED)
 if (NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
    find_package(GLEW REQUIRED)
    add_definitions(-DWITH_GLEW=1)
-else ()
-   add_definitions(-DIMGUI_IMPL_OPENGL_LOADER_CUSTOM=<GLFW/glfw3.h>)
 endif()
 find_package(GLFW REQUIRED)
 find_package(GLM REQUIRED)
@@ -32,6 +30,8 @@ set(IMGUI_SOURCES ${IMGUI_SRC}/imgui.cpp
                   ${IMGUI_SRC}/imgui_widgets.cpp
                   ${IMGUI_SRC}/backends/imgui_impl_glfw.cpp
                   ${IMGUI_SRC}/backends/imgui_impl_opengl3.cpp)
+
+set_source_files_properties(${IMGUI_SRC}/imgui_widgets.cpp PROPERTIES COMPILE_FLAGS " -Wno-unused-function")
 
 set(GFX_SOURCES
    Gfx.cpp
