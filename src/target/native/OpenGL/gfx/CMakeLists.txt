@@ -2,6 +2,7 @@ find_package(OpenGL REQUIRED)
 if (NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
    find_package(GLEW REQUIRED)
    add_definitions(-DWITH_GLEW=1)
+   set(LIBDL "dl")
 endif()
 find_package(GLFW REQUIRED)
 find_package(GLM REQUIRED)
@@ -19,6 +20,7 @@ set(ALL_LIBS
    ${OPENGL_LIBRARY}
    ${GLEW_LIBRARIES}
    ${GLFW_LIBRARY}
+   ${LIBDL}
 )
 
 set(IMGUI_SRC ${CMAKE_SOURCE_DIR}/imgui)
